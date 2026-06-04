@@ -10,7 +10,7 @@
   --sh-lime:0 6px 20px rgba(124,252,0,.42);
   --r-sm:10px;--r:14px;--r-lg:20px;--r-xl:28px;
   --f:"Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
-  --f-display:"Fraunces", "Iowan Old Style", Georgia, Cambria, "Times New Roman", serif;
+  --f-display:"EB Garamond", "Iowan Old Style", Georgia, Cambria, "Times New Roman", serif;
   --maxw:1180px;
 }
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
@@ -22,9 +22,9 @@ img,svg{display:block;max-width:100%}
 input,select,textarea{font-family:inherit}
 .wrap{max-width:var(--maxw);margin:0 auto;padding:0 24px}
 ::selection{background:var(--lime);color:var(--ink)}
-h1,h2,h3,h4,h5{font-family:var(--f-display);font-weight:600;letter-spacing:-.015em;line-height:1.06;font-variation-settings:"opsz" 96,"SOFT" 30}
-h1{font-weight:700;font-variation-settings:"opsz" 144,"SOFT" 50}
-.sec-title,.wordmark{font-family:var(--f-display);font-weight:600;letter-spacing:-.015em}
+h1,h2,h3,h4,h5{font-family:var(--f-display);font-weight:600;letter-spacing:-.005em;line-height:1.1}
+h1{font-weight:700;letter-spacing:-.01em}
+.sec-title,.wordmark{font-family:var(--f-display);font-weight:600;letter-spacing:-.005em}
 a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:2px solid var(--lime-deep);outline-offset:2px;border-radius:8px}
 .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;font-weight:600;font-size:14.5px;border-radius:999px;padding:12px 22px;transition:transform .16s,box-shadow .24s,background .18s,border-color .18s;white-space:nowrap;letter-spacing:-.01em}
 .btn:active{transform:translateY(1px)}
