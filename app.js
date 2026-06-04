@@ -1,10 +1,12 @@
 (function(){
   var pl=document.getElementById('preloader');
   if(!pl) return;
-  var hide=function(){pl.classList.add('done');setTimeout(function(){pl.remove();},600);};
-  if(document.readyState==='complete'){setTimeout(hide,300);}
-  else{window.addEventListener('load',function(){setTimeout(hide,300);});}
-  setTimeout(hide,4000); // safety: never block past 4s
+  var hidden=false;
+  var hide=function(){if(hidden) return;hidden=true;pl.classList.add('done');setTimeout(function(){if(pl.parentNode)pl.remove();},650);};
+  var minDelay=function(cb){setTimeout(cb,650);}; // graceful minimum so it doesn't flash
+  if(document.readyState==='complete'){minDelay(hide);}
+  else{window.addEventListener('load',function(){minDelay(hide);});}
+  setTimeout(hide,3000); // hard cap at 3s
 })();
 const ICONS={electronics:'<rect x="6" y="2.5" width="12" height="19" rx="2.5"/><path d="M10 18.5h4"/>',fashion:'<path d="M8 3l-4 4 2.5 2.5L8 8v13h8V8l1.5 1.5L20 7l-4-4-2 2a2 2 0 0 1-4 0z"/>',cars:'<path d="M3 13l2-5a3 3 0 0 1 2.8-2h8.4A3 3 0 0 1 19 8l2 5"/><path d="M3 13h18v4a1 1 0 0 1-1 1h-2M3 13v4a1 1 0 0 0 1 1h2"/><circle cx="7" cy="18" r="1.8"/><circle cx="17" cy="18" r="1.8"/>',property:'<path d="M3 10.5L12 3l9 7.5"/><path d="M5 9.5V20h14V9.5"/><path d="M9.5 20v-6h5v6"/>',services:'<path d="M14.5 6.5a3.5 3.5 0 0 1-4.7 4.7L4 17l3 3 5.8-5.8a3.5 3.5 0 0 1 4.7-4.7l-2.5 2.5-1.4-1.4 2.5-2.5"/>'};
 function glyph(k,s){return '<svg class="glyph" width="'+s+'" height="'+s+'" viewBox="0 0 24 24" fill="none" stroke="#2f4d0c" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">'+(ICONS[k]||ICONS.services)+'</svg>'}
@@ -198,3 +200,62 @@ const hdr=document.getElementById('hdr');window.addEventListener('scroll',()=>hd
 window.addEventListener('hashchange',route);
 window.addEventListener('DOMContentLoaded',()=>{initHome();route()});
 initHome();route();
+
+/* ===== Auth (client-side, localStorage) ===== */
+(function(){
+  var KEY='nlAuth'; // {name, email, role, signedInAt}
+  function getAuth(){try{return JSON.parse(localStorage.getItem(KEY)||'null');}catch(e){return null;}}
+  function setAuth(u){localStorage.setItem(KEY,JSON.stringify(u));applyAuthState();}
+  function clearAuth(){localStorage.removeItem(KEY);applyAuthState();}
+
+  function applyAuthState(){
+    var authed=!!getAuth();
+    document.documentElement.classList.toggle('is-authed',authed);
+    document.documentElement.classList.toggle('is-guest',!authed);
+    // Hide the home seller-preview block when not signed in
+    var homeShop=document.getElementById('homeShop');
+    if(homeShop){
+      var block=homeShop.closest('section[data-block]')||homeShop.parentElement;
+      if(block) block.style.display=authed?'':'none';
+    }
+    // Update any "sign in / sign out" affordances
+    document.querySelectorAll('[data-auth-only]').forEach(function(el){el.style.display=authed?'':'none';});
+    document.querySelectorAll('[data-guest-only]').forEach(function(el){el.style.display=authed?'none':'';});
+    var nm=getAuth()&&getAuth().name;
+    document.querySelectorAll('[data-auth-name]').forEach(function(el){el.textContent=nm||'';});
+  }
+
+  function guardRoute(){
+    var hash=(location.hash||'').replace('#','').split('?')[0];
+    if((hash==='dashboard')&&!getAuth()){
+      location.hash='#signin';
+      return true;
+    }
+    return false;
+  }
+
+  // Wire signin / signup forms. They live in [data-page="signin"] and [data-page="signup"].
+  function wireForms(){
+    var signin=document.querySelector('[data-page="signin"] form')||document.querySelector('[data-page="signin"]');
+    var signup=document.querySelector('[data-page="signup"] form')||document.querySelector('[data-page="signup"]');
+    // Sign in: any submit on the signin page sets auth
+    if(signin){
+      signin.addEventListener('submit',function(e){e.preventDefault();var em=(signin.querySelector('input[type="email"]')||{}).value||'';var nm=em.split('@')[0]||'Friend';setAuth({name:nm.charAt(0).toUpperCase()+nm.slice(1),email:em,role:'buyer',signedInAt:Date.now()});location.hash='#dashboard';});
+      // Also catch button clicks in case there's no <form>
+      signin.querySelectorAll('button').forEach(function(b){if(b.type!=='button')b.addEventListener('click',function(e){if(!signin.matches('form')){e.preventDefault();var em=(signin.querySelector('input[type="email"]')||{}).value||'';var nm=em.split('@')[0]||'Friend';setAuth({name:nm.charAt(0).toUpperCase()+nm.slice(1),email:em,role:'buyer',signedInAt:Date.now()});location.hash='#dashboard';}});});
+    }
+    if(signup){
+      signup.addEventListener('submit',function(e){e.preventDefault();var em=(signup.querySelector('input[type="email"]')||{}).value||'';var nm=(signup.querySelector('input[name="name"]')||signup.querySelector('input[type="text"]')||{}).value||em.split('@')[0]||'Friend';var role=(document.querySelector('[data-page="signup"] .role-opt.on')||{}).getAttribute&&document.querySelector('[data-page="signup"] .role-opt.on').getAttribute('data-role')||'buyer';setAuth({name:nm,email:em,role:role,signedInAt:Date.now()});location.hash='#dashboard';});
+    }
+    // Sign-out triggers
+    document.querySelectorAll('[data-signout]').forEach(function(b){b.addEventListener('click',function(e){e.preventDefault();clearAuth();location.hash='#home';});});
+  }
+
+  window.addEventListener('hashchange',guardRoute);
+  document.addEventListener('DOMContentLoaded',function(){wireForms();applyAuthState();guardRoute();});
+  // If DOMContentLoaded already fired (script is `defer`, so DOM is ready), run now:
+  if(document.readyState!=='loading'){wireForms();applyAuthState();guardRoute();}
+
+  // Expose for console testing
+  window.nlAuth={get:getAuth,set:setAuth,clear:clearAuth};
+})();
