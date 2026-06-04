@@ -258,7 +258,9 @@
 <div class="drawer" id="drawer"><div class="bg" id="drawerBg"></div><div class="panel">
   <div class="dhead"><span style="font-weight:800;font-size:19px">Menu</span><button class="iconbtn" id="closeDrawer" aria-label="Close"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
   <a href="#browse" class="dlink drawer-nav">Browse listings</a><a href="#post" class="dlink drawer-nav">Sell on Nile Link</a><a href="#dashboard" class="dlink drawer-nav">Your shop</a><a href="#pricing" class="dlink drawer-nav">Pricing</a><a href="#about" class="dlink drawer-nav">About</a><a href="#help" class="dlink drawer-nav">Help &amp; safety</a>
-  <div class="dacts"><a href="#signin" class="btn btn-ghost btn-block drawer-nav">Log in</a><a href="#post" class="btn btn-lime btn-block drawer-nav">Start selling</a></div>
+  <div class="dacts"><a href="#signin" class="btn btn-ghost btn-block drawer-nav" data-guest-only>Sign in</a>
+<button class="btn btn-ghost btn-block drawer-nav" data-auth-only data-signout>Sign out</button>
+<a href="#post" class="btn btn-lime btn-block drawer-nav">Start selling</a></div>
 </div></div>
 
 <div class="toast" id="toast"><span class="ic"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></span><span id="toastMsg"></span></div>

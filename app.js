@@ -203,7 +203,7 @@ initHome();route();
 
 /* ===== Auth (client-side, localStorage) ===== */
 (function(){
-  var KEY='nlAuth'; // {name, email, role, signedInAt}
+  var KEY='nlAuth'; // {name, identifier, role, signedInAt}
   function getAuth(){try{return JSON.parse(localStorage.getItem(KEY)||'null');}catch(e){return null;}}
   function setAuth(u){localStorage.setItem(KEY,JSON.stringify(u));applyAuthState();}
   function clearAuth(){localStorage.removeItem(KEY);applyAuthState();}
@@ -239,13 +239,15 @@ initHome();route();
     var signin=document.querySelector('[data-page="signin"] form')||document.querySelector('[data-page="signin"]');
     var signup=document.querySelector('[data-page="signup"] form')||document.querySelector('[data-page="signup"]');
     // Sign in: any submit on the signin page sets auth
+    function readIdent(scope){var f=scope.querySelector('input[type="email"]')||scope.querySelector('input[type="tel"]');return (f&&f.value)||'';}
+    function deriveName(scope,ident){var nf=scope.querySelector('input[type="text"]');var typed=nf&&nf.value&&nf.value.trim();if(typed) return typed;if(ident&&ident.indexOf('@')>-1){var lp=ident.split('@')[0];return lp.charAt(0).toUpperCase()+lp.slice(1);}return 'Friend';}
     if(signin){
-      signin.addEventListener('submit',function(e){e.preventDefault();var em=(signin.querySelector('input[type="email"]')||{}).value||'';var nm=em.split('@')[0]||'Friend';setAuth({name:nm.charAt(0).toUpperCase()+nm.slice(1),email:em,role:'buyer',signedInAt:Date.now()});location.hash='#dashboard';});
+      signin.addEventListener('submit',function(e){e.preventDefault();var ident=readIdent(signin);var nm=deriveName(signin,ident);setAuth({name:nm,identifier:ident,role:'buyer',signedInAt:Date.now()});location.hash='#dashboard';});
       // Also catch button clicks in case there's no <form>
-      signin.querySelectorAll('button').forEach(function(b){if(b.type!=='button')b.addEventListener('click',function(e){if(!signin.matches('form')){e.preventDefault();var em=(signin.querySelector('input[type="email"]')||{}).value||'';var nm=em.split('@')[0]||'Friend';setAuth({name:nm.charAt(0).toUpperCase()+nm.slice(1),email:em,role:'buyer',signedInAt:Date.now()});location.hash='#dashboard';}});});
+      signin.querySelectorAll('button').forEach(function(b){if(b.type!=='button')b.addEventListener('click',function(e){if(!signin.matches('form')){e.preventDefault();var ident=readIdent(signin);var nm=deriveName(signin,ident);setAuth({name:nm,identifier:ident,role:'buyer',signedInAt:Date.now()});location.hash='#dashboard';}});});
     }
     if(signup){
-      signup.addEventListener('submit',function(e){e.preventDefault();var em=(signup.querySelector('input[type="email"]')||{}).value||'';var nm=(signup.querySelector('input[name="name"]')||signup.querySelector('input[type="text"]')||{}).value||em.split('@')[0]||'Friend';var role=(document.querySelector('[data-page="signup"] .role-opt.on')||{}).getAttribute&&document.querySelector('[data-page="signup"] .role-opt.on').getAttribute('data-role')||'buyer';setAuth({name:nm,email:em,role:role,signedInAt:Date.now()});location.hash='#dashboard';});
+      signup.addEventListener('submit',function(e){e.preventDefault();var ident=readIdent(signup);var nm=deriveName(signup,ident);var role=(document.querySelector('[data-page="signup"] .role-opt.on')||{}).getAttribute&&document.querySelector('[data-page="signup"] .role-opt.on').getAttribute('data-role')||'buyer';setAuth({name:nm,identifier:ident,role:role,signedInAt:Date.now()});location.hash='#dashboard';});
     }
     // Sign-out triggers
     document.querySelectorAll('[data-signout]').forEach(function(b){b.addEventListener('click',function(e){e.preventDefault();clearAuth();location.hash='#home';});});
