@@ -14,9 +14,26 @@
 </head>
 <body>
 <div id="preloader" class="preloader" aria-hidden="true">
-  <div class="preloader-inner">
-    <div class="preloader-ring"><img src="./logo.png" alt="" class="preloader-logo"></div>
-    <div class="preloader-word">Nile Link</div>
+  <div class="preloader-stage">
+    <svg class="pl-river" viewBox="0 0 320 200" preserveAspectRatio="none" aria-hidden="true">
+      <defs>
+        <linearGradient id="plRiverGrad" x1="0" y1="0" x2="1" y2="0">
+          <stop offset="0%" stop-color="#0f5e3c" stop-opacity="0"/>
+          <stop offset="50%" stop-color="#0f5e3c" stop-opacity=".9"/>
+          <stop offset="100%" stop-color="#0f5e3c" stop-opacity="0"/>
+        </linearGradient>
+      </defs>
+      <path class="pl-river-path" d="M-20 110 Q 60 70 140 110 T 340 110" fill="none" stroke="url(#plRiverGrad)" stroke-width="3" stroke-linecap="round"/>
+      <path class="pl-river-path pl-river-path-2" d="M-20 125 Q 80 95 160 125 T 340 125" fill="none" stroke="rgba(124,252,0,.5)" stroke-width="1.5" stroke-linecap="round"/>
+    </svg>
+    <div class="pl-center">
+      <div class="pl-logo-wrap">
+        <img src="./logo.png" alt="" class="pl-logo">
+        <span class="pl-flag" aria-hidden="true"><i class="pl-flag-b"></i><i class="pl-flag-r"></i><i class="pl-flag-g"></i><i class="pl-flag-tri"></i><i class="pl-flag-star"></i></span>
+      </div>
+      <div class="pl-word"><span class="pl-word-n">Nile</span><span class="pl-word-l">Link</span></div>
+      <div class="pl-tag">South Sudan&rsquo;s Marketplace</div>
+    </div>
   </div>
 </div>
 <header id="hdr"><div class="wrap nav">
@@ -28,7 +45,7 @@
     <a href="#signin" class="btn btn-ghost btn-sm desktop" data-guest-only>Sign in</a>
     <button class="btn btn-ghost btn-sm desktop" data-auth-only data-signout>Sign out</button>
     <a href="#post" class="btn btn-lime btn-sm"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>Sell</a>
-    <button class="iconbtn hamb" id="openDrawer" aria-label="Menu"><svg width="23" height="23" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+    <button class="iconbtn hamb" id="openDrawer" aria-label="Menu" aria-expanded="false"><span class="hamb-lines" aria-hidden="true"><i></i><i></i><i></i></span></button>
   </div>
 </div></header>
 <main id="app">
@@ -39,16 +56,31 @@
       <span class="eyebrow"><span class="tag">NEW</span> Discover · Order · Close with confidence</span>
       <h1>Find it. Order it.<br><span class="hl">Get it</span> — locally.</h1>
       <p class="lede">South Sudan&rsquo;s simple marketplace for products, cars, property &amp; services. Buyers order or request right here — sellers follow up. <b>List it. Sell it. Get paid.</b></p>
-      <div class="hero-search"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4-4"/></svg><input id="heroSearch" type="text" placeholder="What are you looking for?"><button class="btn btn-ink" id="heroSearchBtn">Search</button></div>
+      <div class="hero-search" role="search">
+        <svg class="hs-ic" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4-4"/></svg>
+        <input id="heroSearch" type="search" inputmode="search" autocomplete="off" autocorrect="off" spellcheck="false" placeholder="Search phones, cars, houses, services…" aria-label="Search the marketplace">
+        <button class="btn btn-ink hs-btn" id="heroSearchBtn" aria-label="Search">
+          <span class="hs-btn-text">Search</span>
+          <svg class="hs-btn-ic" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4-4"/></svg>
+        </button>
+      </div>
       <div class="chips"><span class="lbl">Popular:</span><button class="chip" data-q="iPhone">iPhone</button><button class="chip" data-q="Land Cruiser">Land Cruiser</button><button class="chip" data-q="House">Houses</button><button class="chip" data-q="Photography">Photography</button></div>
       <div class="cur-note"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/><path d="M12 2v3M12 19v3"/></svg>All prices in <b>USD &amp; SSP</b> &nbsp;·&nbsp; $1 = 4,585 SSP</div>
       <div class="hero-stats"><div><div class="n">5</div><div class="t">Launch categories</div></div><div><div class="n">100%</div><div class="t">In-platform requests</div></div><div><div class="n">Juba</div><div class="t">First &amp; growing</div></div></div>
     </div>
-    <div class="hv" aria-hidden="true"><div class="grid-dots"></div>
-      <div class="hv-card" style="--rot:2deg"><div class="media"><span class="lbl-boost"><svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><path d="M13 2L3 14h7l-1 8 10-12h-7z"/></svg>Boosted</span><svg class="glyph" width="62" height="62" viewBox="0 0 24 24" fill="none" stroke="#2f4d0c" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="2.5" width="12" height="19" rx="2.5"/><path d="M10 18.5h4"/></svg></div>
-        <div class="body"><div class="c">Electronics</div><div class="t">iPhone 13 Pro · 256GB</div><div class="r"><span><span class="p">$720</span><span style="display:block;font-size:11px;font-weight:700;color:var(--lime-deep);margin-top:1px">≈ 3,301,200 SSP</span></span><span class="mini-cta">Order Now</span></div></div></div>
-      <div class="float-note" style="--rot:0deg"><span class="ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16v12H7l-3 3z"/></svg></span><div><b>New request</b><span>Achol wants to order · just now</span></div></div>
-      <div class="float-badge" style="--rot:0deg"><span class="ic"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></span><div><b>Verified seller</b><span>Trusted on every listing</span></div></div>
+    <div class="hv" aria-hidden="true">
+      <picture class="hero-pic">
+        <source media="(max-width:760px)" srcset="./hero-mobile.jpg">
+        <source media="(min-width:761px)" srcset="./hero-desktop.jpg">
+        <img src="./hero-desktop.jpg" alt="" loading="eager" onerror="this.closest('.hero-pic').classList.add('no-img')">
+      </picture>
+      <div class="grid-dots"></div>
+      <div class="hv-floats">
+        <div class="hv-card" style="--rot:2deg"><div class="media"><span class="lbl-boost"><svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><path d="M13 2L3 14h7l-1 8 10-12h-7z"/></svg>Boosted</span><svg class="glyph" width="62" height="62" viewBox="0 0 24 24" fill="none" stroke="#2f4d0c" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="2.5" width="12" height="19" rx="2.5"/><path d="M10 18.5h4"/></svg></div>
+          <div class="body"><div class="c">Electronics</div><div class="t">iPhone 13 Pro · 256GB</div><div class="r"><span><span class="p">$720</span><span style="display:block;font-size:11px;font-weight:700;color:var(--lime-deep);margin-top:1px">≈ 3,301,200 SSP</span></span><span class="mini-cta">Order Now</span></div></div></div>
+        <div class="float-note" style="--rot:0deg"><span class="ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16v12H7l-3 3z"/></svg></span><div><b>New request</b><span>Achol wants to order · just now</span></div></div>
+        <div class="float-badge" style="--rot:0deg"><span class="ic"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></span><div><b>Verified seller</b><span>Trusted on every listing</span></div></div>
+      </div>
     </div>
   </div></div>
   <section data-block><div class="wrap"><div class="sec-head reveal"><div><span class="sec-kick">Browse</span><h2 class="sec-title">Shop by category</h2></div><a href="#browse" class="seelink">All categories</a></div><div class="cat-strip reveal" id="catStrip"></div></div></section>
@@ -239,7 +271,7 @@
     <div class="foot-col"><h5>Selling</h5><a href="#post">Become a seller</a><a href="#pricing">Pricing &amp; boosts</a><a href="#dashboard">Get verified</a><a href="#dashboard">Your shop</a><a href="#help">Seller guide</a></div>
     <div class="foot-col last"><h5>Company</h5><a href="#about">About us</a><a href="#help">Safety tips</a><a href="#help">Help center</a><a href="#help">Contact</a><a href="#about">Terms</a></div>
   </div>
-  <div class="foot-bottom"><p>&copy; 2026 Nile Link. All rights reserved.</p><p class="rate-foot"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/><path d="M12 2v3M12 19v3"/></svg>USD &amp; SSP · $1 = 4,585 SSP</p><p class="made">Built for South Sudan <span class="flagdot"><i style="background:#000"></i><i style="background:#d9472b"></i><i style="background:#0f5e3c"></i></span> by Neeza &amp; Rico</p></div>
+  <div class="foot-bottom"><p>&copy; 2026 Nile Link. All rights reserved.</p><p class="rate-foot"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/><path d="M12 2v3M12 19v3"/></svg>USD &amp; SSP · $1 = 4,585 SSP</p><p class="made">Built for South Sudan <span class="made-flag" aria-label="South Sudan flag" role="img">🇸🇸</span> by Neeza &amp; Rico</p></div>
 </div></footer>
 
 <div class="overlay" id="overlay"><div class="modal" role="dialog" aria-modal="true">
@@ -255,13 +287,34 @@
   <div class="modal-success" id="mSuccess"><div class="sic"><svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></div><h3 id="sTitle">Request sent!</h3><p id="sMsg"></p><span class="ref" id="sRef">REF · SSD-000000</span><button class="btn btn-ink btn-block" id="successDone">Keep browsing</button></div>
 </div></div>
 
-<div class="drawer" id="drawer"><div class="bg" id="drawerBg"></div><div class="panel">
-  <div class="dhead"><span style="font-weight:800;font-size:19px">Menu</span><button class="iconbtn" id="closeDrawer" aria-label="Close"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
-  <a href="#browse" class="dlink drawer-nav">Browse listings</a><a href="#post" class="dlink drawer-nav">Sell on Nile Link</a><a href="#dashboard" class="dlink drawer-nav">Your shop</a><a href="#pricing" class="dlink drawer-nav">Pricing</a><a href="#about" class="dlink drawer-nav">About</a><a href="#help" class="dlink drawer-nav">Help &amp; safety</a>
-  <div class="dacts"><a href="#signin" class="btn btn-ghost btn-block drawer-nav" data-guest-only>Sign in</a>
-<button class="btn btn-ghost btn-block drawer-nav" data-auth-only data-signout>Sign out</button>
-<a href="#post" class="btn btn-lime btn-block drawer-nav">Start selling</a></div>
-</div></div>
+<div class="drawer" id="drawer" aria-hidden="true">
+  <div class="bg" id="drawerBg"></div>
+  <div class="panel" role="dialog" aria-label="Menu">
+    <div class="drawer-head">
+      <div class="drawer-brand">
+        <img src="./logo.png" alt="" class="logomark" width="36" height="36">
+        <div class="wordmark"><span class="wm-n">Nile</span><span class="wm-sep"></span><span class="wm-l">Link</span></div>
+      </div>
+      <button class="iconbtn drawer-close" id="closeDrawer" aria-label="Close menu"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+    </div>
+    <nav class="drawer-nav-list">
+      <a href="#browse" class="dlink drawer-nav" style="--i:0"><span>Browse listings</span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 6l6 6-6 6"/></svg></a>
+      <a href="#post" class="dlink drawer-nav" style="--i:1"><span>Sell on Nile Link</span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 6l6 6-6 6"/></svg></a>
+      <a href="#dashboard" class="dlink drawer-nav" style="--i:2"><span>Your shop</span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 6l6 6-6 6"/></svg></a>
+      <a href="#pricing" class="dlink drawer-nav" style="--i:3"><span>Pricing</span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 6l6 6-6 6"/></svg></a>
+      <a href="#about" class="dlink drawer-nav" style="--i:4"><span>About</span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 6l6 6-6 6"/></svg></a>
+      <a href="#help" class="dlink drawer-nav" style="--i:5"><span>Help &amp; safety</span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 6l6 6-6 6"/></svg></a>
+    </nav>
+    <div class="dacts">
+      <a href="#signin" class="btn btn-ghost btn-block drawer-nav" data-guest-only>Sign in</a>
+      <button class="btn btn-ghost btn-block drawer-nav" data-auth-only data-signout>Sign out</button>
+      <a href="#post" class="btn btn-lime btn-block drawer-nav">Start selling</a>
+    </div>
+    <div class="drawer-foot">
+      <span>🇸🇸 Built for South Sudan</span>
+    </div>
+  </div>
+</div>
 
 <div class="toast" id="toast"><span class="ic"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></span><span id="toastMsg"></span></div>
 <script defer src="app.js"></script>

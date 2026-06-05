@@ -53,13 +53,34 @@ let REQUESTS=[
 const CTA={order:{label:'Order Now',cls:'cta-order',icon:'<path d="M5 7h14l-1 12H6z"/><path d="M9 7V5a3 3 0 0 1 6 0v2"/>'},contact:{label:'Request Contact',cls:'cta-contact',icon:'<path d="M4 4h16v12H7l-3 3z"/>'},quote:{label:'Request Quote',cls:'cta-quote',icon:'<path d="M4 5h16v10H4z"/><path d="M8 19h8M12 15v4"/>'}};
 const BADGE={boost:{cls:'bdg-boost',label:'Boosted',fill:1,icon:'<path d="M13 2L3 14h7l-1 8 10-12h-7z"/>'},feat:{cls:'bdg-feat',label:'Featured',fill:1,icon:'<path d="M12 2l2.6 6.6L21.6 9l-5 4.6 1.4 6.9L12 17.2 6 20.5 7.4 13.6 2.4 9l6.9-.4z"/>'},verified:{cls:'bdg-verified',label:'Verified',fill:0,icon:'<path d="M20 6L9 17l-5-5"/>'}};
 function badgeHTML(b){const d=BADGE[b];if(!d)return'';return '<span class="bdg '+d.cls+'"><svg width="11" height="11" viewBox="0 0 24 24" fill="'+(d.fill?'currentColor':'none')+'" stroke="'+(d.fill?'none':'currentColor')+'" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">'+d.icon+'</svg>'+d.label+'</span>'}
-function cardHTML(it,i){const cta=CTA[it.type];return '<article class="card" data-id="'+it.id+'" data-group="'+it.group+'" style="animation-delay:'+(i*45)+'ms"><div class="media"><div class="badges">'+it.badges.map(badgeHTML).join('')+'</div><button class="fav" data-fav="'+it.id+'" aria-label="Save"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 1 0-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 0 0 0-7.8z"/></svg></button>'+glyph(it.key,62)+'<span class="loc-chip"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M12 21s7-5.5 7-11a7 7 0 1 0-14 0c0 5.5 7 11 7 11z"/><circle cx="12" cy="10" r="2.2"/></svg>'+it.loc+'</span></div><div class="body"><div class="cat">'+it.cat+'</div><div class="ttl">'+it.title+'</div><div class="meta"><span class="price-wrap"><span class="price">'+usdLine(it)+'</span><span class="price-ssp">'+sspLine(it)+'</span></span><span class="seller"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg>'+it.seller+'</span></div><button class="btn btn-sm cta '+cta.cls+'" data-cta="'+it.id+'"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">'+cta.icon+'</svg>'+cta.label+'</button></div></article>'}
+function cardHTML(it,i){
+  const cta=CTA[it.type];
+  const verified=it.badges.includes('verified');
+  const initial=(it.seller||'?').charAt(0).toUpperCase();
+  return '<article class="card" data-id="'+it.id+'" data-group="'+it.group+'" style="animation-delay:'+(i*45)+'ms">'+
+    '<div class="media">'+
+      '<div class="badges">'+it.badges.map(badgeHTML).join('')+'</div>'+
+      '<button class="fav" data-fav="'+it.id+'" aria-label="Save"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 1 0-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 0 0 0-7.8z"/></svg></button>'+
+      glyph(it.key,62)+
+      '<span class="loc-chip"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M12 21s7-5.5 7-11a7 7 0 1 0-14 0c0 5.5 7 11 7 11z"/><circle cx="12" cy="10" r="2.2"/></svg>'+it.loc+'</span>'+
+    '</div>'+
+    '<div class="body">'+
+      '<div class="cat">'+it.cat+'</div>'+
+      '<div class="ttl">'+it.title+'</div>'+
+      '<div class="price-row"><span class="price">'+usdLine(it)+'</span><span class="price-ssp">'+sspLine(it)+'</span></div>'+
+      '<a class="seller-chip" href="#shop?seller='+encodeURIComponent(it.seller)+'" data-seller-link><span class="sc-av">'+initial+'</span><span class="sc-info"><span class="sc-name">'+it.seller+(verified?' <svg class="sc-tick" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>':'')+'</span><span class="sc-role">'+(verified?'Verified seller':'Seller')+'</span></span></a>'+
+      '<button class="btn btn-sm cta '+cta.cls+'" data-cta="'+it.id+'"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">'+cta.icon+'</svg>'+cta.label+'</button>'+
+    '</div>'+
+  '</article>';
+}
 function renderGrid(el,list){if(!el)return;el.innerHTML=list.length?list.map((it,i)=>cardHTML(it,i)).join(''):'<div class="empty"><svg width="54" height="54" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4-4"/></svg><p style="font-weight:600;color:var(--slate)">No listings match — try another category or search.</p></div>'}
 document.addEventListener('click',e=>{
   const fav=e.target.closest('[data-fav]');
   if(fav){e.stopPropagation();fav.classList.toggle('on');const s=fav.querySelector('svg');if(s){s.classList.add('pop');setTimeout(()=>s.classList.remove('pop'),300)}return}
   const cta=e.target.closest('[data-cta]');
   if(cta){e.stopPropagation();openModal(+cta.dataset.cta);return}
+  const sellerLink=e.target.closest('[data-seller-link]');
+  if(sellerLink){return}
   const card=e.target.closest('.card[data-id]');
   if(card){location.hash='#listing?id='+card.dataset.id}
 });
@@ -176,11 +197,12 @@ function initPost(){
 }
 
 let toastT;function showToast(msg){const t=document.getElementById('toast');document.getElementById('toastMsg').innerHTML=msg;t.classList.add('show');clearTimeout(toastT);toastT=setTimeout(()=>t.classList.remove('show'),2600)}
-const drawer=document.getElementById('drawer');function openDr(){drawer.classList.add('show');document.body.style.overflow='hidden'}function closeDr(){drawer.classList.remove('show');document.body.style.overflow=''}
+const drawer=document.getElementById('drawer');function openDr(){drawer.classList.add('show');drawer.classList.add('open');const ob=document.getElementById('openDrawer');if(ob)ob.setAttribute('aria-expanded','true');drawer.setAttribute('aria-hidden','false');document.body.style.overflow='hidden'}function closeDr(){drawer.classList.remove('show');drawer.classList.remove('open');const ob=document.getElementById('openDrawer');if(ob)ob.setAttribute('aria-expanded','false');drawer.setAttribute('aria-hidden','true');document.body.style.overflow=''}
 document.getElementById('openDrawer').addEventListener('click',openDr);
 document.getElementById('closeDrawer').addEventListener('click',closeDr);
 document.getElementById('drawerBg').addEventListener('click',closeDr);
 document.querySelectorAll('.drawer-nav').forEach(a=>a.addEventListener('click',closeDr));
+document.addEventListener('keydown',function(e){if(e.key==='Escape'&&drawer.classList.contains('open'))closeDr();});
 
 const PAGES=['home','browse','listing','post','dashboard','shop','pricing','about','help','signin','signup'];
 function parseHash(){let h=location.hash.replace(/^#/,'')||'home';const i=h.indexOf('?');let page=h,query='';if(i>=0){page=h.slice(0,i);query=h.slice(i+1)}if(!PAGES.includes(page))page='home';const params={};query.split('&').filter(Boolean).forEach(p=>{const [k,v]=p.split('=');params[k]=decodeURIComponent(v||'')});return {page,params}}
