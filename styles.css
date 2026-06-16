@@ -461,3 +461,9 @@ h1,h2,.sec-title{text-wrap:balance}
   .hero-text{max-width:none;padding-top:48vh}
   .hero-glow{display:none}
 }
+
+/* ===== Product Images ===== */
+.card .media .card-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;border-radius:inherit;transition:transform .4s ease}
+.card:hover .media .card-img{transform:scale(1.04)}
+.pdp-gallery .main-img .pdp-main-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;border-radius:var(--r-xl);display:block}
+.pdp-gallery .pdp-thumb img{width:100%;height:100%;object-fit:cover;display:block;border-radius:11px}
