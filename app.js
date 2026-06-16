@@ -1,12 +1,15 @@
 (function(){
   var pl=document.getElementById('preloader');
   if(!pl) return;
+  var start=Date.now();
+  var MIN=2900;  // always show the full ring-reveal animation, even on fast networks
+  var CAP=5000;  // absolute safety cap so it never gets stuck
   var hidden=false;
-  var hide=function(){if(hidden) return;hidden=true;pl.classList.add('done');setTimeout(function(){if(pl.parentNode)pl.remove();},650);};
-  var minDelay=function(cb){setTimeout(cb,650);}; // graceful minimum so it doesn't flash
-  if(document.readyState==='complete'){minDelay(hide);}
-  else{window.addEventListener('load',function(){minDelay(hide);});}
-  setTimeout(hide,3000); // hard cap at 3s
+  var hide=function(){if(hidden) return;hidden=true;pl.classList.add('done');setTimeout(function(){if(pl.parentNode)pl.remove();},700);};
+  var schedule=function(){setTimeout(hide,Math.max(MIN-(Date.now()-start),0));};
+  if(document.readyState==='complete'){schedule();}
+  else{window.addEventListener('load',schedule);}
+  setTimeout(hide,CAP);
 })();
 const ICONS={electronics:'<rect x="6" y="2.5" width="12" height="19" rx="2.5"/><path d="M10 18.5h4"/>',fashion:'<path d="M8 3l-4 4 2.5 2.5L8 8v13h8V8l1.5 1.5L20 7l-4-4-2 2a2 2 0 0 1-4 0z"/>',cars:'<path d="M3 13l2-5a3 3 0 0 1 2.8-2h8.4A3 3 0 0 1 19 8l2 5"/><path d="M3 13h18v4a1 1 0 0 1-1 1h-2M3 13v4a1 1 0 0 0 1 1h2"/><circle cx="7" cy="18" r="1.8"/><circle cx="17" cy="18" r="1.8"/>',property:'<path d="M3 10.5L12 3l9 7.5"/><path d="M5 9.5V20h14V9.5"/><path d="M9.5 20v-6h5v6"/>',services:'<path d="M14.5 6.5a3.5 3.5 0 0 1-4.7 4.7L4 17l3 3 5.8-5.8a3.5 3.5 0 0 1 4.7-4.7l-2.5 2.5-1.4-1.4 2.5-2.5"/>'};
 function glyph(k,s){return '<svg class="glyph" width="'+s+'" height="'+s+'" viewBox="0 0 24 24" fill="none" stroke="#2f4d0c" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">'+(ICONS[k]||ICONS.services)+'</svg>'}
