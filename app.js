@@ -412,8 +412,8 @@ function revealInit(){document.querySelectorAll('.reveal').forEach(el=>{if(!el.d
 const io=new IntersectionObserver(es=>es.forEach(en=>{if(en.isIntersecting){en.target.classList.add('in');io.unobserve(en.target)}}),{threshold:.1});
 const hdr=document.getElementById('hdr');window.addEventListener('scroll',()=>hdr.classList.toggle('scrolled',window.scrollY>10));
 window.addEventListener('hashchange',route);
-window.addEventListener('DOMContentLoaded',()=>{initHome();route()});
-initHome();route();
+/* NOTE: initial initHome()/route() bootstrap moved to end of file so all data
+   (CONVERSATIONS, NOTIFICATIONS, etc.) is declared before route() first runs. */
 
 /* ===== Auth (client-side, localStorage) ===== */
 (function(){
@@ -785,3 +785,7 @@ function initPost(){
 /* ---- Initial hydration of badges + recent rail ---- */
 document.addEventListener('DOMContentLoaded',()=>{updateBadges();renderRecentRail()});
 updateBadges();renderRecentRail();
+
+/* ---- App bootstrap (runs last, after every const/function above is defined) ---- */
+function bootApp(){initHome();route();}
+if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded',bootApp);}else{bootApp();}
