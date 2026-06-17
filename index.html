@@ -62,6 +62,21 @@
   <nav class="nav-links"><a href="#browse" data-nav="browse">Browse</a><a href="#post" data-nav="post">Sell</a><a href="#pricing" data-nav="pricing">Pricing</a><a href="#about" data-nav="about">About</a><a href="#help" data-nav="help">Help</a></nav>
   <div class="nav-search-wrap"><div class="nav-search"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4-4"/></svg><input id="navSearch" type="text" placeholder="Search the marketplace…" autocomplete="off" role="combobox" aria-expanded="false" aria-controls="navSearchDropdown"></div><div class="search-dropdown" id="navSearchDropdown" role="listbox" aria-label="Search suggestions"></div></div>
   <div class="nav-actions">
+    <div class="nav-bell-wrap">
+      <button class="iconbtn desktop nav-bell" id="navBell" aria-label="Notifications" aria-expanded="false" aria-controls="notifDropdown">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 16v-5a6 6 0 0 0-12 0v5l-2 2v1h16v-1z"/><path d="M10 21a2 2 0 0 0 4 0"/></svg>
+        <span class="nav-bell-dot" data-notif-count aria-hidden="true"></span>
+      </button>
+      <div class="notif-dropdown" id="notifDropdown" role="dialog" aria-label="Notifications">
+        <div class="notif-head"><h3>Notifications</h3><button class="notif-clear" id="notifClear">Mark all read</button></div>
+        <div class="notif-list" id="notifList" role="list"></div>
+        <a href="#notifications" class="notif-see-all">View all notifications<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+      </div>
+    </div>
+    <a href="#messages" class="iconbtn desktop nav-msg" data-nav="messages" aria-label="Messages">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h16v11H8l-4 4z"/></svg>
+      <span class="nav-msg-dot" data-msg-count aria-hidden="true"></span>
+    </a>
     <a href="#dashboard" class="iconbtn desktop" data-nav="dashboard" aria-label="Your shop"><svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg></a>
     <a href="#signin" class="btn btn-ghost btn-sm desktop" data-guest-only>Sign in</a>
     <button class="btn btn-ghost btn-sm desktop" data-auth-only data-signout>Sign out</button>
@@ -103,6 +118,11 @@
   </div>
 
   <section data-block class="block-tight"><div class="wrap"><div class="cat-head reveal"><h2 class="sec-title">Browse categories</h2><a href="#browse" class="seelink">See all</a></div><div class="cat-strip reveal" id="catStrip"></div></div></section>
+
+  <section data-block class="block-tight" id="recentSection" hidden><div class="wrap">
+    <div class="cat-head reveal"><h2 class="sec-title">Recently viewed</h2><button class="seelink as-link" id="recentClear" type="button">Clear history</button></div>
+    <div class="recent-rail" id="recentRail" role="list"></div>
+  </div></section>
 
   <section data-block class="block-tight"><div class="wrap">
     <div class="cat-head reveal"><h2 class="sec-title">Fresh on the market</h2><a href="#browse" class="seelink">View all</a></div>
@@ -220,6 +240,54 @@
   <div class="wrap" style="padding:8px 0 40px"><div class="grid" id="savedGrid"></div></div>
 </section>
 
+<section class="page" data-page="messages">
+  <div class="back-bar"><div class="wrap back-bar-row">
+    <a href="#home" class="back-link" aria-label="Back to home"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></svg><span>Back</span></a>
+    <nav class="crumb-inline" aria-label="Breadcrumb"><a href="#home">Home</a><span class="sep">›</span><span class="cur">Messages</span></nav>
+  </div></div>
+  <div class="wrap msg-layout" id="msgLayout">
+    <aside class="msg-list" id="msgList">
+      <div class="msg-list-head">
+        <h2>Messages</h2>
+        <span class="msg-list-count" id="msgListCount">0</span>
+      </div>
+      <div class="msg-search">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4-4"/></svg>
+        <input id="msgSearch" type="text" placeholder="Search conversations…" autocomplete="off">
+      </div>
+      <div class="msg-conv-list" id="msgConvList" role="list"></div>
+    </aside>
+    <main class="msg-thread" id="msgThread">
+      <div class="msg-empty" id="msgEmpty">
+        <div class="me-ic"><svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h16v11H8l-4 4z"/></svg></div>
+        <h3>Select a conversation</h3>
+        <p>Pick a thread to read messages and reply.</p>
+      </div>
+      <div class="msg-thread-head" id="msgThreadHead" hidden>
+        <button class="msg-back" id="msgBack" aria-label="Back to conversations"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></svg></button>
+        <div class="mt-av" id="mtAv"></div>
+        <div class="mt-info"><div class="mt-name" id="mtName"></div><div class="mt-sub" id="mtSub"></div></div>
+        <a class="mt-view-listing" id="mtViewListing" href="#">View listing</a>
+      </div>
+      <div class="msg-thread-body" id="msgThreadBody" hidden></div>
+      <form class="msg-composer" id="msgComposer" hidden onsubmit="return false">
+        <button type="button" class="mc-attach" aria-label="Attach image"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.5l-8.5 8.5a5.5 5.5 0 0 1-7.8-7.8L13 5a3.7 3.7 0 0 1 5.2 5.2l-8.4 8.4a1.9 1.9 0 0 1-2.6-2.6L14 9.5"/></svg></button>
+        <textarea id="msgInput" rows="1" placeholder="Type a message…" aria-label="Message"></textarea>
+        <button type="button" class="mc-send" id="msgSend" aria-label="Send"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M3 11l18-8-8 18-2-7z"/></svg></button>
+      </form>
+    </main>
+  </div>
+</section>
+
+<section class="page" data-page="notifications">
+  <div class="back-bar"><div class="wrap back-bar-row">
+    <a href="#home" class="back-link" aria-label="Back to home"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></svg><span>Back</span></a>
+    <nav class="crumb-inline" aria-label="Breadcrumb"><a href="#home">Home</a><span class="sep">›</span><span class="cur">Notifications</span></nav>
+  </div></div>
+  <div class="browse-head"><div class="wrap"><div class="bh-top"><div class="bh-title"><h1>Notifications</h1><p>Activity on your listings, orders, and account.</p></div><button class="btn btn-ghost btn-sm" id="notifClearAll"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>Mark all read</button></div></div></div>
+  <div class="wrap" style="padding:8px 0 40px"><div class="notif-page" id="notifPage"></div></div>
+</section>
+
 <section class="page" data-page="listing">
   <div class="page-head"><div class="wrap"><div class="crumb" id="pdpCrumb"></div></div></div>
   <div class="wrap pdp" id="pdpContent"></div>
@@ -227,30 +295,65 @@
 </section>
 
 <section class="page" data-page="post">
-  <div class="page-head"><div class="wrap"><div class="crumb"><a href="#home">Home</a> › <span>Sell</span></div><h1>Create a listing</h1><p>Fill in the details, save as a draft, or publish straight to the marketplace.</p></div></div>
-  <div class="wrap post-layout">
-    <form class="post-form" id="postForm" onsubmit="return false">
-      <div class="cta-hint" id="ctaHint"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l8 4v6c0 5-3.5 8-8 10-4.5-2-8-5-8-10V6z"/></svg><span>Buyers will see an <b id="ctaHintLabel">Order Now</b> button on this listing.</span><span class="pill" id="ctaHintPill">Order</span></div>
-      <div class="field"><label>Category</label><select id="pCat"><option value="electronics">Phones &amp; Electronics</option><option value="fashion">Fashion &amp; Beauty</option><option value="cars">Cars &amp; Motorbikes</option><option value="property">Property &amp; Land</option><option value="services">Services</option></select></div>
-      <div class="field"><label>Listing title</label><input id="pTitle" type="text" placeholder="e.g. iPhone 13 Pro · 256GB · Clean" maxlength="60"></div>
-      <div class="field"><label>Description</label><textarea id="pDesc" rows="4" placeholder="Describe the item, condition, and any details buyers should know…"></textarea></div>
-      <div class="field-row">
-        <div class="field"><label>Price (USD)</label><div class="price-input"><span class="dollar">$</span><input id="pPrice" type="number" min="0" placeholder="0"></div><div class="ssp-preview" id="pSsp">≈ 0 SSP</div></div>
-        <div class="field"><label>Location</label><input id="pLoc" type="text" placeholder="e.g. Juba, Munuki"></div>
-      </div>
-      <div class="field"><label>Photos <span class="hint">(add up to 4 — first is the cover)</span></label>
-        <div class="photo-row">
-          <div class="photo-tile cover"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="8.5" cy="10" r="1.5"/><path d="M21 16l-5-5L5 21"/></svg></div>
-          <div class="photo-tile"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></div>
-          <div class="photo-tile"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></div>
-          <div class="photo-tile"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></div>
-        </div></div>
-      <div class="post-actions"><button class="btn btn-ink btn-block" id="publishBtn">Publish listing</button><button class="btn btn-ghost" id="draftBtn">Save draft</button></div>
-    </form>
-    <aside class="post-side">
-      <div class="preview-wrap"><div class="pl">Live preview</div><div id="previewCard"></div></div>
-      <div class="tips"><h4><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M13 2L3 14h7l-1 8 10-12h-7z"/></svg>Tips for a fast sale</h4><ul style="list-style:none"><li>Use a clear cover photo in good light</li><li>Be specific in the title (brand, model, size)</li><li>Set a fair price — buyers compare</li><li>Add your location so nearby buyers find you</li></ul></div>
-    </aside>
+  <div class="back-bar"><div class="wrap back-bar-row">
+    <a href="#home" class="back-link" aria-label="Back to home"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></svg><span>Back</span></a>
+    <nav class="crumb-inline" aria-label="Breadcrumb"><a href="#home">Home</a><span class="sep">›</span><span class="cur">Sell</span></nav>
+  </div></div>
+  <div class="wrap post-wizard-wrap">
+    <header class="pw-head"><h1>Create a listing</h1><p>It takes about a minute. You can save as a draft any time.</p></header>
+    <ol class="pw-progress" id="pwProgress" aria-label="Listing steps">
+      <li class="pw-step on" data-step="1"><span class="pw-num">1</span><span class="pw-label">Category</span></li>
+      <li class="pw-step" data-step="2"><span class="pw-num">2</span><span class="pw-label">Photos &amp; details</span></li>
+      <li class="pw-step" data-step="3"><span class="pw-num">3</span><span class="pw-label">Price &amp; location</span></li>
+      <li class="pw-step" data-step="4"><span class="pw-num">4</span><span class="pw-label">Review</span></li>
+    </ol>
+    <div class="post-layout pw-layout">
+      <form class="post-form pw-form" id="postForm" onsubmit="return false">
+        <div class="pw-panel" data-panel="1">
+          <h2 class="pw-h">What are you selling?</h2>
+          <p class="pw-sub">Pick the category that fits best and write a clear title.</p>
+          <div class="cta-hint" id="ctaHint"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l8 4v6c0 5-3.5 8-8 10-4.5-2-8-5-8-10V6z"/></svg><span>Buyers will see an <b id="ctaHintLabel">Order Now</b> button on this listing.</span><span class="pill" id="ctaHintPill">Order</span></div>
+          <div class="field"><label>Category</label>
+            <div class="pw-cats" id="pwCats"></div>
+            <select id="pCat" hidden><option value="electronics">Phones &amp; Electronics</option><option value="fashion">Fashion &amp; Beauty</option><option value="cars">Cars &amp; Motorbikes</option><option value="property">Property &amp; Land</option><option value="services">Services</option></select>
+          </div>
+          <div class="field"><label>Listing title <span class="hint" id="pTitleCount">0/60</span></label><input id="pTitle" type="text" placeholder="e.g. iPhone 13 Pro · 256GB · Clean" maxlength="60" aria-describedby="pTitleErr"><span class="field-err" id="pTitleErr" hidden></span></div>
+        </div>
+        <div class="pw-panel" data-panel="2" hidden>
+          <h2 class="pw-h">Add photos and details</h2>
+          <p class="pw-sub">Listings with clear photos get up to 3× more requests.</p>
+          <div class="field"><label>Photos <span class="hint">First photo is the cover · up to 6 photos</span></label>
+            <div class="pw-photos" id="pwPhotos" role="list"></div>
+            <input id="pwFile" type="file" accept="image/*" multiple hidden>
+            <button type="button" class="pw-add-btn" id="pwAddPhoto"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>Add photos</button>
+          </div>
+          <div class="field"><label>Description <span class="hint" id="pDescCount">0 chars</span></label><textarea id="pDesc" rows="5" placeholder="Describe condition, model, what's included, why you&rsquo;re selling…" aria-describedby="pDescErr"></textarea><span class="field-err" id="pDescErr" hidden></span></div>
+        </div>
+        <div class="pw-panel" data-panel="3" hidden>
+          <h2 class="pw-h">Set a price and location</h2>
+          <p class="pw-sub">Prices show in both USD and SSP based on today&rsquo;s live rate.</p>
+          <div class="field-row">
+            <div class="field"><label>Price (USD)</label><div class="price-input"><span class="dollar">$</span><input id="pPrice" type="number" min="0" placeholder="0" inputmode="numeric" aria-describedby="pPriceErr"></div><div class="ssp-preview" id="pSsp">≈ 0 SSP</div><span class="field-err" id="pPriceErr" hidden></span></div>
+            <div class="field"><label>Location</label><input id="pLoc" type="text" placeholder="e.g. Juba, Munuki" aria-describedby="pLocErr"><span class="field-err" id="pLocErr" hidden></span></div>
+          </div>
+        </div>
+        <div class="pw-panel" data-panel="4" hidden>
+          <h2 class="pw-h">Review your listing</h2>
+          <p class="pw-sub">Make sure everything looks right before publishing.</p>
+          <div class="pw-review" id="pwReview"></div>
+        </div>
+        <div class="pw-nav">
+          <button class="btn btn-ghost" id="pwBack" type="button" hidden><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></svg>Back</button>
+          <button class="btn btn-ghost" id="draftBtn" type="button">Save draft</button>
+          <button class="btn btn-ink pw-next-btn" id="pwNext" type="button">Continue<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg></button>
+          <button class="btn btn-lime pw-publish-btn" id="publishBtn" type="button" hidden><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>Publish listing</button>
+        </div>
+      </form>
+      <aside class="post-side">
+        <div class="preview-wrap"><div class="pl">Live preview</div><div id="previewCard"></div></div>
+        <div class="tips"><h4><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M13 2L3 14h7l-1 8 10-12h-7z"/></svg>Tips for a fast sale</h4><ul style="list-style:none"><li>Use a clear cover photo in good light</li><li>Be specific in the title (brand, model, size)</li><li>Set a fair price — buyers compare</li><li>Add your location so nearby buyers find you</li></ul></div>
+      </aside>
+    </div>
   </div>
 </section>
 <section class="page" data-page="dashboard">

@@ -383,20 +383,7 @@ document.getElementById('submitReq').addEventListener('click',()=>{const name=do
   document.getElementById('sMsg').innerHTML=t==='order'?'<b>'+currentItem.seller+'</b> received your order and will confirm availability and delivery shortly.':t==='contact'?'<b>'+currentItem.seller+'</b> got your request and will reach out on the number you provided.':'<b>'+currentItem.seller+'</b> will review your request and send a quote soon.';
   document.getElementById('sRef').textContent='REF · '+ref;document.getElementById('mSuccess').classList.add('show')});
 
-let postBound=false;
-function previewListing(){const cat=document.getElementById('pCat').value;const title=document.getElementById('pTitle').value||'Your listing title';const usd=+document.getElementById('pPrice').value||0;const loc=document.getElementById('pLoc').value||'Location';const t=typeForCat(cat);const cta=CTA[t];const it={id:0,title:title,cat:CATLABEL[cat],key:cat,usd:usd,note:cat==='property'?'/mo':'',loc:loc,seller:'You',type:t,group:groupForCat(cat),badges:['boost']};document.getElementById('previewCard').innerHTML=cardHTML(it,0)}
-function initPost(){
-  if(!postBound){
-    const cat=document.getElementById('pCat'),title=document.getElementById('pTitle'),desc=document.getElementById('pDesc'),price=document.getElementById('pPrice'),loc=document.getElementById('pLoc');
-    function updHint(){const k=cat.value;const t=typeForCat(k);const lbl={order:'Order Now',contact:'Request Contact',quote:'Request Quote'}[t];const pill={order:'Order',contact:'Contact',quote:'Quote'}[t];document.getElementById('ctaHintLabel').textContent=lbl;document.getElementById('ctaHintPill').textContent=pill;previewListing()}
-    function updSsp(){const v=+price.value||0;document.getElementById('pSsp').textContent='≈ '+fmtSSP(v*RATE);previewListing()}
-    cat.addEventListener('change',updHint);[title,desc,price,loc].forEach(el=>el.addEventListener('input',previewListing));price.addEventListener('input',updSsp);
-    document.getElementById('publishBtn').addEventListener('click',()=>{if(!title.value.trim()||!price.value){showToast('Add a title and price first');return}const k=cat.value;SHOP.unshift({id:'n'+Date.now(),title:title.value.trim(),cat:CATLABEL[k],key:k,usd:+price.value,note:k==='property'?'/mo':'',status:'pending'});showToast('Published — awaiting review');setTimeout(()=>location.hash='#dashboard',600)});
-    document.getElementById('draftBtn').addEventListener('click',()=>{if(!title.value.trim()){showToast('Add a title first');return}const k=cat.value;SHOP.unshift({id:'d'+Date.now(),title:title.value.trim(),cat:CATLABEL[k],key:k,usd:+price.value||0,note:k==='property'?'/mo':'',status:'draft',pct:30,missing:'Add more details'});showToast('Saved as draft');setTimeout(()=>location.hash='#dashboard',600)});
-    postBound=true;
-  }
-  previewListing();
-}
+/* legacy initPost removed — replaced by wizard-driven initPost below */
 
 let toastT;function showToast(msg){const t=document.getElementById('toast');document.getElementById('toastMsg').innerHTML=msg;t.classList.add('show');clearTimeout(toastT);toastT=setTimeout(()=>t.classList.remove('show'),2600)}
 const drawer=document.getElementById('drawer');function openDr(){drawer.classList.add('show');drawer.classList.add('open');const ob=document.getElementById('openDrawer');if(ob)ob.setAttribute('aria-expanded','true');drawer.setAttribute('aria-hidden','false');document.body.style.overflow='hidden'}function closeDr(){drawer.classList.remove('show');drawer.classList.remove('open');const ob=document.getElementById('openDrawer');if(ob)ob.setAttribute('aria-expanded','false');drawer.setAttribute('aria-hidden','true');document.body.style.overflow=''}
@@ -406,9 +393,11 @@ document.getElementById('drawerBg').addEventListener('click',closeDr);
 document.querySelectorAll('.drawer-nav').forEach(a=>a.addEventListener('click',closeDr));
 document.addEventListener('keydown',function(e){if(e.key==='Escape'&&drawer.classList.contains('open'))closeDr();});
 
-const PAGES=['home','browse','listing','post','dashboard','shop','pricing','about','help','signin','signup','saved'];
+const PAGES=['home','browse','listing','post','dashboard','shop','pricing','about','help','signin','signup','saved','messages','notifications'];
 function parseHash(){let h=location.hash.replace(/^#/,'')||'home';const i=h.indexOf('?');let page=h,query='';if(i>=0){page=h.slice(0,i);query=h.slice(i+1)}if(!PAGES.includes(page))page='home';const params={};query.split('&').filter(Boolean).forEach(p=>{const [k,v]=p.split('=');params[k]=decodeURIComponent(v||'')});return {page,params}}
-function route(){const {page,params}=parseHash();document.querySelectorAll('.page').forEach(p=>p.classList.toggle('active',p.dataset.page===page));document.querySelectorAll('[data-nav]').forEach(n=>n.classList.toggle('on',n.dataset.nav===page));document.body.classList.toggle('is-listing',page==='listing');window.scrollTo(0,0);closeDr();updateSavedBadge();
+function route(){const {page,params}=parseHash();document.querySelectorAll('.page').forEach(p=>p.classList.toggle('active',p.dataset.page===page));document.querySelectorAll('[data-nav]').forEach(n=>n.classList.toggle('on',n.dataset.nav===page));document.body.classList.toggle('is-listing',page==='listing');window.scrollTo(0,0);closeDr();updateSavedBadge();if(typeof updateBadges==='function')updateBadges();
+  if(page==='messages')renderMessages(params.c||'');
+  if(page==='notifications')renderNotificationsPage();
   if(page==='browse')initBrowse();
   if(page==='listing')renderListingDetail(+params.id||1);
   if(page==='post')initPost();
@@ -486,3 +475,313 @@ initHome();route();
   // Expose for console testing
   window.nlAuth={get:getAuth,set:setAuth,clear:clearAuth};
 })();
+
+/* ============================================================
+   Month 2 sprint additions
+   ============================================================ */
+
+/* ---- Thin API data layer (Promise-returning facade ready for backend swap) ---- */
+window.NL=window.NL||{};
+NL.api=(function(){
+  function delay(ms){return new Promise(r=>setTimeout(r,ms||60))}
+  function ok(d){return delay().then(()=>({ok:true,data:d}))}
+  return {
+    listings:{
+      list:(filters)=>ok(LISTINGS),
+      get:(id)=>ok(LISTINGS.find(l=>l.id===+id)||null),
+      create:(p)=>ok({id:'n'+Date.now(),...p,status:'pending'}),
+      saveDraft:(p)=>ok({id:'d'+Date.now(),...p,status:'draft'})
+    },
+    favorites:{list:()=>ok(FAVS),toggle:(id)=>ok(toggleFav(id))},
+    requests:{list:()=>ok(REQUESTS),create:(p)=>ok({id:'r'+Date.now(),...p,status:'new'})},
+    messages:{
+      conversations:()=>ok(CONVERSATIONS),
+      thread:(id)=>ok(MESSAGES[id]||[]),
+      send:(convId,text)=>{const m={from:'me',text,time:'Just now'};(MESSAGES[convId]=MESSAGES[convId]||[]).push(m);const c=CONVERSATIONS.find(x=>x.id===convId);if(c){c.lastMsg=text;c.lastTime='Just now'}return ok(m)}
+    },
+    notifications:{
+      list:()=>ok(NOTIFICATIONS),
+      markRead:(id)=>{const n=NOTIFICATIONS.find(x=>x.id===id);if(n)n.read=true;return ok(n)},
+      markAllRead:()=>{NOTIFICATIONS.forEach(n=>n.read=true);return ok(NOTIFICATIONS)}
+    },
+    rate:{get:()=>ok(RATE)}
+  };
+})();
+
+/* ---- Mock data: conversations, messages, notifications ---- */
+const CONVERSATIONS=[
+  {id:'c1',with:'TechHub SS',listingId:1,listingTitle:'iPhone 13 Pro · 256GB · Clean',lastMsg:'Yes, the price is negotiable. When can you pick up?',lastTime:'2h ago',unread:0,verified:true,avInitial:'T'},
+  {id:'c2',with:'Nile Motors',listingId:2,listingTitle:'Toyota Land Cruiser V8 (2016)',lastMsg:'Can we meet tomorrow at 10am at the Tongping yard?',lastTime:'5h ago',unread:2,verified:true,avInitial:'N'},
+  {id:'c3',with:'Juba Homes',listingId:3,listingTitle:'3-Bedroom House · Thongpiny',lastMsg:'I sent over the rental contract. Let me know.',lastTime:'1d ago',unread:0,verified:true,avInitial:'J'},
+  {id:'c4',with:'Lensia Studio',listingId:4,listingTitle:'Wedding & Event Photography',lastMsg:'Looking forward to your wedding next month!',lastTime:'2d ago',unread:0,verified:false,avInitial:'L'},
+  {id:'c5',with:'Achol Styles',listingId:5,listingTitle:'Ankara Two-Piece Set · Custom',lastMsg:'I have 3 fabric options I can show you.',lastTime:'3d ago',unread:1,verified:false,avInitial:'A'}
+];
+const MESSAGES={
+  c1:[{from:'them',text:'Hi, is the iPhone still available?',time:'10:14'},{from:'me',text:'Yes, brand new condition. 256GB, battery health 92%.',time:'10:18'},{from:'them',text:'Can we negotiate on the price?',time:'10:22'},{from:'me',text:'A little. Best is $700 if you can pick up today.',time:'10:24'},{from:'them',text:'Yes, the price is negotiable. When can you pick up?',time:'2h ago'}],
+  c2:[{from:'them',text:'Hello, interested in the Land Cruiser. Is it negotiable?',time:'Yesterday'},{from:'me',text:'Yes — come for inspection first then we talk price.',time:'Yesterday'},{from:'them',text:'Sounds good. Can we meet tomorrow at 10am at the Tongping yard?',time:'5h ago'}],
+  c3:[{from:'me',text:'Hi, sending the rental contract now.',time:'1d ago'},{from:'them',text:'I sent over the rental contract. Let me know.',time:'1d ago'}],
+  c4:[{from:'me',text:'Booked you for May 14 wedding.',time:'2d ago'},{from:'them',text:'Looking forward to your wedding next month!',time:'2d ago'}],
+  c5:[{from:'them',text:'I have 3 fabric options I can show you.',time:'3d ago'}]
+};
+const NOTIFICATIONS=[
+  {id:'no1',type:'request',title:'New order request',body:'Achol Deng wants to order iPhone 13 Pro · 256GB',time:'5m ago',read:false,link:'#dashboard',icon:'cart'},
+  {id:'no2',type:'message',title:'New message',body:'Nile Motors: Can we meet tomorrow at 10am?',time:'2h ago',read:false,link:'#messages?c=c2',icon:'chat'},
+  {id:'no3',type:'system',title:'Verified badge approved',body:'Your shop is now verified — buyers see the green tick everywhere.',time:'1d ago',read:false,link:'#dashboard',icon:'shield'},
+  {id:'no4',type:'boost',title:'Boost ending soon',body:'Your boost on iPhone 13 Pro ends in 2 days.',time:'3d ago',read:true,link:'#listing?id=1',icon:'bolt'},
+  {id:'no5',type:'request',title:'New quote request',body:'Mary Nyandeng requested a quote for Wedding Photography.',time:'5d ago',read:true,link:'#dashboard',icon:'doc'},
+  {id:'no6',type:'system',title:'Welcome to Nile Link!',body:'Your account is set up. Start by listing your first item.',time:'1w ago',read:true,link:'#post',icon:'spark'}
+];
+const NOTIF_ICONS={
+  cart:'<path d="M5 7h14l-1 12H6z"/><path d="M9 7V5a3 3 0 0 1 6 0v2"/>',
+  chat:'<path d="M4 5h16v11H8l-4 4z"/>',
+  shield:'<path d="M12 2l8 4v6c0 5-3.5 8-8 10-4.5-2-8-5-8-10V6z"/><path d="M9 12l2 2 4-4"/>',
+  bolt:'<path d="M13 2L3 14h7l-1 8 10-12h-7z"/>',
+  doc:'<path d="M14 2H6v20h12V6z"/><path d="M14 2v4h4"/>',
+  spark:'<path d="M12 2v6M12 16v6M2 12h6M16 12h6M5 5l4 4M15 15l4 4M5 19l4-4M15 9l4-4"/>'
+};
+
+/* ---- Recently viewed (localStorage) ---- */
+let RECENT=[];try{RECENT=JSON.parse(localStorage.getItem('nl_recent')||'[]').map(Number).filter(Number.isFinite)}catch(e){RECENT=[]}
+function pushRecent(id){id=+id;if(!id)return;RECENT=[id,...RECENT.filter(x=>x!==id)].slice(0,10);try{localStorage.setItem('nl_recent',JSON.stringify(RECENT))}catch(e){}renderRecentRail()}
+function clearRecent(){RECENT=[];try{localStorage.removeItem('nl_recent')}catch(e){}renderRecentRail()}
+function renderRecentRail(){
+  const sec=document.getElementById('recentSection');const rail=document.getElementById('recentRail');if(!sec||!rail)return;
+  const items=RECENT.map(id=>LISTINGS.find(l=>l.id===id)).filter(Boolean);
+  if(!items.length){sec.hidden=true;return}
+  sec.hidden=false;
+  rail.innerHTML=items.map(it=>'<a href="#listing?id='+it.id+'" class="recent-card" role="listitem">'
+    +'<div class="rc-media">'+(it.img?'<img src="'+it.img+'" alt="'+it.title+'" loading="lazy">':glyph(it.key,40))+'</div>'
+    +'<div class="rc-body"><div class="rc-ttl">'+it.title+'</div><div class="rc-price">'+(it.from?'From ':'')+fmtUSD(it.usd)+(it.note?'<small>'+it.note+'</small>':'')+'</div></div>'
+    +'</a>').join('');
+}
+
+/* ---- Toast queue with types ---- */
+const TOAST_ICONS={success:'<path d="M20 6L9 17l-5-5"/>',error:'<path d="M6 6l12 12M18 6L6 18"/>',info:'<circle cx="12" cy="12" r="9"/><path d="M12 16v-5M12 8h.01"/>',loading:'<circle cx="12" cy="12" r="8" stroke-dasharray="40" stroke-dashoffset="16"/>'};
+function ensureToastStack(){let s=document.getElementById('toastStack');if(!s){s=document.createElement('div');s.id='toastStack';s.className='toast-stack';document.body.appendChild(s)}return s}
+function toast(msg,opts){
+  opts=opts||{};const type=opts.type||'success';const ms=opts.duration||2800;const stack=ensureToastStack();
+  const el=document.createElement('div');el.className='t-card t-'+type;
+  el.innerHTML='<span class="t-ic"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">'+(TOAST_ICONS[type]||TOAST_ICONS.info)+'</svg></span><span class="t-msg">'+msg+'</span>';
+  stack.appendChild(el);
+  requestAnimationFrame(()=>el.classList.add('show'));
+  if(type!=='loading'){setTimeout(()=>{el.classList.remove('show');el.classList.add('hide');setTimeout(()=>el.remove(),320)},ms)}
+  return {dismiss:()=>{el.classList.add('hide');setTimeout(()=>el.remove(),320)},update:(newMsg,newType)=>{el.querySelector('.t-msg').innerHTML=newMsg;if(newType){el.className='t-card show t-'+newType}}}
+}
+/* keep legacy showToast working */
+window.showToast=function(msg){toast(msg,{type:'success'})};
+
+/* ---- Bell dropdown + notification rendering ---- */
+function unreadCount(){return NOTIFICATIONS.filter(n=>!n.read).length}
+function unreadMsgCount(){return CONVERSATIONS.reduce((a,c)=>a+(c.unread||0),0)}
+function updateBadges(){
+  const n=unreadCount();
+  document.querySelectorAll('[data-notif-count]').forEach(el=>{
+    if(n){el.textContent=n>9?'9+':n;el.classList.add('show')}else{el.classList.remove('show');el.textContent=''}
+  });
+  const m=unreadMsgCount();
+  document.querySelectorAll('[data-msg-count]').forEach(el=>{
+    if(m){el.textContent=m>9?'9+':m;el.classList.add('show')}else{el.classList.remove('show');el.textContent=''}
+  });
+}
+function renderNotifDropdown(){
+  const list=document.getElementById('notifList');if(!list)return;
+  const show=NOTIFICATIONS.slice(0,5);
+  if(!show.length){list.innerHTML='<div class="notif-empty">You&rsquo;re all caught up.</div>';return}
+  list.innerHTML=show.map(n=>'<a href="'+n.link+'" class="notif-row'+(n.read?'':' unread')+'" data-notif="'+n.id+'" role="listitem"><span class="notif-ic notif-ic-'+n.type+'"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">'+(NOTIF_ICONS[n.icon]||NOTIF_ICONS.spark)+'</svg></span><span class="notif-body"><span class="notif-ttl">'+n.title+'</span><span class="notif-msg">'+n.body+'</span><span class="notif-time">'+n.time+'</span></span>'+(n.read?'':'<span class="notif-dot" aria-label="Unread"></span>')+'</a>').join('');
+}
+function renderNotificationsPage(){
+  const el=document.getElementById('notifPage');if(!el)return;
+  if(!NOTIFICATIONS.length){el.innerHTML='<div class="saved-empty"><div class="se-ic"><svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M18 16v-5a6 6 0 0 0-12 0v5l-2 2v1h16v-1z"/><path d="M10 21a2 2 0 0 0 4 0"/></svg></div><h3>No notifications yet</h3><p>Activity on your listings and account will show here.</p></div>';return}
+  el.innerHTML=NOTIFICATIONS.map(n=>'<a href="'+n.link+'" class="notif-row notif-row-lg'+(n.read?'':' unread')+'" data-notif="'+n.id+'"><span class="notif-ic notif-ic-'+n.type+'"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">'+(NOTIF_ICONS[n.icon]||NOTIF_ICONS.spark)+'</svg></span><span class="notif-body"><span class="notif-ttl">'+n.title+'</span><span class="notif-msg">'+n.body+'</span><span class="notif-time">'+n.time+'</span></span>'+(n.read?'':'<span class="notif-dot"></span>')+'</a>').join('');
+}
+function markNotifRead(id){const n=NOTIFICATIONS.find(x=>x.id===id);if(n){n.read=true;updateBadges();renderNotifDropdown();renderNotificationsPage()}}
+function markAllNotifRead(){NOTIFICATIONS.forEach(n=>n.read=true);updateBadges();renderNotifDropdown();renderNotificationsPage();toast('All notifications marked as read',{type:'success'})}
+
+/* ---- Bell + dropdown bindings ---- */
+(function(){
+  const bell=document.getElementById('navBell');const dd=document.getElementById('notifDropdown');
+  if(bell&&dd){
+    bell.addEventListener('click',e=>{e.stopPropagation();const open=dd.classList.toggle('show');bell.setAttribute('aria-expanded',open?'true':'false');if(open)renderNotifDropdown()});
+    document.addEventListener('click',e=>{if(!bell.contains(e.target)&&!dd.contains(e.target)){dd.classList.remove('show');bell.setAttribute('aria-expanded','false')}});
+    document.addEventListener('keydown',e=>{if(e.key==='Escape'&&dd.classList.contains('show')){dd.classList.remove('show');bell.setAttribute('aria-expanded','false');bell.focus()}});
+    dd.addEventListener('click',e=>{const row=e.target.closest('[data-notif]');if(row)markNotifRead(row.dataset.notif)});
+  }
+  const clearBtn=document.getElementById('notifClear');if(clearBtn)clearBtn.addEventListener('click',markAllNotifRead);
+  const clearAllPage=document.getElementById('notifClearAll');if(clearAllPage)clearAllPage.addEventListener('click',markAllNotifRead);
+  const page=document.getElementById('notifPage');if(page)page.addEventListener('click',e=>{const row=e.target.closest('[data-notif]');if(row)markNotifRead(row.dataset.notif)});
+  const rc=document.getElementById('recentClear');if(rc)rc.addEventListener('click',()=>{clearRecent();toast('Recently viewed cleared',{type:'success'})});
+})();
+
+/* ---- Messages: list + thread + composer ---- */
+let activeConvId=null;let msgSearchQuery='';
+function renderConvList(){
+  const wrap=document.getElementById('msgConvList');const counter=document.getElementById('msgListCount');if(!wrap)return;
+  const q=msgSearchQuery.trim().toLowerCase();
+  const list=CONVERSATIONS.filter(c=>!q||c.with.toLowerCase().includes(q)||c.lastMsg.toLowerCase().includes(q)||c.listingTitle.toLowerCase().includes(q));
+  if(counter)counter.textContent=list.length;
+  if(!list.length){wrap.innerHTML='<div class="conv-empty">No conversations found.</div>';return}
+  wrap.innerHTML=list.map(c=>'<button type="button" class="conv-row'+(c.id===activeConvId?' on':'')+'" data-conv="'+c.id+'" role="listitem"><span class="conv-av">'+c.avInitial+(c.verified?'<span class="conv-vtick"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></span>':'')+'</span><span class="conv-info"><span class="conv-top"><span class="conv-name">'+c.with+'</span><span class="conv-time">'+c.lastTime+'</span></span><span class="conv-snip">'+c.lastMsg+'</span><span class="conv-listing">'+c.listingTitle+'</span></span>'+(c.unread?'<span class="conv-unread">'+c.unread+'</span>':'')+'</button>').join('');
+}
+function openConversation(id){
+  const c=CONVERSATIONS.find(x=>x.id===id);if(!c){document.getElementById('msgEmpty').hidden=false;return}
+  activeConvId=id;c.unread=0;updateBadges();renderConvList();
+  document.getElementById('msgEmpty').hidden=true;
+  const head=document.getElementById('msgThreadHead');const body=document.getElementById('msgThreadBody');const comp=document.getElementById('msgComposer');
+  head.hidden=false;body.hidden=false;comp.hidden=false;
+  document.getElementById('mtAv').innerHTML=c.avInitial+(c.verified?'<span class="mt-vtick" aria-label="Verified"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></span>':'');
+  document.getElementById('mtName').innerHTML=c.with+(c.verified?' <svg class="mt-tick" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>':'');
+  document.getElementById('mtSub').textContent='About: '+c.listingTitle;
+  document.getElementById('mtViewListing').href='#listing?id='+c.listingId;
+  const msgs=MESSAGES[id]||[];
+  body.innerHTML=msgs.map(m=>'<div class="bubble bubble-'+m.from+'"><div class="bubble-text">'+m.text+'</div><div class="bubble-time">'+m.time+'</div></div>').join('')+'<div class="thread-typing" hidden id="threadTyping"><div class="bubble bubble-them tt-bubble"><span></span><span></span><span></span></div></div>';
+  body.scrollTop=body.scrollHeight;
+  document.querySelector('.msg-layout')?.classList.add('on-thread');
+  if(history.replaceState)history.replaceState(null,'',location.pathname+location.search+'#messages?c='+id);
+}
+function backToConvList(){
+  activeConvId=null;
+  document.querySelector('.msg-layout')?.classList.remove('on-thread');
+  document.getElementById('msgEmpty').hidden=false;
+  document.getElementById('msgThreadHead').hidden=true;
+  document.getElementById('msgThreadBody').hidden=true;
+  document.getElementById('msgComposer').hidden=true;
+  renderConvList();
+  if(history.replaceState)history.replaceState(null,'',location.pathname+location.search+'#messages');
+}
+function sendMessage(){
+  if(!activeConvId)return;
+  const input=document.getElementById('msgInput');const text=(input.value||'').trim();if(!text)return;
+  const c=CONVERSATIONS.find(x=>x.id===activeConvId);if(!c)return;
+  const m={from:'me',text,time:'Just now'};(MESSAGES[activeConvId]=MESSAGES[activeConvId]||[]).push(m);
+  c.lastMsg=text;c.lastTime='Just now';
+  input.value='';input.style.height='';
+  const body=document.getElementById('msgThreadBody');
+  const bub=document.createElement('div');bub.className='bubble bubble-me bubble-in';bub.innerHTML='<div class="bubble-text">'+text+'</div><div class="bubble-time">Just now</div>';
+  const tp=document.getElementById('threadTyping');body.insertBefore(bub,tp);body.scrollTop=body.scrollHeight;
+  renderConvList();
+  /* simulate reply typing */
+  if(tp){tp.hidden=false;setTimeout(()=>{tp.hidden=true;const reply={from:'them',text:"Got it — thanks!",time:'Just now'};MESSAGES[activeConvId].push(reply);c.lastMsg=reply.text;const rb=document.createElement('div');rb.className='bubble bubble-them bubble-in';rb.innerHTML='<div class="bubble-text">'+reply.text+'</div><div class="bubble-time">Just now</div>';body.insertBefore(rb,tp);body.scrollTop=body.scrollHeight;renderConvList()},1400+Math.random()*900)}
+}
+function renderMessages(convId){
+  renderConvList();
+  if(convId){openConversation(convId)}else if(window.innerWidth>760&&CONVERSATIONS.length){openConversation(CONVERSATIONS[0].id)}else{backToConvList()}
+}
+(function(){
+  const list=document.getElementById('msgConvList');if(list)list.addEventListener('click',e=>{const r=e.target.closest('[data-conv]');if(r)openConversation(r.dataset.conv)});
+  const back=document.getElementById('msgBack');if(back)back.addEventListener('click',backToConvList);
+  const search=document.getElementById('msgSearch');if(search)search.addEventListener('input',e=>{msgSearchQuery=e.target.value;renderConvList()});
+  const send=document.getElementById('msgSend');if(send)send.addEventListener('click',sendMessage);
+  const input=document.getElementById('msgInput');
+  if(input){
+    input.addEventListener('input',()=>{input.style.height='';input.style.height=Math.min(input.scrollHeight,140)+'px'});
+    input.addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendMessage()}});
+  }
+})();
+
+/* ---- Track recently viewed when entering a listing ---- */
+const _origRenderListingDetail=renderListingDetail;
+renderListingDetail=function(id){const r=_origRenderListingDetail.apply(this,arguments);if(LISTINGS.find(l=>l.id===+id))pushRecent(id);return r};
+
+/* ---- Post wizard ---- */
+const PW={step:1,photos:[],MAX_PHOTOS:6};
+const PW_CATS=[
+  {key:'electronics',name:'Phones & Electronics',sub:'Phones, laptops, audio'},
+  {key:'fashion',name:'Fashion & Beauty',sub:'Clothes, shoes, beauty'},
+  {key:'cars',name:'Cars & Motorbikes',sub:'Vehicles, bikes, parts'},
+  {key:'property',name:'Property & Land',sub:'Houses, rentals, land'},
+  {key:'services',name:'Services',sub:'Photography, cleaning, more'}
+];
+function renderPwCats(){
+  const wrap=document.getElementById('pwCats');if(!wrap)return;
+  const cur=document.getElementById('pCat').value||'electronics';
+  wrap.innerHTML=PW_CATS.map(c=>'<button type="button" class="pw-cat'+(c.key===cur?' on':'')+'" data-pw-cat="'+c.key+'"><span class="pw-cat-ic">'+glyph(c.key,24)+'</span><span class="pw-cat-tx"><b>'+c.name+'</b><span>'+c.sub+'</span></span></button>').join('');
+}
+function pwGotoStep(n){
+  PW.step=Math.max(1,Math.min(4,n));
+  document.querySelectorAll('#pwProgress .pw-step').forEach(s=>{const idx=+s.dataset.step;s.classList.toggle('on',idx===PW.step);s.classList.toggle('done',idx<PW.step)});
+  document.querySelectorAll('.pw-panel').forEach(p=>{p.hidden=+p.dataset.panel!==PW.step});
+  document.getElementById('pwBack').hidden=PW.step===1;
+  document.getElementById('pwNext').hidden=PW.step===4;
+  document.getElementById('publishBtn').hidden=PW.step!==4;
+  if(PW.step===4)pwRenderReview();
+  document.querySelector('.pw-form')?.scrollIntoView({behavior:'smooth',block:'start'});
+}
+function fieldErr(id,msg){const e=document.getElementById(id+'Err');const f=document.getElementById(id);if(!e||!f)return;if(msg){e.textContent=msg;e.hidden=false;f.classList.add('err');f.addEventListener('input',()=>{e.hidden=true;f.classList.remove('err')},{once:true})}else{e.hidden=true;f.classList.remove('err')}}
+function pwValidate(step){
+  let ok=true;
+  if(step===1){const t=document.getElementById('pTitle').value.trim();if(t.length<6){fieldErr('pTitle','At least 6 characters — include brand, model or size.');ok=false}else fieldErr('pTitle','')}
+  if(step===2){const d=document.getElementById('pDesc').value.trim();if(d.length<20){fieldErr('pDesc','At least 20 characters — describe condition and what&rsquo;s included.');ok=false}else fieldErr('pDesc','')}
+  if(step===3){const p=document.getElementById('pPrice').value;if(!p||+p<=0){fieldErr('pPrice','Enter a price greater than 0.');ok=false}else fieldErr('pPrice','');const l=document.getElementById('pLoc').value.trim();if(l.length<2){fieldErr('pLoc','Add at least a city or area.');ok=false}else fieldErr('pLoc','')}
+  return ok;
+}
+function pwRenderReview(){
+  const k=document.getElementById('pCat').value;const cat=PW_CATS.find(c=>c.key===k);
+  const title=document.getElementById('pTitle').value.trim();const desc=document.getElementById('pDesc').value.trim();
+  const price=+document.getElementById('pPrice').value||0;const loc=document.getElementById('pLoc').value.trim();
+  document.getElementById('pwReview').innerHTML='<div class="rv-row"><div class="rv-label">Category</div><div class="rv-val">'+(cat?cat.name:k)+' <button type="button" class="rv-edit" data-pw-goto="1">Edit</button></div></div>'
+    +'<div class="rv-row"><div class="rv-label">Title</div><div class="rv-val">'+(title||'<i>Not set</i>')+' <button type="button" class="rv-edit" data-pw-goto="1">Edit</button></div></div>'
+    +'<div class="rv-row"><div class="rv-label">Photos</div><div class="rv-val">'+(PW.photos.length?'<div class="rv-photos">'+PW.photos.map(p=>'<img src="'+p+'" alt="">').join('')+'</div>':'<i>No photos added</i>')+' <button type="button" class="rv-edit" data-pw-goto="2">Edit</button></div></div>'
+    +'<div class="rv-row"><div class="rv-label">Description</div><div class="rv-val rv-desc">'+(desc||'<i>Not set</i>')+' <button type="button" class="rv-edit" data-pw-goto="2">Edit</button></div></div>'
+    +'<div class="rv-row"><div class="rv-label">Price</div><div class="rv-val">'+(price?'<b>'+fmtUSD(price)+'</b> <span class="rv-ssp">≈ '+fmtSSP(price*RATE)+'</span>':'<i>Not set</i>')+' <button type="button" class="rv-edit" data-pw-goto="3">Edit</button></div></div>'
+    +'<div class="rv-row"><div class="rv-label">Location</div><div class="rv-val">'+(loc||'<i>Not set</i>')+' <button type="button" class="rv-edit" data-pw-goto="3">Edit</button></div></div>';
+}
+function pwRenderPhotos(){
+  const wrap=document.getElementById('pwPhotos');if(!wrap)return;
+  wrap.innerHTML=PW.photos.map((src,i)=>'<div class="pw-photo'+(i===0?' cover':'')+'" role="listitem"><img src="'+src+'" alt="Photo '+(i+1)+'"><button type="button" class="pw-photo-rm" data-rm="'+i+'" aria-label="Remove"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button>'+(i===0?'<span class="pw-cover-tag">Cover</span>':'')+'</div>').join('');
+  const add=document.getElementById('pwAddPhoto');if(add)add.disabled=PW.photos.length>=PW.MAX_PHOTOS;
+}
+let postBound=false;
+function initPost(){
+  /* keep this function name so route() and existing code still work */
+  if(postBound){pwGotoStep(1);return}
+  postBound=true;
+  const cat=document.getElementById('pCat');const title=document.getElementById('pTitle');const desc=document.getElementById('pDesc');const price=document.getElementById('pPrice');const loc=document.getElementById('pLoc');
+  const ssp=document.getElementById('pSsp');const ctaLbl=document.getElementById('ctaHintLabel');const ctaPill=document.getElementById('ctaHintPill');const preview=document.getElementById('previewCard');
+  const ctaMap={electronics:['Order Now','Order'],fashion:['Order Now','Order'],cars:['Request Contact','Contact'],property:['Request Contact','Contact'],services:['Request Quote','Quote']};
+  function syncCTA(){const m=ctaMap[cat.value]||ctaMap.electronics;ctaLbl.textContent=m[0];ctaPill.textContent=m[1]}
+  function syncSsp(){ssp.textContent='≈ '+fmtSSP((+price.value||0)*RATE)}
+  function syncTitleCount(){const c=document.getElementById('pTitleCount');if(c)c.textContent=(title.value.length||0)+'/60'}
+  function syncDescCount(){const c=document.getElementById('pDescCount');if(c)c.textContent=(desc.value.length||0)+' chars'}
+  function syncPreview(){const it={id:'new',title:title.value||'Your listing title',cat:CATLABEL[cat.value],key:cat.value,usd:+price.value||0,loc:loc.value||'Your location',seller:'You',type:typeForCat(cat.value),group:groupForCat(cat.value),badges:[],img:PW.photos[0]||''};preview.innerHTML=cardHTML(it,0)}
+  [cat,title,desc,price,loc].forEach(el=>el&&el.addEventListener('input',()=>{syncCTA();syncSsp();syncTitleCount();syncDescCount();syncPreview()}));
+  renderPwCats();
+  document.getElementById('pwCats')?.addEventListener('click',e=>{const b=e.target.closest('[data-pw-cat]');if(b){cat.value=b.dataset.pwCat;cat.dispatchEvent(new Event('input'));renderPwCats()}});
+  document.getElementById('pwNext').addEventListener('click',()=>{if(pwValidate(PW.step))pwGotoStep(PW.step+1)});
+  document.getElementById('pwBack').addEventListener('click',()=>pwGotoStep(PW.step-1));
+  document.getElementById('pwReview')?.addEventListener('click',e=>{const g=e.target.closest('[data-pw-goto]');if(g)pwGotoStep(+g.dataset.pwGoto)});
+  /* photos */
+  const file=document.getElementById('pwFile');const addBtn=document.getElementById('pwAddPhoto');
+  if(addBtn)addBtn.addEventListener('click',()=>file?.click());
+  if(file)file.addEventListener('change',e=>{
+    const files=[...(e.target.files||[])];
+    files.slice(0,PW.MAX_PHOTOS-PW.photos.length).forEach(f=>{const r=new FileReader();r.onload=ev=>{PW.photos.push(ev.target.result);pwRenderPhotos();syncPreview()};r.readAsDataURL(f)});
+    file.value='';
+  });
+  document.getElementById('pwPhotos')?.addEventListener('click',e=>{const rm=e.target.closest('[data-rm]');if(rm){PW.photos.splice(+rm.dataset.rm,1);pwRenderPhotos();syncPreview()}});
+  /* publish + draft */
+  document.getElementById('publishBtn').onclick=()=>{
+    if(!pwValidate(1)){pwGotoStep(1);return}
+    if(!pwValidate(2)){pwGotoStep(2);return}
+    if(!pwValidate(3)){pwGotoStep(3);return}
+    const k=cat.value;
+    NL.api.listings.create({title:title.value.trim(),cat:CATLABEL[k],key:k,usd:+price.value,loc:loc.value.trim(),desc:desc.value.trim(),img:PW.photos[0]||'',imgs:PW.photos.slice(),note:k==='property'?'/mo':''}).then(r=>{
+      SHOP.unshift({id:r.data.id,title:r.data.title,cat:r.data.cat,key:r.data.key,usd:r.data.usd,note:r.data.note,status:'pending'});
+      toast('Listing submitted — awaiting review',{type:'success'});
+      setTimeout(()=>location.hash='#dashboard',700);
+    });
+  };
+  document.getElementById('draftBtn').onclick=()=>{
+    if(!title.value.trim()){toast('Add a title first',{type:'error'});pwGotoStep(1);return}
+    const k=cat.value;
+    NL.api.listings.saveDraft({title:title.value.trim(),cat:CATLABEL[k],key:k,usd:+price.value||0,loc:loc.value.trim(),desc:desc.value.trim(),img:PW.photos[0]||'',note:k==='property'?'/mo':''}).then(r=>{
+      SHOP.unshift({id:r.data.id,title:r.data.title,cat:r.data.cat,key:r.data.key,usd:r.data.usd,note:r.data.note,status:'draft',pct:30,missing:'Add more details'});
+      toast('Saved as draft',{type:'success'});
+      setTimeout(()=>location.hash='#dashboard',600);
+    });
+  };
+  syncCTA();syncSsp();syncTitleCount();syncDescCount();syncPreview();pwGotoStep(1);
+}
+
+/* ---- Initial hydration of badges + recent rail ---- */
+document.addEventListener('DOMContentLoaded',()=>{updateBadges();renderRecentRail()});
+updateBadges();renderRecentRail();
