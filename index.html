@@ -19,9 +19,9 @@
 <meta name="twitter:title" content="Nile Link — South Sudan&rsquo;s marketplace">
 <meta name="twitter:description" content="Buy &amp; sell anything in South Sudan. Verified sellers, in-app orders, USD &amp; SSP pricing.">
 <meta name="twitter:image" content="./hero-desktop.jpg">
-<link rel="icon" type="image/png" sizes="512x512" href="./logo.png">
-<link rel="icon" type="image/png" sizes="192x192" href="./logo.png">
-<link rel="apple-touch-icon" href="./logo.png">
+<link rel="icon" type="image/svg+xml" href="./favicon.svg">
+<link rel="alternate icon" href="./favicon.svg">
+<link rel="apple-touch-icon" sizes="180x180" href="./logo.png">
 <meta name="theme-color" content="#0a0e08">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <link rel="manifest" href="./manifest.json">
@@ -495,21 +495,60 @@
       </div>
       <button class="iconbtn drawer-close" id="closeDrawer" aria-label="Close menu"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
     </div>
-    <nav class="drawer-nav-list">
-      <a href="#browse" class="dlink drawer-nav" style="--i:0"><span>Browse listings</span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 6l6 6-6 6"/></svg></a>
-      <a href="#post" class="dlink drawer-nav" style="--i:1"><span>Sell on Nile Link</span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 6l6 6-6 6"/></svg></a>
-      <a href="#dashboard" class="dlink drawer-nav" style="--i:2"><span>Your shop</span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 6l6 6-6 6"/></svg></a>
-      <a href="#pricing" class="dlink drawer-nav" style="--i:3"><span>Pricing</span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 6l6 6-6 6"/></svg></a>
-      <a href="#about" class="dlink drawer-nav" style="--i:4"><span>About</span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 6l6 6-6 6"/></svg></a>
-      <a href="#help" class="dlink drawer-nav" style="--i:5"><span>Help &amp; safety</span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 6l6 6-6 6"/></svg></a>
+    <div class="drawer-quick">
+      <a href="#messages" class="dq-tile drawer-nav" style="--i:0">
+        <span class="dq-ic dq-ic-msg"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h16v11H8l-4 4z"/></svg><span class="mn-badge" data-msg-count></span></span>
+        <span class="dq-label">Messages</span>
+      </a>
+      <a href="#notifications" class="dq-tile drawer-nav" style="--i:1">
+        <span class="dq-ic dq-ic-bell"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 16v-5a6 6 0 0 0-12 0v5l-2 2v1h16v-1z"/><path d="M10 21a2 2 0 0 0 4 0"/></svg><span class="mn-badge" data-notif-count></span></span>
+        <span class="dq-label">Alerts</span>
+      </a>
+      <a href="#saved" class="dq-tile drawer-nav" style="--i:2">
+        <span class="dq-ic dq-ic-heart"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 1 0-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 0 0 0-7.8z"/></svg></span>
+        <span class="dq-label">Saved</span>
+      </a>
+    </div>
+    <nav class="drawer-nav-list" aria-label="Primary">
+      <a href="#browse" class="dlink drawer-nav" style="--i:3" data-nav="browse">
+        <span class="dl-ic" style="--c1:#dbeafe;--c2:#bfdbfe;--cc:#1e40af"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4-4"/></svg></span>
+        <span class="dl-tx"><span class="dl-ttl">Browse listings</span><span class="dl-sub">Phones, cars, property, more</span></span>
+        <svg class="dl-arr" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M9 6l6 6-6 6"/></svg>
+      </a>
+      <a href="#post" class="dlink drawer-nav" style="--i:4" data-nav="post">
+        <span class="dl-ic" style="--c1:var(--lime-100);--c2:var(--lime-200);--cc:var(--lime-deeper)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg></span>
+        <span class="dl-tx"><span class="dl-ttl">Sell on Nile Link</span><span class="dl-sub">Free to list · 3 boosts free</span></span>
+        <svg class="dl-arr" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M9 6l6 6-6 6"/></svg>
+      </a>
+      <a href="#dashboard" class="dlink drawer-nav" style="--i:5" data-nav="dashboard">
+        <span class="dl-ic" style="--c1:#fef3c7;--c2:#fde68a;--cc:#92400e"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg></span>
+        <span class="dl-tx"><span class="dl-ttl">Your shop</span><span class="dl-sub">Listings, drafts, requests</span></span>
+        <svg class="dl-arr" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M9 6l6 6-6 6"/></svg>
+      </a>
+      <a href="#pricing" class="dlink drawer-nav" style="--i:6" data-nav="pricing">
+        <span class="dl-ic" style="--c1:#fce7f3;--c2:#fbcfe8;--cc:#9d174d"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M13 2L3 14h7l-1 8 10-12h-7z"/></svg></span>
+        <span class="dl-tx"><span class="dl-ttl">Pricing &amp; boosts</span><span class="dl-sub">Grow your shop faster</span></span>
+        <svg class="dl-arr" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M9 6l6 6-6 6"/></svg>
+      </a>
+      <a href="#about" class="dlink drawer-nav" style="--i:7" data-nav="about">
+        <span class="dl-ic" style="--c1:#ede9fe;--c2:#ddd6fe;--cc:#5b21b6"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 16v-4M12 8h.01"/></svg></span>
+        <span class="dl-tx"><span class="dl-ttl">About Nile Link</span><span class="dl-sub">Our story &amp; team</span></span>
+        <svg class="dl-arr" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M9 6l6 6-6 6"/></svg>
+      </a>
+      <a href="#help" class="dlink drawer-nav" style="--i:8" data-nav="help">
+        <span class="dl-ic" style="--c1:#dcfce7;--c2:#bbf7d0;--cc:#166534"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l8 4v6c0 5-3.5 8-8 10-4.5-2-8-5-8-10V6z"/></svg></span>
+        <span class="dl-tx"><span class="dl-ttl">Help &amp; safety</span><span class="dl-sub">Tips, FAQs, contact</span></span>
+        <svg class="dl-arr" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M9 6l6 6-6 6"/></svg>
+      </a>
     </nav>
     <div class="dacts">
       <a href="#signin" class="btn btn-ghost btn-block drawer-nav" data-guest-only>Sign in</a>
       <button class="btn btn-ghost btn-block drawer-nav" data-auth-only data-signout>Sign out</button>
-      <a href="#post" class="btn btn-lime btn-block drawer-nav">Start selling</a>
+      <a href="#post" class="btn btn-lime btn-block drawer-nav">Start selling<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
     </div>
     <div class="drawer-foot">
-      <span>🇸🇸 Built for South Sudan</span>
+      <span class="df-flag" aria-hidden="true">🇸🇸</span>
+      <div class="df-text">Built for South Sudan<br><b>by Neeza &amp; Rico</b></div>
     </div>
   </div>
 </div>

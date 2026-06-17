@@ -210,8 +210,25 @@ function bindAutocomplete(inputId,dropdownId){
 }
 bindAutocomplete('heroSearch','heroSearchDropdown');
 bindAutocomplete('navSearch','navSearchDropdown');
-const STEPS={buy:[{h:'Browse & search',p:'Filter by category, location and price across phones, cars, property, fashion and services.'},{h:'Order or request',p:'Tap Order Now, Request Contact, or Request Quote. Your details are captured safely inside Nile Link.'},{h:'Close with confidence',p:'Verified sellers follow up to confirm, arrange a viewing or delivery, and close the deal.'}],sell:[{h:'Post or save a draft',p:'Add photos, price, location and category in minutes — or save as a draft and finish later.'},{h:'Receive real requests',p:'Get orders, contacts and quotes from serious buyers, organized in your shop dashboard.'},{h:'Grow & get paid',p:'Boost listings, earn a verified badge, and close more deals.'}]};
-function renderSteps(m){document.getElementById('steps').innerHTML=STEPS[m].map((s,i)=>'<div class="step" style="animation:rise .5s ease both;animation-delay:'+(i*65)+'ms"><div class="num"></div><h3>'+s.h+'</h3><p>'+s.p+'</p><div class="bigno">'+(i+1)+'</div></div>').join('')}
+const STEP_ICONS={
+  buy:['<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4-4"/><path d="M11 8v3l2 1.5"/></svg>','<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M5 7h14l-1 12H6z"/><path d="M9 7V5a3 3 0 0 1 6 0v2"/><path d="M9 12h6M9 15h4"/></svg>','<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l8 4v6c0 5-3.5 8-8 10-4.5-2-8-5-8-10V6z"/><path d="M9 12l2 2 4-4"/></svg>'],
+  sell:['<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="8.5" cy="10" r="1.5"/><path d="M21 16l-5-5L5 21"/><path d="M17 3v4M15 5h4"/></svg>','<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M18 16v-5a6 6 0 0 0-12 0v5l-2 2v1h16v-1z"/><path d="M10 21a2 2 0 0 0 4 0"/><circle cx="18" cy="6" r="3" fill="currentColor" stroke="none"/></svg>','<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v10M9.5 9.5c0-1.2 1.1-2 2.5-2s2.5.8 2.5 2-1.1 2-2.5 2-2.5.8-2.5 2 1.1 2 2.5 2 2.5-.8 2.5-2"/></svg>']
+};
+const STEPS={buy:[{h:'Search &amp; discover',p:'Filter by category, location and price across phones, cars, property, fashion and services.'},{h:'Order or request',p:'Tap Order Now, Request Contact, or Request Quote. Your details stay safely inside Nile Link.'},{h:'Close with confidence',p:'Verified sellers follow up to confirm, arrange viewing or delivery, and close the deal.'}],sell:[{h:'Post in minutes',p:'Add photos, price, location and category — or save as a draft and finish later.'},{h:'Get real requests',p:'Receive orders, contacts and quotes from serious buyers, organized in your dashboard.'},{h:'Grow &amp; get paid',p:'Boost listings, earn a verified badge, and close more deals every week.'}]};
+function renderSteps(m){
+  const ic=STEP_ICONS[m]||STEP_ICONS.buy;
+  document.getElementById('steps').innerHTML=STEPS[m].map((s,i)=>'<div class="step-v2" style="--si:'+i+'">'
+    +'<div class="step-num-line">'
+    +  '<div class="step-num"><span>'+(i+1)+'</span><span class="step-num-pulse"></span></div>'
+    +  (i<STEPS[m].length-1?'<div class="step-line" aria-hidden="true"></div>':'')
+    +'</div>'
+    +'<div class="step-card">'
+    +  '<div class="step-illustration" aria-hidden="true">'+ic[i]+'<span class="step-illust-glow"></span></div>'
+    +  '<h3>'+s.h+'</h3>'
+    +  '<p>'+s.p+'</p>'
+    +'</div>'
+    +'</div>').join('');
+}
 document.getElementById('howToggle').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;document.querySelectorAll('#howToggle button').forEach(x=>x.classList.remove('active'));b.classList.add('active');renderSteps(b.dataset.mode)});
 const browseState={search:'',cats:[],type:'all',max:42000,sort:'featured'};
 let browseBound=false;
@@ -391,6 +408,13 @@ document.getElementById('openDrawer').addEventListener('click',openDr);
 document.getElementById('closeDrawer').addEventListener('click',closeDr);
 document.getElementById('drawerBg').addEventListener('click',closeDr);
 document.querySelectorAll('.drawer-nav').forEach(a=>a.addEventListener('click',closeDr));
+/* Bottom-nav + drawer links: always scroll to top, even when tapping the current page */
+(function(){
+  function scrollTop(){try{window.scrollTo({top:0,left:0,behavior:'smooth'})}catch(e){window.scrollTo(0,0)}}
+  document.querySelectorAll('.mob-bottom-nav .mn-item, .drawer-nav, .nav-actions a[data-nav], .nav-actions .nav-msg, .nav-links a').forEach(a=>{
+    a.addEventListener('click',()=>{requestAnimationFrame(scrollTop);setTimeout(scrollTop,40)});
+  });
+})();
 document.addEventListener('keydown',function(e){if(e.key==='Escape'&&drawer.classList.contains('open'))closeDr();});
 
 const PAGES=['home','browse','listing','post','dashboard','shop','pricing','about','help','signin','signup','saved','messages','notifications'];
