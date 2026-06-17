@@ -74,6 +74,7 @@
           </button>
         </div>
         <div class="chips reveal-hero" style="--d:3"><span class="lbl">Popular:</span><button class="chip" data-q="iPhone">iPhone</button><button class="chip" data-q="Land Cruiser">Land Cruiser</button><button class="chip" data-q="House">Houses</button><button class="chip" data-q="Photography">Photography</button><button class="chip" data-q="Generator">Generators</button></div>
+        <div class="fx-live reveal-hero" style="--d:4" aria-live="polite"><span class="fx-dot" aria-hidden="true"></span><span class="fx-label">LIVE</span><span class="fx-val">$1 = <b data-fx-rate>4,585</b> SSP</span><span class="fx-source">Mid-market rate · auto-updated</span></div>
       </div>
     </div>
   </div>
@@ -135,24 +136,53 @@
   </div></div></section>
 </section>
 <section class="page" data-page="browse">
-  <div class="page-head"><div class="wrap"><div class="crumb"><a href="#home">Home</a> › <span>Browse</span></div><h1>Browse the marketplace</h1><p>Everything for sale across South Sudan — filter by category, type, location and price.</p></div></div>
+  <div class="back-bar"><div class="wrap back-bar-row">
+    <a href="#home" class="back-link" aria-label="Back to home"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></svg><span>Back</span></a>
+    <nav class="crumb-inline" aria-label="Breadcrumb"><a href="#home">Home</a><span class="sep">›</span><span class="cur">Browse</span></nav>
+  </div></div>
+  <div class="browse-head"><div class="wrap">
+    <div class="bh-top">
+      <div class="bh-title"><h1>Browse the marketplace</h1><p>Filter by category, type, location and price — everything for sale across South Sudan.</p></div>
+    </div>
+    <div class="cat-pills" id="catPills" role="tablist">
+      <button class="cat-pill on" data-cat="" role="tab" aria-selected="true"><span class="cp-ic"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg></span>All</button>
+      <button class="cat-pill" data-cat="electronics" role="tab" aria-selected="false">Phones &amp; Electronics</button>
+      <button class="cat-pill" data-cat="fashion" role="tab" aria-selected="false">Fashion &amp; Beauty</button>
+      <button class="cat-pill" data-cat="cars" role="tab" aria-selected="false">Cars &amp; Motorbikes</button>
+      <button class="cat-pill" data-cat="property" role="tab" aria-selected="false">Property &amp; Land</button>
+      <button class="cat-pill" data-cat="services" role="tab" aria-selected="false">Services</button>
+    </div>
+  </div></div>
   <div class="wrap browse-layout">
     <aside class="filters" id="filters">
-      <h4>Search</h4><div class="f-search"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4-4"/></svg><input id="browseSearch" type="text" placeholder="Search…"></div>
-      <h4>Category</h4><div id="fltCats"></div>
-      <h4>Listing type</h4>
-      <label class="check"><input type="radio" name="ftype" value="all" checked> All types</label>
-      <label class="check"><input type="radio" name="ftype" value="products"> Products (Order)</label>
-      <label class="check"><input type="radio" name="ftype" value="vehprop"> Cars &amp; Property</label>
-      <label class="check"><input type="radio" name="ftype" value="services"> Services (Quote)</label>
-      <h4>Max price (USD)</h4>
-      <input id="priceRange" type="range" min="0" max="42000" value="42000" step="100" style="width:100%;accent-color:var(--lime-deep)">
-      <div style="font-size:13px;font-weight:700;color:var(--lime-deeper);margin-top:6px" id="priceLabel">Up to $42,000</div>
-      <button class="f-reset" id="resetFilters">Reset filters</button>
+      <div class="filter-head"><h3>Filters</h3><button class="f-reset" id="resetFilters">Clear all</button></div>
+      <div class="filter-block">
+        <h4>Search</h4>
+        <div class="f-search"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4-4"/></svg><input id="browseSearch" type="text" placeholder="Search listings…"></div>
+      </div>
+      <div class="filter-block"><h4>Category</h4><div id="fltCats"></div></div>
+      <div class="filter-block">
+        <h4>Listing type</h4>
+        <label class="check"><input type="radio" name="ftype" value="all" checked> All types</label>
+        <label class="check"><input type="radio" name="ftype" value="products"> Products (Order)</label>
+        <label class="check"><input type="radio" name="ftype" value="vehprop"> Cars &amp; Property</label>
+        <label class="check"><input type="radio" name="ftype" value="services"> Services (Quote)</label>
+      </div>
+      <div class="filter-block">
+        <h4>Max price (USD)</h4>
+        <input id="priceRange" type="range" min="0" max="42000" value="42000" step="100" style="width:100%;accent-color:var(--lime-deep)">
+        <div class="price-label-row"><span class="pl-from">$0</span><span class="pl-to" id="priceLabel">Up to $42,000</span></div>
+      </div>
     </aside>
-    <div>
-      <div class="browse-toolbar"><div style="display:flex;align-items:center;gap:12px"><button class="btn btn-ghost btn-sm filter-toggle" id="filterToggle"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M4 6h16M7 12h10M10 18h4"/></svg>Filters</button><span class="count"><b id="resCount">0</b> listings</span></div>
-        <select class="sortsel" id="sortSel"><option value="featured">Sort: Featured</option><option value="low">Price: Low to High</option><option value="high">Price: High to Low</option><option value="az">Name: A–Z</option></select></div>
+    <div class="browse-main">
+      <div class="browse-toolbar">
+        <div class="toolbar-left">
+          <button class="btn btn-ghost btn-sm filter-toggle" id="filterToggle"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M4 6h16M7 12h10M10 18h4"/></svg>Filters</button>
+          <span class="count"><b id="resCount">0</b> listings found</span>
+        </div>
+        <select class="sortsel" id="sortSel"><option value="featured">Sort: Featured</option><option value="low">Price: Low to High</option><option value="high">Price: High to Low</option><option value="az">Name: A–Z</option></select>
+      </div>
+      <div class="active-filters" id="activeFilters" aria-live="polite"></div>
       <div class="browse-grid" id="browseGrid"></div>
     </div>
   </div>
@@ -296,7 +326,7 @@
     <div class="foot-col"><h5>Selling</h5><a href="#post">Become a seller</a><a href="#pricing">Pricing &amp; boosts</a><a href="#dashboard">Get verified</a><a href="#dashboard">Your shop</a><a href="#help">Seller guide</a></div>
     <div class="foot-col last"><h5>Company</h5><a href="#about">About us</a><a href="#help">Safety tips</a><a href="#help">Help center</a><a href="#help">Contact</a><a href="#about">Terms</a></div>
   </div>
-  <div class="foot-bottom"><p>&copy; 2026 Nile Link. All rights reserved.</p><p class="rate-foot"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/><path d="M12 2v3M12 19v3"/></svg>USD &amp; SSP · $1 = 4,585 SSP</p><p class="made">Built for South Sudan <span class="made-flag" aria-label="South Sudan flag" role="img">🇸🇸</span> by Neeza &amp; Rico</p></div>
+  <div class="foot-bottom"><p>&copy; 2026 Nile Link. All rights reserved.</p><p class="rate-foot"><span class="fx-dot" aria-hidden="true"></span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/><path d="M12 2v3M12 19v3"/></svg>$1 = <b data-fx-rate>4,585</b> SSP</p><p class="made">Built for South Sudan <span class="made-flag" aria-label="South Sudan flag" role="img">🇸🇸</span> by Neeza &amp; Rico</p></div>
 </div></footer>
 
 <div class="overlay" id="overlay"><div class="modal" role="dialog" aria-modal="true">

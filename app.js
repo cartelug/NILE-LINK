@@ -11,9 +11,53 @@
   else{window.addEventListener('load',schedule);}
   setTimeout(hide,CAP);
 })();
-const ICONS={electronics:'<rect x="6" y="2.5" width="12" height="19" rx="2.5"/><path d="M10 18.5h4"/>',fashion:'<path d="M8 3l-4 4 2.5 2.5L8 8v13h8V8l1.5 1.5L20 7l-4-4-2 2a2 2 0 0 1-4 0z"/>',cars:'<path d="M3 13l2-5a3 3 0 0 1 2.8-2h8.4A3 3 0 0 1 19 8l2 5"/><path d="M3 13h18v4a1 1 0 0 1-1 1h-2M3 13v4a1 1 0 0 0 1 1h2"/><circle cx="7" cy="18" r="1.8"/><circle cx="17" cy="18" r="1.8"/>',property:'<path d="M3 10.5L12 3l9 7.5"/><path d="M5 9.5V20h14V9.5"/><path d="M9.5 20v-6h5v6"/>',services:'<path d="M14.5 6.5a3.5 3.5 0 0 1-4.7 4.7L4 17l3 3 5.8-5.8a3.5 3.5 0 0 1 4.7-4.7l-2.5 2.5-1.4-1.4 2.5-2.5"/>'};
-function glyph(k,s){return '<svg class="glyph" width="'+s+'" height="'+s+'" viewBox="0 0 24 24" fill="none" stroke="#2f4d0c" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">'+(ICONS[k]||ICONS.services)+'</svg>'}
-const RATE=4585;
+const ICONS={
+  electronics:'<rect x="6.5" y="2" width="11" height="20" rx="2.6"/><path d="M10.5 18.5h3"/><path d="M9.5 5h5"/>',
+  fashion:'<path d="M8.5 3.5L4.5 6.5L7 9.5L8.5 8.5V21H15.5V8.5L17 9.5L19.5 6.5L15.5 3.5"/><path d="M9.5 3.5C9.5 5.2 10.6 6.5 12 6.5C13.4 6.5 14.5 5.2 14.5 3.5"/>',
+  cars:'<path d="M3.5 16V11.5L5.4 7.5C5.7 6.7 6.5 6.2 7.3 6.2H16.7C17.5 6.2 18.3 6.7 18.6 7.5L20.5 11.5V16"/><path d="M3.5 11.5H20.5"/><path d="M6.5 16V18H4.5V16"/><path d="M19.5 16V18H17.5V16"/><circle cx="7.5" cy="14.5" r="1.3"/><circle cx="16.5" cy="14.5" r="1.3"/>',
+  property:'<path d="M3.5 11L12 3.5L20.5 11"/><path d="M5.5 9.5V20H18.5V9.5"/><path d="M10 20V14.5H14V20"/><path d="M15 12.5H16.5"/>',
+  services:'<path d="M14.7 6.3a3.5 3.5 0 0 0-4.8 4.8L4 17l3 3 5.9-5.9a3.5 3.5 0 0 0 4.8-4.8l-2.5 2.5-1.5-1.5z"/><circle cx="15.5" cy="8.5" r=".7"/>'
+};
+function glyph(k,s){return '<svg class="glyph" width="'+s+'" height="'+s+'" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">'+(ICONS[k]||ICONS.services)+'</svg>'}
+let RATE=4585;
+async function fetchLiveRate(){
+  const sources=[
+    {url:'https://open.er-api.com/v6/latest/USD',pick:d=>d&&d.rates&&d.rates.SSP},
+    {url:'https://api.exchangerate.host/latest?base=USD&symbols=SSP',pick:d=>d&&d.rates&&d.rates.SSP}
+  ];
+  for(const s of sources){
+    try{
+      const r=await fetch(s.url,{cache:'no-store'});if(!r.ok)continue;
+      const d=await r.json();const v=s.pick(d);
+      if(v&&v>500&&v<50000){
+        const newRate=Math.round(v);
+        animateRate(newRate);
+        if(RATE!==newRate){
+          RATE=newRate;
+          const hg=document.getElementById('homeGrid');if(hg&&hg.children.length)renderGrid(hg,LISTINGS.filter(it=>homeFilter==='all'||it.group===homeFilter));
+          const bg=document.getElementById('browseGrid');if(bg&&bg.children.length)renderBrowse();
+        }
+        return;
+      }
+    }catch(e){/* try next */}
+  }
+}
+function animateRate(target){
+  document.querySelectorAll('[data-fx-rate]').forEach(el=>{
+    const start=parseInt((el.dataset.fxCurrent||el.textContent||'0').replace(/[^0-9]/g,''))||0;
+    if(start===target){el.textContent=target.toLocaleString('en-US');el.dataset.fxCurrent=String(target);return}
+    const dur=1400;const t0=performance.now();
+    function step(now){
+      const t=Math.min((now-t0)/dur,1);
+      const ease=1-Math.pow(1-t,3);
+      el.textContent=Math.round(start+(target-start)*ease).toLocaleString('en-US');
+      if(t<1)requestAnimationFrame(step);
+      else{el.dataset.fxCurrent=String(target);el.classList.remove('fx-flash');void el.offsetWidth;el.classList.add('fx-flash')}
+    }
+    requestAnimationFrame(step);
+  });
+}
+window.addEventListener('DOMContentLoaded',()=>{fetchLiveRate();setInterval(fetchLiveRate,5*60*1000)});
 const fmtUSD=n=>'$'+Number(n).toLocaleString('en-US');
 const fmtSSP=n=>Number(n).toLocaleString('en-US')+' SSP';
 const usdLine=it=>(it.from?'From ':'')+fmtUSD(it.usd)+(it.note?'<small>'+it.note+'</small>':'');
@@ -105,8 +149,46 @@ document.getElementById('howToggle').addEventListener('click',e=>{const b=e.targ
 const browseState={search:'',cats:[],type:'all',max:42000,sort:'featured'};
 let browseBound=false;
 function buildBrowseFilters(){document.getElementById('fltCats').innerHTML=CATEGORIES.map(c=>'<label class="check"><input type="checkbox" value="'+c.key+'" class="fcat"> '+c.name+'</label>').join('');document.querySelectorAll('.fcat').forEach(cb=>cb.addEventListener('change',()=>{browseState.cats=[...document.querySelectorAll('.fcat:checked')].map(x=>x.value);renderBrowse()}))}
-function renderBrowse(){let l=LISTINGS.filter(it=>{if(browseState.search){const q=browseState.search.toLowerCase();if(!(it.title.toLowerCase().includes(q)||it.cat.toLowerCase().includes(q)||it.seller.toLowerCase().includes(q)))return false}if(browseState.cats.length&&!browseState.cats.includes(it.key))return false;if(browseState.type!=='all'&&it.group!==browseState.type)return false;if(it.usd>browseState.max)return false;return true});if(browseState.sort==='low')l=[...l].sort((a,b)=>a.usd-b.usd);else if(browseState.sort==='high')l=[...l].sort((a,b)=>b.usd-a.usd);else if(browseState.sort==='az')l=[...l].sort((a,b)=>a.title.localeCompare(b.title));const rc=document.getElementById('resCount');if(rc)rc.textContent=l.length;renderGrid(document.getElementById('browseGrid'),l)}
-function initBrowse(){if(!browseBound){buildBrowseFilters();document.getElementById('browseSearch').addEventListener('input',e=>{browseState.search=e.target.value;renderBrowse()});document.querySelectorAll('input[name=ftype]').forEach(r=>r.addEventListener('change',e=>{browseState.type=e.target.value;renderBrowse()}));const pr=document.getElementById('priceRange');pr.addEventListener('input',e=>{browseState.max=+e.target.value;document.getElementById('priceLabel').textContent='Up to '+fmtUSD(+e.target.value);renderBrowse()});document.getElementById('sortSel').addEventListener('change',e=>{browseState.sort=e.target.value;renderBrowse()});document.getElementById('resetFilters').addEventListener('click',()=>{browseState.search='';browseState.cats=[];browseState.type='all';browseState.max=42000;browseState.sort='featured';document.getElementById('browseSearch').value='';document.querySelectorAll('.fcat').forEach(x=>x.checked=false);document.querySelector('input[name=ftype][value=all]').checked=true;pr.value=42000;document.getElementById('priceLabel').textContent='Up to $42,000';document.getElementById('sortSel').value='featured';renderBrowse()});document.getElementById('filterToggle').addEventListener('click',()=>document.getElementById('filters').classList.toggle('open'));browseBound=true}renderBrowse()}
+function renderActiveFilters(){
+  const el=document.getElementById('activeFilters');if(!el)return;
+  const chips=[];
+  if(browseState.search)chips.push({k:'search',label:'"'+browseState.search+'"'});
+  browseState.cats.forEach(c=>{const cat=CATEGORIES.find(x=>x.key===c);if(cat)chips.push({k:'cat:'+c,label:cat.name})});
+  if(browseState.type!=='all'){const tl={products:'Products',vehprop:'Cars & Property',services:'Services'};chips.push({k:'type',label:tl[browseState.type]||browseState.type})}
+  if(browseState.max<42000)chips.push({k:'price',label:'Under '+fmtUSD(browseState.max)});
+  el.innerHTML=chips.map(c=>'<span class="afilter">'+c.label+'<button data-rm="'+c.k+'" aria-label="Remove filter"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button></span>').join('');
+}
+function removeActiveFilter(k){
+  if(k==='search'){browseState.search='';const i=document.getElementById('browseSearch');if(i)i.value=''}
+  else if(k.startsWith('cat:')){const c=k.slice(4);browseState.cats=browseState.cats.filter(x=>x!==c);const cb=document.querySelector('.fcat[value="'+c+'"]');if(cb)cb.checked=false}
+  else if(k==='type'){browseState.type='all';const r=document.querySelector('input[name=ftype][value=all]');if(r)r.checked=true}
+  else if(k==='price'){browseState.max=42000;const pr=document.getElementById('priceRange');if(pr)pr.value=42000;const pl=document.getElementById('priceLabel');if(pl)pl.textContent='Up to $42,000'}
+  syncCatPills();renderBrowse();
+}
+function syncCatPills(){
+  document.querySelectorAll('.cat-pill').forEach(p=>{
+    const c=p.dataset.cat;
+    const on=(c==='')?browseState.cats.length===0:browseState.cats.includes(c);
+    p.classList.toggle('on',on);p.setAttribute('aria-selected',on?'true':'false');
+  });
+}
+function renderBrowse(){let l=LISTINGS.filter(it=>{if(browseState.search){const q=browseState.search.toLowerCase();if(!(it.title.toLowerCase().includes(q)||it.cat.toLowerCase().includes(q)||it.seller.toLowerCase().includes(q)))return false}if(browseState.cats.length&&!browseState.cats.includes(it.key))return false;if(browseState.type!=='all'&&it.group!==browseState.type)return false;if(it.usd>browseState.max)return false;return true});if(browseState.sort==='low')l=[...l].sort((a,b)=>a.usd-b.usd);else if(browseState.sort==='high')l=[...l].sort((a,b)=>b.usd-a.usd);else if(browseState.sort==='az')l=[...l].sort((a,b)=>a.title.localeCompare(b.title));const rc=document.getElementById('resCount');if(rc)rc.textContent=l.length;renderActiveFilters();syncCatPills();renderGrid(document.getElementById('browseGrid'),l)}
+function initBrowse(){
+  if(!browseBound){
+    buildBrowseFilters();
+    document.getElementById('browseSearch').addEventListener('input',e=>{browseState.search=e.target.value;renderBrowse()});
+    document.querySelectorAll('input[name=ftype]').forEach(r=>r.addEventListener('change',e=>{browseState.type=e.target.value;renderBrowse()}));
+    const pr=document.getElementById('priceRange');
+    pr.addEventListener('input',e=>{browseState.max=+e.target.value;document.getElementById('priceLabel').textContent='Up to '+fmtUSD(+e.target.value);renderBrowse()});
+    document.getElementById('sortSel').addEventListener('change',e=>{browseState.sort=e.target.value;renderBrowse()});
+    document.getElementById('resetFilters').addEventListener('click',()=>{browseState.search='';browseState.cats=[];browseState.type='all';browseState.max=42000;browseState.sort='featured';document.getElementById('browseSearch').value='';document.querySelectorAll('.fcat').forEach(x=>x.checked=false);document.querySelector('input[name=ftype][value=all]').checked=true;pr.value=42000;document.getElementById('priceLabel').textContent='Up to $42,000';document.getElementById('sortSel').value='featured';renderBrowse()});
+    document.getElementById('filterToggle').addEventListener('click',()=>document.getElementById('filters').classList.toggle('open'));
+    document.getElementById('catPills').addEventListener('click',e=>{const p=e.target.closest('.cat-pill');if(!p)return;const c=p.dataset.cat;if(c===''){browseState.cats=[]}else{browseState.cats=[c]}document.querySelectorAll('.fcat').forEach(cb=>cb.checked=browseState.cats.includes(cb.value));renderBrowse()});
+    document.getElementById('activeFilters').addEventListener('click',e=>{const b=e.target.closest('[data-rm]');if(b)removeActiveFilter(b.dataset.rm)});
+    browseBound=true
+  }
+  renderBrowse()
+}
 function renderListingDetail(id){
   const it=LISTINGS.find(x=>x.id===id)||LISTINGS[0];
   document.getElementById('pdpCrumb').innerHTML='<a href="#home">Home</a> › <a href="#browse">'+it.cat+'</a> › <span>'+it.title+'</span>';
