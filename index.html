@@ -27,6 +27,34 @@
 <meta name="theme-color" content="#0a0e08">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <link rel="manifest" href="./manifest.json">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+<script>
+/* Aggressive cleanup: unregister any service worker from earlier builds + purge all caches.
+   Runs before anything else so stale shells can't intercept this load. */
+(function(){
+  try{
+    if('serviceWorker' in navigator){
+      navigator.serviceWorker.getRegistrations().then(function(regs){
+        var hadAny=regs && regs.length>0;
+        Promise.all(regs.map(function(r){return r.unregister()})).then(function(){
+          if('caches' in window){
+            caches.keys().then(function(keys){
+              return Promise.all(keys.map(function(k){return caches.delete(k)}));
+            }).then(function(){
+              if(hadAny && !sessionStorage.getItem('nl_sw_purged')){
+                sessionStorage.setItem('nl_sw_purged','1');
+                location.reload();
+              }
+            }).catch(function(){});
+          }
+        }).catch(function(){});
+      }).catch(function(){});
+    }
+  }catch(e){}
+})();
+</script>
 <link rel="preload" as="image" href="./hero-desktop.jpg" media="(min-width:921px)" fetchpriority="high">
 <link rel="preload" as="image" href="./hero-mobile.jpg" media="(max-width:920px)" fetchpriority="high">
 <link rel="preconnect" href="https://fonts.googleapis.com">
