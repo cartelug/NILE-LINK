@@ -59,6 +59,25 @@ function animateRate(target){
 }
 window.addEventListener('DOMContentLoaded',()=>{fetchLiveRate();setInterval(fetchLiveRate,5*60*1000)});
 
+/* === PWA: service worker === */
+if('serviceWorker' in navigator){window.addEventListener('load',()=>{navigator.serviceWorker.register('./sw.js').catch(()=>{})})}
+
+/* === Multi-image gallery from a single source === */
+function listingImages(it){
+  if(!it||!it.img)return [];
+  const base=it.img.split('?')[0];
+  const opts=[
+    '?w=900&h=720&fit=crop&auto=format&q=82',
+    '?w=900&h=720&fit=crop&crop=top&auto=format&q=82',
+    '?w=900&h=720&fit=crop&crop=bottom&auto=format&q=82',
+    '?w=900&h=720&fit=crop&crop=entropy&auto=format&q=82'
+  ];
+  return opts.map(o=>base+o);
+}
+
+/* === Skeleton loader === */
+function skeletonGrid(n){return '<div class="skel-grid">'+Array.from({length:n||8},()=>'<div class="skel-card"><div class="skel-media"></div><div class="skel-body"><div class="skel-line w90"></div><div class="skel-line w55"></div><div class="skel-meta"></div></div></div>').join('')+'</div>'}
+
 /* === Favorites (localStorage-backed) === */
 let FAVS=[];try{FAVS=JSON.parse(localStorage.getItem('nl_favs')||'[]').map(Number).filter(Number.isFinite)}catch(e){FAVS=[]}
 function saveFavs(){try{localStorage.setItem('nl_favs',JSON.stringify(FAVS))}catch(e){}}
@@ -150,6 +169,47 @@ document.getElementById('heroSearchBtn').addEventListener('click',()=>goSearch(d
 document.getElementById('heroSearch').addEventListener('keydown',e=>{if(e.key==='Enter')goSearch(e.target.value)});
 document.getElementById('navSearch').addEventListener('keydown',e=>{if(e.key==='Enter')goSearch(e.target.value)});
 document.querySelectorAll('.chip').forEach(c=>c.addEventListener('click',()=>goSearch(c.dataset.q)));
+
+/* === Search autocomplete === */
+function buildSuggestions(q){
+  q=(q||'').trim().toLowerCase();if(!q)return [];
+  const out=[],seen=new Set();
+  CATEGORIES.forEach(c=>{if(c.name.toLowerCase().includes(q)){out.push({type:'cat',key:c.key,name:c.name,count:c.count})}});
+  LISTINGS.forEach(l=>{
+    const blob=(l.title+' '+l.cat+' '+l.seller+' '+l.loc).toLowerCase();
+    if(blob.includes(q)&&!seen.has(l.id)){seen.add(l.id);out.push({type:'item',data:l})}
+  });
+  return out.slice(0,7);
+}
+function renderSearchDropdown(input,dropdown){
+  const q=input.value;const items=buildSuggestions(q);
+  if(!q.trim()){dropdown.classList.remove('show');input.setAttribute('aria-expanded','false');return}
+  if(!items.length){dropdown.innerHTML='<div class="sd-empty">No matches for &ldquo;<b>'+q.replace(/[<>]/g,'')+'&rdquo;</b><div class="sd-empty-sub">Try a different word or browse all listings.</div></div>';dropdown.classList.add('show');input.setAttribute('aria-expanded','true');return}
+  dropdown.innerHTML=items.map(s=>{
+    if(s.type==='cat'){return '<a href="#browse" class="sd-item sd-cat-row" data-sd-cat="'+s.key+'" role="option"><div class="sd-thumb sd-cat-thumb">'+glyph(s.key,22)+'</div><div class="sd-info"><div class="sd-ttl">'+s.name+'</div><div class="sd-meta">Browse category &middot; '+s.count+'</div></div><svg class="sd-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M9 6l6 6-6 6"/></svg></a>'}
+    const it=s.data;
+    return '<a href="#listing?id='+it.id+'" class="sd-item" role="option"><div class="sd-thumb">'+(it.img?'<img src="'+it.img+'" alt="" loading="lazy">':glyph(it.key,22))+'</div><div class="sd-info"><div class="sd-ttl">'+it.title+'</div><div class="sd-meta">'+it.cat+' &middot; <b>'+(it.from?'From ':'')+fmtUSD(it.usd)+(it.note||'')+'</b></div></div><svg class="sd-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M9 6l6 6-6 6"/></svg></a>';
+  }).join('')+'<a href="#browse" class="sd-item sd-all" data-sd-search="'+q.replace(/"/g,'')+'" role="option"><div class="sd-thumb sd-all-thumb"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4-4"/></svg></div><div class="sd-info"><div class="sd-ttl">See all results for &ldquo;'+q.replace(/[<>]/g,'')+'&rdquo;</div><div class="sd-meta">Search the full marketplace</div></div></a>';
+  dropdown.classList.add('show');input.setAttribute('aria-expanded','true');
+}
+function bindAutocomplete(inputId,dropdownId){
+  const input=document.getElementById(inputId);const dropdown=document.getElementById(dropdownId);
+  if(!input||!dropdown)return;
+  let t;
+  input.addEventListener('input',()=>{clearTimeout(t);t=setTimeout(()=>renderSearchDropdown(input,dropdown),80)});
+  input.addEventListener('focus',()=>{if(input.value.trim())renderSearchDropdown(input,dropdown)});
+  input.addEventListener('keydown',e=>{if(e.key==='Escape'){dropdown.classList.remove('show');input.blur()}});
+  document.addEventListener('click',e=>{if(!input.contains(e.target)&&!dropdown.contains(e.target)){dropdown.classList.remove('show');input.setAttribute('aria-expanded','false')}});
+  dropdown.addEventListener('click',e=>{
+    const cat=e.target.closest('[data-sd-cat]');
+    const all=e.target.closest('[data-sd-search]');
+    if(cat){setTimeout(()=>{browseState.cats=[cat.dataset.sdCat];browseState.search='';const i=document.getElementById('browseSearch');if(i)i.value='';if(typeof renderBrowse==='function')renderBrowse()},20)}
+    else if(all){setTimeout(()=>{browseState.search=all.dataset.sdSearch;const i=document.getElementById('browseSearch');if(i)i.value=all.dataset.sdSearch;if(typeof renderBrowse==='function')renderBrowse()},20)}
+    dropdown.classList.remove('show');input.setAttribute('aria-expanded','false');input.value='';
+  });
+}
+bindAutocomplete('heroSearch','heroSearchDropdown');
+bindAutocomplete('navSearch','navSearchDropdown');
 const STEPS={buy:[{h:'Browse & search',p:'Filter by category, location and price across phones, cars, property, fashion and services.'},{h:'Order or request',p:'Tap Order Now, Request Contact, or Request Quote. Your details are captured safely inside Nile Link.'},{h:'Close with confidence',p:'Verified sellers follow up to confirm, arrange a viewing or delivery, and close the deal.'}],sell:[{h:'Post or save a draft',p:'Add photos, price, location and category in minutes — or save as a draft and finish later.'},{h:'Receive real requests',p:'Get orders, contacts and quotes from serious buyers, organized in your shop dashboard.'},{h:'Grow & get paid',p:'Boost listings, earn a verified badge, and close more deals.'}]};
 function renderSteps(m){document.getElementById('steps').innerHTML=STEPS[m].map((s,i)=>'<div class="step" style="animation:rise .5s ease both;animation-delay:'+(i*65)+'ms"><div class="num"></div><h3>'+s.h+'</h3><p>'+s.p+'</p><div class="bigno">'+(i+1)+'</div></div>').join('')}
 document.getElementById('howToggle').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;document.querySelectorAll('#howToggle button').forEach(x=>x.classList.remove('active'));b.classList.add('active');renderSteps(b.dataset.mode)});
@@ -204,19 +264,57 @@ function renderSaved(){
   else{renderGrid(el,items)}
 }
 function renderListingDetail(id){
-  const it=LISTINGS.find(x=>x.id===id)||LISTINGS[0];
+  const it=LISTINGS.find(x=>x.id===id);
+  /* tear down any prior sticky CTA */
+  const oldSticky=document.querySelector('.pdp-mob-cta');if(oldSticky)oldSticky.remove();
+  if(!it){
+    document.getElementById('pdpCrumb').innerHTML='<a href="#home">Home</a> › <span>Listing not found</span>';
+    document.getElementById('pdpContent').innerHTML='<div class="pdp-notfound"><div class="nf-ic"><svg width="46" height="46" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4-4"/><path d="M8.5 8.5l5 5M13.5 8.5l-5 5"/></svg></div><h2>This listing isn&rsquo;t available</h2><p>It may have been sold, removed by the seller, or never existed. Try browsing for something similar.</p><div class="nf-actions"><a href="#browse" class="btn btn-lime">Browse listings</a><a href="#home" class="btn btn-ghost">Go home</a></div></div>';
+    document.getElementById('similarGrid').innerHTML='';return;
+  }
   document.getElementById('pdpCrumb').innerHTML='<a href="#home">Home</a> › <a href="#browse">'+it.cat+'</a> › <span>'+it.title+'</span>';
-  /* mount sticky mobile CTA */
-  let stickyEl=document.querySelector('.pdp-mob-cta');if(stickyEl)stickyEl.remove();
-  stickyEl=document.createElement('div');stickyEl.className='pdp-mob-cta';
+  const imgs=listingImages(it);
+  /* sticky mobile CTA */
   const cta0=CTA[it.type];
+  const stickyEl=document.createElement('div');stickyEl.className='pdp-mob-cta';
   stickyEl.innerHTML='<div class="pmc-price"><span class="pmc-u">'+(it.from?'From ':'')+fmtUSD(it.usd)+(it.note?'<small>'+it.note+'</small>':'')+'</span><span class="pmc-s">≈ '+fmtSSP(it.usd*RATE)+(it.note||'')+'</span></div><button class="btn pmc-cta '+cta0.cls+'" data-cta="'+it.id+'"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">'+cta0.icon+'</svg>'+cta0.label+'</button>';
   document.body.appendChild(stickyEl);
   const cta=CTA[it.type];
   const specs=it.group==='vehprop'?[['Location',it.loc],['Listing type',it.cat],['Status','Available'],['Seller',it.seller]]:[['Condition','Excellent'],['Location',it.loc],['Category',it.cat],['Seller',it.seller]];
-  document.getElementById('pdpContent').innerHTML='<div class="pdp-gallery"><div class="main-img"><div class="badges">'+it.badges.map(badgeHTML).join('')+'</div>'+(it.img?'<img src="'+it.img+'" alt="'+it.title+'" class="pdp-main-img" loading="eager">':glyph(it.key,120))+'</div><div class="pdp-thumbs">'+[0,1,2,3].map(n=>'<div class="pdp-thumb '+(n===0?'on':'')+'">'+(it.img?'<img src="'+it.img+'" alt="" loading="lazy">':glyph(it.key,30))+'</div>').join('')+'</div></div><div class="pdp-info"><div class="cat">'+it.cat+'</div><h1>'+it.title+'</h1><span class="pdp-loc"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 21s7-5.5 7-11a7 7 0 1 0-14 0c0 5.5 7 11 7 11z"/><circle cx="12" cy="10" r="2.2"/></svg>'+it.loc+' · posted 2 days ago</span><div class="pdp-price"><span class="u">'+(it.from?'From ':'')+fmtUSD(it.usd)+(it.note?'<small>'+it.note+'</small>':'')+'</span><span class="s">≈ '+fmtSSP(it.usd*RATE)+(it.note||'')+'</span></div><div class="seller-card"><div class="av">'+it.seller[0]+'</div><div><div class="nm">'+it.seller+(it.badges.includes('verified')?' <span class="vb"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></span>':'')+'</div><div class="lv">'+(it.badges.includes('verified')?'Verified seller':'Seller')+' · Juba</div></div><a href="#shop?seller='+encodeURIComponent(it.seller)+'" class="vshop">View shop ›</a></div><div class="pdp-cta"><button class="btn btn-lg btn-block '+cta.cls+'" data-cta="'+it.id+'"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">'+cta.icon+'</svg>'+cta.label+'</button></div><div class="pdp-actions-row"><button class="pdp-icon-btn" data-fav="'+it.id+'"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 1 0-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 0 0 0-7.8z"/></svg>Save</button><button class="pdp-icon-btn" onclick="showToast(\'Listing link copied to share\')"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.6 13.5l6.8 4M15.4 6.5l-6.8 4"/></svg>Share</button><button class="pdp-icon-btn" onclick="showToast(\'Reported — our team will review\')"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 22V4h13l-2 4 2 4H4"/></svg>Report</button></div><div class="pdp-note"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l8 4v6c0 5-3.5 8-8 10-4.5-2-8-5-8-10V6z"/><path d="M9 12l2 2 4-4"/></svg><p>Your request stays inside Nile Link. The seller follows up directly — no payment is taken on the platform.</p></div><div class="pdp-section"><h3>Description</h3><p>'+it.desc+'</p></div><div class="pdp-section"><h3>Details</h3><div class="specs">'+specs.map(s=>'<div class="spec"><span class="k">'+s[0]+'</span><span class="v">'+s[1]+'</span></div>').join('')+'</div></div></div>';
+  const galleryHTML='<div class="pdp-gallery">'
+    +'<div class="main-img" data-zoom-target>'
+    +'<div class="badges">'+it.badges.map(badgeHTML).join('')+'</div>'
+    +(imgs.length?'<img src="'+imgs[0]+'" alt="'+it.title+'" class="pdp-main-img" id="pdpMainImg" width="600" height="460" loading="eager" decoding="async">':glyph(it.key,120))
+    +(imgs.length?'<button class="pdp-zoom-btn" data-zoom-open aria-label="Open full-size image"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h6v6"/><path d="M9 21H3v-6"/><path d="M21 3l-7 7"/><path d="M3 21l7-7"/></svg></button>':'')
+    +'<div class="pdp-photo-count">'+(imgs.length||1)+' photo'+(imgs.length>1?'s':'')+'</div>'
+    +'</div>'
+    +(imgs.length>1?'<div class="pdp-thumbs" role="tablist" aria-label="Listing photos">'+imgs.map((src,n)=>'<button class="pdp-thumb'+(n===0?' on':'')+'" data-thumb-src="'+src+'" data-idx="'+n+'" aria-label="View photo '+(n+1)+'" role="tab" aria-selected="'+(n===0?'true':'false')+'"><img src="'+src+'" alt="" loading="lazy" decoding="async"></button>').join('')+'</div>':'')
+    +'</div>';
+  document.getElementById('pdpContent').innerHTML=galleryHTML+'<div class="pdp-info"><div class="cat">'+it.cat+'</div><h1>'+it.title+'</h1><span class="pdp-loc"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 21s7-5.5 7-11a7 7 0 1 0-14 0c0 5.5 7 11 7 11z"/><circle cx="12" cy="10" r="2.2"/></svg>'+it.loc+' · posted 2 days ago</span><div class="pdp-price"><span class="u">'+(it.from?'From ':'')+fmtUSD(it.usd)+(it.note?'<small>'+it.note+'</small>':'')+'</span><span class="s">≈ '+fmtSSP(it.usd*RATE)+(it.note||'')+'</span></div><div class="seller-card"><div class="av">'+it.seller[0]+'</div><div><div class="nm">'+it.seller+(it.badges.includes('verified')?' <span class="vb"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></span>':'')+'</div><div class="lv">'+(it.badges.includes('verified')?'Verified seller':'Seller')+' · Juba</div></div><a href="#shop?seller='+encodeURIComponent(it.seller)+'" class="vshop">View shop ›</a></div><div class="pdp-cta"><button class="btn btn-lg btn-block '+cta.cls+'" data-cta="'+it.id+'"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">'+cta.icon+'</svg>'+cta.label+'</button></div><div class="pdp-actions-row"><button class="pdp-icon-btn'+(isFav(it.id)?' on':'')+'" data-fav="'+it.id+'"><svg width="16" height="16" viewBox="0 0 24 24" fill="'+(isFav(it.id)?'currentColor':'none')+'" stroke="currentColor" stroke-width="2"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 1 0-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 0 0 0-7.8z"/></svg>Save</button><button class="pdp-icon-btn" onclick="showToast(\'Listing link copied to share\')"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.6 13.5l6.8 4M15.4 6.5l-6.8 4"/></svg>Share</button><button class="pdp-icon-btn" onclick="showToast(\'Reported — our team will review\')"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 22V4h13l-2 4 2 4H4"/></svg>Report</button></div><div class="pdp-note"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l8 4v6c0 5-3.5 8-8 10-4.5-2-8-5-8-10V6z"/><path d="M9 12l2 2 4-4"/></svg><p>Your request stays inside Nile Link. The seller follows up directly — no payment is taken on the platform.</p></div><div class="pdp-section"><h3>Description</h3><p>'+it.desc+'</p></div><div class="pdp-section"><h3>Details</h3><div class="specs">'+specs.map(s=>'<div class="spec"><span class="k">'+s[0]+'</span><span class="v">'+s[1]+'</span></div>').join('')+'</div></div></div>';
   renderGrid(document.getElementById('similarGrid'),LISTINGS.filter(x=>x.group===it.group&&x.id!==it.id).slice(0,4));
 }
+
+/* === PDP gallery + lightbox bindings === */
+document.addEventListener('click',e=>{
+  const thumb=e.target.closest('.pdp-thumb[data-thumb-src]');
+  if(thumb){
+    const main=document.getElementById('pdpMainImg');
+    if(main)main.src=thumb.dataset.thumbSrc;
+    document.querySelectorAll('.pdp-thumb').forEach(t=>{t.classList.remove('on');t.setAttribute('aria-selected','false')});
+    thumb.classList.add('on');thumb.setAttribute('aria-selected','true');
+    return;
+  }
+  const zoomOpen=e.target.closest('[data-zoom-open]')||e.target.closest('.pdp-main-img');
+  if(zoomOpen&&zoomOpen.closest('[data-zoom-target]')){
+    const main=document.getElementById('pdpMainImg');const lb=document.getElementById('lightbox');const lbi=document.getElementById('lightboxImg');
+    if(main&&lb&&lbi){lbi.src=main.src;lb.classList.add('show');lb.setAttribute('aria-hidden','false');document.body.style.overflow='hidden'}
+    return;
+  }
+  if(e.target.closest('[data-lb-close]')||e.target.id==='lightbox'){
+    const lb=document.getElementById('lightbox');if(lb&&lb.classList.contains('show')){lb.classList.remove('show');lb.setAttribute('aria-hidden','true');document.body.style.overflow=''}
+  }
+});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){const lb=document.getElementById('lightbox');if(lb&&lb.classList.contains('show')){lb.classList.remove('show');lb.setAttribute('aria-hidden','true');document.body.style.overflow=''}}});
 
 const STATUS={live:{cls:'st-live',label:'Live',dot:1},draft:{cls:'st-draft',label:'Draft'},pending:{cls:'st-pending',label:'Pending review'},sold:{cls:'st-sold',label:'Sold'}};
 function statpill(s){const d=STATUS[s];return '<span class="statpill '+d.cls+'">'+(d.dot?'<span class="dot"></span>':'')+d.label+'</span>'}

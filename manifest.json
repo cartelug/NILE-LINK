@@ -1,0 +1,22 @@
+{
+  "name": "Nile Link — South Sudan's Marketplace",
+  "short_name": "Nile Link",
+  "description": "Buy & sell anything in South Sudan. Verified sellers, in-app orders, prices in USD & SSP.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#0a0e08",
+  "theme_color": "#0a0e08",
+  "lang": "en",
+  "categories": ["shopping", "business"],
+  "icons": [
+    { "src": "./logo.png", "sizes": "192x192", "type": "image/png", "purpose": "any maskable" },
+    { "src": "./logo.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
+  ],
+  "shortcuts": [
+    { "name": "Browse listings", "short_name": "Browse", "url": "./#browse" },
+    { "name": "Sell an item", "short_name": "Sell", "url": "./#post" },
+    { "name": "Saved", "short_name": "Saved", "url": "./#saved" }
+  ]
+}
