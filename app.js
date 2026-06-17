@@ -58,6 +58,13 @@ function animateRate(target){
   });
 }
 window.addEventListener('DOMContentLoaded',()=>{fetchLiveRate();setInterval(fetchLiveRate,5*60*1000)});
+
+/* === Favorites (localStorage-backed) === */
+let FAVS=[];try{FAVS=JSON.parse(localStorage.getItem('nl_favs')||'[]').map(Number).filter(Number.isFinite)}catch(e){FAVS=[]}
+function saveFavs(){try{localStorage.setItem('nl_favs',JSON.stringify(FAVS))}catch(e){}}
+function isFav(id){return FAVS.includes(+id)}
+function toggleFav(id){id=+id;const i=FAVS.indexOf(id);if(i>=0)FAVS.splice(i,1);else FAVS.push(id);saveFavs();updateSavedBadge();return i<0}
+function updateSavedBadge(){const badges=document.querySelectorAll('[data-saved-count]');badges.forEach(b=>{if(FAVS.length){b.textContent=FAVS.length>99?'99+':FAVS.length;b.classList.add('show')}else{b.classList.remove('show')}});const sg=document.querySelector('.page[data-page="saved"].active');if(sg)renderSaved()}
 const fmtUSD=n=>'$'+Number(n).toLocaleString('en-US');
 const fmtSSP=n=>Number(n).toLocaleString('en-US')+' SSP';
 const usdLine=it=>(it.from?'From ':'')+fmtUSD(it.usd)+(it.note?'<small>'+it.note+'</small>':'');
@@ -108,7 +115,7 @@ function cardHTML(it,i){
   return '<article class="card" data-id="'+it.id+'" data-group="'+it.group+'" style="animation-delay:'+(i*40)+'ms">'+
     '<div class="media">'+
       topBadge+
-      '<button class="fav" data-fav="'+it.id+'" aria-label="Save"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 1 0-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 0 0 0-7.8z"/></svg></button>'+
+      '<button class="fav'+(isFav(it.id)?' on':'')+'" data-fav="'+it.id+'" aria-label="Save"><svg width="16" height="16" viewBox="0 0 24 24" fill="'+(isFav(it.id)?'currentColor':'none')+'" stroke="currentColor" stroke-width="2.2"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 1 0-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 0 0 0-7.8z"/></svg></button>'+
       (it.img?'<img src="'+it.img+'" alt="'+it.title+'" class="card-img" loading="lazy">':glyph(it.key,62))+
     '</div>'+
     '<div class="body">'+
@@ -122,7 +129,7 @@ function cardHTML(it,i){
 function renderGrid(el,list){if(!el)return;el.innerHTML=list.length?list.map((it,i)=>cardHTML(it,i)).join(''):'<div class="empty"><svg width="54" height="54" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4-4"/></svg><p style="font-weight:600;color:var(--slate)">No listings match — try another category or search.</p></div>'}
 document.addEventListener('click',e=>{
   const fav=e.target.closest('[data-fav]');
-  if(fav){e.stopPropagation();fav.classList.toggle('on');const s=fav.querySelector('svg');if(s){s.classList.add('pop');setTimeout(()=>s.classList.remove('pop'),300)}return}
+  if(fav){e.stopPropagation();const id=fav.dataset.fav;const on=toggleFav(id);fav.classList.toggle('on',on);const s=fav.querySelector('svg');if(s){s.setAttribute('fill',on?'currentColor':'none');s.classList.add('pop');setTimeout(()=>s.classList.remove('pop'),300)}return}
   const cta=e.target.closest('[data-cta]');
   if(cta){e.stopPropagation();openModal(+cta.dataset.cta);return}
   const sellerLink=e.target.closest('[data-seller-link]');
@@ -189,9 +196,22 @@ function initBrowse(){
   }
   renderBrowse()
 }
+function renderSaved(){
+  const items=LISTINGS.filter(l=>FAVS.includes(l.id));
+  const el=document.getElementById('savedGrid');if(!el)return;
+  const cnt=document.getElementById('savedCount');if(cnt)cnt.textContent=items.length;
+  if(!items.length){el.innerHTML='<div class="empty saved-empty"><div class="se-ic"><svg width="42" height="42" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 1 0-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 0 0 0-7.8z"/></svg></div><h3>No saved listings yet</h3><p>Tap the heart on any listing to save it here for later.</p><a href="#browse" class="btn btn-lime">Start browsing</a></div>'}
+  else{renderGrid(el,items)}
+}
 function renderListingDetail(id){
   const it=LISTINGS.find(x=>x.id===id)||LISTINGS[0];
   document.getElementById('pdpCrumb').innerHTML='<a href="#home">Home</a> › <a href="#browse">'+it.cat+'</a> › <span>'+it.title+'</span>';
+  /* mount sticky mobile CTA */
+  let stickyEl=document.querySelector('.pdp-mob-cta');if(stickyEl)stickyEl.remove();
+  stickyEl=document.createElement('div');stickyEl.className='pdp-mob-cta';
+  const cta0=CTA[it.type];
+  stickyEl.innerHTML='<div class="pmc-price"><span class="pmc-u">'+(it.from?'From ':'')+fmtUSD(it.usd)+(it.note?'<small>'+it.note+'</small>':'')+'</span><span class="pmc-s">≈ '+fmtSSP(it.usd*RATE)+(it.note||'')+'</span></div><button class="btn pmc-cta '+cta0.cls+'" data-cta="'+it.id+'"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">'+cta0.icon+'</svg>'+cta0.label+'</button>';
+  document.body.appendChild(stickyEl);
   const cta=CTA[it.type];
   const specs=it.group==='vehprop'?[['Location',it.loc],['Listing type',it.cat],['Status','Available'],['Seller',it.seller]]:[['Condition','Excellent'],['Location',it.loc],['Category',it.cat],['Seller',it.seller]];
   document.getElementById('pdpContent').innerHTML='<div class="pdp-gallery"><div class="main-img"><div class="badges">'+it.badges.map(badgeHTML).join('')+'</div>'+(it.img?'<img src="'+it.img+'" alt="'+it.title+'" class="pdp-main-img" loading="eager">':glyph(it.key,120))+'</div><div class="pdp-thumbs">'+[0,1,2,3].map(n=>'<div class="pdp-thumb '+(n===0?'on':'')+'">'+(it.img?'<img src="'+it.img+'" alt="" loading="lazy">':glyph(it.key,30))+'</div>').join('')+'</div></div><div class="pdp-info"><div class="cat">'+it.cat+'</div><h1>'+it.title+'</h1><span class="pdp-loc"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 21s7-5.5 7-11a7 7 0 1 0-14 0c0 5.5 7 11 7 11z"/><circle cx="12" cy="10" r="2.2"/></svg>'+it.loc+' · posted 2 days ago</span><div class="pdp-price"><span class="u">'+(it.from?'From ':'')+fmtUSD(it.usd)+(it.note?'<small>'+it.note+'</small>':'')+'</span><span class="s">≈ '+fmtSSP(it.usd*RATE)+(it.note||'')+'</span></div><div class="seller-card"><div class="av">'+it.seller[0]+'</div><div><div class="nm">'+it.seller+(it.badges.includes('verified')?' <span class="vb"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></span>':'')+'</div><div class="lv">'+(it.badges.includes('verified')?'Verified seller':'Seller')+' · Juba</div></div><a href="#shop?seller='+encodeURIComponent(it.seller)+'" class="vshop">View shop ›</a></div><div class="pdp-cta"><button class="btn btn-lg btn-block '+cta.cls+'" data-cta="'+it.id+'"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">'+cta.icon+'</svg>'+cta.label+'</button></div><div class="pdp-actions-row"><button class="pdp-icon-btn" data-fav="'+it.id+'"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 1 0-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 0 0 0-7.8z"/></svg>Save</button><button class="pdp-icon-btn" onclick="showToast(\'Listing link copied to share\')"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.6 13.5l6.8 4M15.4 6.5l-6.8 4"/></svg>Share</button><button class="pdp-icon-btn" onclick="showToast(\'Reported — our team will review\')"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 22V4h13l-2 4 2 4H4"/></svg>Report</button></div><div class="pdp-note"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l8 4v6c0 5-3.5 8-8 10-4.5-2-8-5-8-10V6z"/><path d="M9 12l2 2 4-4"/></svg><p>Your request stays inside Nile Link. The seller follows up directly — no payment is taken on the platform.</p></div><div class="pdp-section"><h3>Description</h3><p>'+it.desc+'</p></div><div class="pdp-section"><h3>Details</h3><div class="specs">'+specs.map(s=>'<div class="spec"><span class="k">'+s[0]+'</span><span class="v">'+s[1]+'</span></div>').join('')+'</div></div></div>';
@@ -288,9 +308,9 @@ document.getElementById('drawerBg').addEventListener('click',closeDr);
 document.querySelectorAll('.drawer-nav').forEach(a=>a.addEventListener('click',closeDr));
 document.addEventListener('keydown',function(e){if(e.key==='Escape'&&drawer.classList.contains('open'))closeDr();});
 
-const PAGES=['home','browse','listing','post','dashboard','shop','pricing','about','help','signin','signup'];
+const PAGES=['home','browse','listing','post','dashboard','shop','pricing','about','help','signin','signup','saved'];
 function parseHash(){let h=location.hash.replace(/^#/,'')||'home';const i=h.indexOf('?');let page=h,query='';if(i>=0){page=h.slice(0,i);query=h.slice(i+1)}if(!PAGES.includes(page))page='home';const params={};query.split('&').filter(Boolean).forEach(p=>{const [k,v]=p.split('=');params[k]=decodeURIComponent(v||'')});return {page,params}}
-function route(){const {page,params}=parseHash();document.querySelectorAll('.page').forEach(p=>p.classList.toggle('active',p.dataset.page===page));document.querySelectorAll('[data-nav]').forEach(n=>n.classList.toggle('on',n.dataset.nav===page));window.scrollTo(0,0);closeDr();
+function route(){const {page,params}=parseHash();document.querySelectorAll('.page').forEach(p=>p.classList.toggle('active',p.dataset.page===page));document.querySelectorAll('[data-nav]').forEach(n=>n.classList.toggle('on',n.dataset.nav===page));document.body.classList.toggle('is-listing',page==='listing');window.scrollTo(0,0);closeDr();updateSavedBadge();
   if(page==='browse')initBrowse();
   if(page==='listing')renderListingDetail(+params.id||1);
   if(page==='post')initPost();
@@ -298,6 +318,7 @@ function route(){const {page,params}=parseHash();document.querySelectorAll('.pag
   if(page==='shop')renderShopProfile(params.seller||'TechHub SS');
   if(page==='pricing'){renderPricing();renderFaq(document.getElementById('pricingFaq'),PRICING_FAQ)}
   if(page==='help')renderFaq(document.getElementById('helpFaq'),HELP_FAQ);
+  if(page==='saved')renderSaved();
   setTimeout(revealInit,40);
 }
 function revealInit(){document.querySelectorAll('.reveal').forEach(el=>{if(!el.dataset.io){el.dataset.io=1;io.observe(el)}})}
