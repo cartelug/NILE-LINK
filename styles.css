@@ -740,3 +740,283 @@ h1,h2,.sec-title{text-wrap:balance}
   .feat::before{display:none!important}
   .testi{padding:20px}
 }
+
+/* === Responsive polish pass — perfect mobile === */
+
+/* Hide whole nav-search wrap on tablet/mobile (parent of nav-search) */
+@media (max-width:920px){.nav-search-wrap{display:none}}
+
+/* Toast lifts above bottom nav on mobile */
+@media (max-width:760px){
+  .toast{bottom:calc(82px + env(safe-area-inset-bottom,0px));font-size:13.5px;padding:11px 16px}
+  body.is-listing .toast{bottom:calc(96px + env(safe-area-inset-bottom,0px))}
+}
+
+/* Back-bar tighter on mobile */
+@media (max-width:760px){
+  .back-bar-row{padding:10px 0;min-height:44px;gap:14px}
+  .back-link{padding:7px 12px 7px 8px;font-size:13px}
+  .back-link span{font-size:13px}
+  .crumb-inline{font-size:12.5px}
+}
+@media (max-width:480px){
+  .back-bar-row{gap:10px}
+  .crumb-inline{font-size:12px}
+}
+
+/* Browse head + cat-pills mobile */
+@media (max-width:760px){
+  .browse-head{padding:18px 0 4px}
+  .browse-head .bh-title h1{font-size:24px;line-height:1.1}
+  .browse-head .bh-title p{font-size:13.5px;margin-top:8px;max-width:none}
+  .browse-head .bh-top{margin-bottom:14px}
+  .cat-pills{padding:4px 16px 8px;margin:0 -16px;scroll-padding-left:16px}
+  .cat-pill{font-size:13px;padding:8px 13px}
+}
+@media (max-width:480px){
+  .cat-pill{font-size:12.5px;padding:7px 12px;gap:5px}
+  .cat-pill .cp-ic svg{width:13px;height:13px}
+}
+
+/* Browse toolbar / sort */
+@media (max-width:480px){
+  .browse-toolbar{padding:10px 12px;gap:10px;border-radius:12px}
+  .toolbar-left{flex:1;justify-content:space-between;width:100%;gap:10px}
+  .sortsel{flex:1;min-width:0;font-size:12.5px;padding:7px 10px}
+  .browse-toolbar .count{font-size:12.5px}
+  .filter-toggle{padding:8px 12px;font-size:12.5px}
+  .filter-toggle svg{width:14px;height:14px}
+}
+
+/* Active filter chips on mobile */
+@media (max-width:480px){
+  .active-filters{gap:6px;margin-bottom:14px}
+  .afilter{font-size:12px;padding:5px 5px 5px 11px}
+  .afilter button{width:17px;height:17px}
+}
+
+/* Hero compact — small phones */
+@media (max-width:480px){
+  .hero.hero-compact{padding:0 0 22px}
+  .hero.hero-compact .hero-bg{height:38vh;height:38dvh;min-height:240px;max-height:340px}
+  .hero.hero-compact .hero-text{padding-top:28vh;padding-top:28dvh}
+  .hero.hero-compact h1{font-size:24px;line-height:1.14;margin-bottom:14px;letter-spacing:-.028em}
+  .hero.hero-compact .chips{margin-top:11px;flex-wrap:nowrap;overflow-x:auto;-webkit-overflow-scrolling:touch;padding-bottom:2px;scrollbar-width:none}
+  .hero.hero-compact .chips::-webkit-scrollbar{display:none}
+  .hero.hero-compact .chips .chip{flex-shrink:0}
+  .hero.hero-compact .fx-live{margin-top:12px}
+  .hero-search{padding:5px 5px 5px 14px}
+  .hero-search input{font-size:16px;padding:7px 0}
+  .hero-search .hs-btn{padding:10px 14px;min-width:44px;border-radius:999px}
+}
+
+/* FX live ticker — safer wrap on tiny screens */
+@media (max-width:480px){
+  .fx-live{padding:7px 12px 7px 9px;gap:8px;font-size:11.5px;max-width:100%;border-radius:999px}
+  .fx-live .fx-val b{min-width:36px;font-size:11.5px}
+  .fx-live .fx-label{font-size:9.5px;letter-spacing:.1em}
+}
+@media (max-width:380px){
+  .fx-live{padding:6px 10px 6px 8px;gap:6px;font-size:11px}
+  .fx-live .fx-val b{min-width:32px}
+}
+
+/* Eyebrow scaling on very small */
+@media (max-width:380px){
+  .eyebrow{font-size:10.5px;padding:6px 10px 6px 6px;gap:7px}
+  .eyebrow .tag{font-size:9.5px;padding:2px 7px}
+}
+
+/* Section heads tighter on small */
+@media (max-width:480px){
+  .cat-head{margin-bottom:14px;padding-bottom:10px}
+  .cat-head .sec-title{font-size:17px;padding-left:12px}
+  .cat-head .sec-title::before{height:15px;width:3px}
+  .cat-head .seelink{font-size:12.5px}
+}
+
+/* Page-head universal mobile */
+@media (max-width:480px){
+  .page-head{padding:24px 0 4px}
+  .page-head h1{font-size:24px;line-height:1.12}
+  .page-head p{font-size:13.5px;margin-top:8px}
+}
+
+/* PDP gallery + thumbs on small */
+@media (max-width:480px){
+  .pdp-thumbs{gap:7px;margin-top:8px;grid-template-columns:repeat(4,1fr)}
+  .pdp-thumb{border-radius:9px}
+  .pdp-zoom-btn{bottom:10px;right:10px;width:38px;height:38px}
+  .pdp-photo-count{bottom:10px;left:10px;font-size:11px;padding:4px 9px}
+  .pdp-gallery{margin-bottom:16px}
+  .pdp-info h1{font-size:22px;line-height:1.18;margin:6px 0 4px}
+  .pdp-loc{font-size:12.5px}
+  .pdp-price{margin:14px 0}
+  .pdp-price .u{font-size:26px}
+  .pdp-price .u small{font-size:14px}
+  .pdp-price .s{font-size:14px;padding:4px 10px}
+  .pdp-cta{margin:16px 0 10px}
+  .seller-card{padding:12px;gap:11px;margin:14px 0}
+  .seller-card .av{width:42px;height:42px;font-size:17px}
+  .seller-card .nm{font-size:14px}
+  .seller-card .lv{font-size:12px}
+  .seller-card .vshop{font-size:12px}
+  .pdp-actions-row{gap:8px;margin-top:8px}
+  .pdp-icon-btn{padding:9px;font-size:12.5px;gap:6px}
+  .pdp-note{padding:11px 13px;margin-top:14px}
+  .pdp-note p{font-size:12px;line-height:1.45}
+  .pdp-section h3{font-size:15px}
+  .pdp-section p{font-size:13.5px}
+  .spec{padding:10px 13px;font-size:13px}
+}
+
+/* PDP sticky mob CTA refinement */
+@media (max-width:480px){
+  .pdp-mob-cta{padding:10px 14px max(10px,env(safe-area-inset-bottom));gap:10px}
+  .pdp-mob-cta .pmc-u{font-size:18px}
+  .pdp-mob-cta .pmc-u small{font-size:11.5px}
+  .pdp-mob-cta .pmc-s{font-size:10.5px}
+  .pdp-mob-cta .pmc-cta{padding:11px 14px;font-size:13.5px;min-height:46px}
+}
+
+/* PDP not-found */
+@media (max-width:480px){
+  .pdp-notfound{padding:48px 18px}
+  .pdp-notfound .nf-ic{width:80px;height:80px}
+  .pdp-notfound h2{font-size:20px}
+  .pdp-notfound p{font-size:13.5px}
+}
+
+/* Bottom nav tighter on very small */
+@media (max-width:380px){
+  .mob-bottom-nav{padding:6px 2px max(8px,env(safe-area-inset-bottom))}
+  .mob-bottom-nav .mn-item{font-size:9.5px;padding:5px 1px;min-height:46px;gap:2px}
+  .mob-bottom-nav .mn-item .mn-ic{width:22px;height:22px}
+  .mob-bottom-nav .mn-cta{width:58px}
+  .mob-bottom-nav .mn-cta .mn-ic-cta{width:44px;height:44px;margin-top:-13px}
+  .mob-bottom-nav .mn-cta .mn-l{font-size:9.5px;margin-top:2px}
+}
+
+/* Search dropdown on mobile */
+@media (max-width:480px){
+  .search-dropdown{border-radius:14px;max-height:55vh;padding:6px;top:calc(100% + 8px)}
+  .sd-item{padding:8px 9px;gap:10px;border-radius:10px}
+  .sd-thumb{width:40px;height:40px;border-radius:9px}
+  .sd-ttl{font-size:13px}
+  .sd-meta{font-size:11px}
+  .sd-empty{padding:18px 14px;font-size:12.5px}
+}
+
+/* Footer responsive — tablet & phone */
+@media (max-width:760px){
+  footer{padding:44px 0 22px;margin-top:34px}
+  .foot-grid{grid-template-columns:1fr 1fr;gap:28px 24px;padding-bottom:28px}
+  .foot-brand{grid-column:1/-1;margin-bottom:0}
+  .foot-brand p{font-size:13px;line-height:1.6;max-width:none;margin-bottom:14px}
+  .foot-bottom{flex-direction:column;align-items:flex-start;gap:12px;padding-top:20px}
+}
+@media (max-width:480px){
+  .foot-grid{grid-template-columns:1fr 1fr;gap:22px 18px}
+  .foot-col h5{font-size:11.5px;margin-bottom:10px}
+  .foot-col a{padding:5px 0;font-size:13px}
+  .foot-brand .brandrow{margin-bottom:12px}
+  .foot-brand p{font-size:12.5px;margin-bottom:12px}
+  .foot-bottom{align-items:center;text-align:center;gap:10px}
+  .foot-bottom>*{margin:0 auto}
+  .foot-bottom p{text-align:center}
+}
+
+/* Feature strip on phone */
+@media (max-width:480px){
+  .feat-strip{grid-template-columns:1fr 1fr;gap:14px 0;padding:18px 0}
+  .feat{padding:4px 12px;gap:10px}
+  .feat .fic{width:38px;height:38px;border-radius:11px}
+  .feat h4{font-size:13px}
+  .feat p{font-size:11.5px;line-height:1.3}
+  .feat+.feat::before{display:none}
+}
+
+/* Testimonials on phone */
+@media (max-width:480px){
+  .testi{padding:18px}
+  .testi blockquote{font-size:13.5px;line-height:1.55}
+  .testi .ta{width:38px;height:38px;font-size:15px}
+  .testi .ti b{font-size:13.5px}
+  .testi .ti i{font-size:11.5px}
+}
+
+/* Impact band on phone */
+@media (max-width:480px){
+  .impact{padding:30px 20px;border-radius:18px}
+  .impact-head h2{font-size:22px;line-height:1.15}
+  .impact-head p{font-size:13.5px;margin-top:10px}
+  .impact-stats{grid-template-columns:1fr 1fr;gap:18px 12px;margin-top:24px;padding-top:22px}
+  .impact-stats .v{font-size:clamp(22px,5.4vw,28px)}
+  .impact-stats .k{font-size:11px;margin-top:5px}
+}
+
+/* Saved empty on phone */
+@media (max-width:480px){
+  .saved-empty{padding:42px 18px;gap:12px}
+  .saved-empty .se-ic{width:72px;height:72px}
+  .saved-empty .se-ic svg{width:36px;height:36px}
+  .saved-empty h3{font-size:18px}
+  .saved-empty p{font-size:13.5px;max-width:none}
+}
+
+/* Drawer accounts for bottom nav */
+@media (max-width:760px){
+  .drawer .panel{padding-bottom:calc(80px + env(safe-area-inset-bottom,0px))}
+}
+
+/* Skip-link mobile position */
+@media (max-width:480px){
+  .skip-link:focus{top:10px;left:10px;font-size:12.5px;padding:8px 14px}
+}
+
+/* Cards on tiny phones — prevent overflow */
+@media (max-width:380px){
+  .card .ttl{font-size:13px;margin-bottom:5px}
+  .card .price{font-size:15.5px}
+  .card .price-ssp{font-size:10.5px}
+  .card .meta{font-size:10.5px;gap:4px}
+  .card .meta .vchip{font-size:9px;padding:1px 4px}
+  .card .body{padding:10px}
+}
+
+/* Lightbox close button mobile */
+@media (max-width:480px){
+  .lb-close{top:12px;right:12px;width:42px;height:42px}
+  .lightbox{padding:16px}
+}
+
+/* Browse layout — when filters collapse */
+@media (max-width:920px){
+  .browse-layout{padding:14px 0 30px}
+  .filters{box-shadow:none;border-radius:14px;padding:18px;margin-bottom:14px}
+  .filter-block{padding:12px 0}
+}
+
+/* Reduce padding on cards container on phone */
+@media (max-width:480px){
+  .wrap{padding:0 14px}
+  .browse-grid{gap:10px;grid-template-columns:repeat(2,1fr)}
+}
+
+/* Tap targets - all buttons min 44 */
+@media (max-width:760px){
+  .iconbtn,.btn-sm,.fav,.modal-close,.drawer-close{min-width:44px;min-height:44px}
+}
+
+/* Smooth modal interactions on mobile keyboards */
+@media (max-width:480px){
+  .modal{max-height:90vh;max-height:90dvh}
+  .modal-body{padding:18px 16px}
+}
+
+/* Hero-compact on landscape phones — shorter band */
+@media (max-width:920px) and (max-height:520px) and (orientation:landscape){
+  .hero.hero-compact .hero-bg{height:60vh;min-height:240px;max-height:340px;width:50%;left:auto;right:0;-webkit-mask-image:radial-gradient(ellipse 90% 100% at 80% 50%,#000 30%,transparent 80%);mask-image:radial-gradient(ellipse 90% 100% at 80% 50%,#000 30%,transparent 80%)}
+  .hero.hero-compact .hero-text{padding-top:18px;max-width:55%}
+  .hero.hero-compact h1{font-size:24px}
+}
