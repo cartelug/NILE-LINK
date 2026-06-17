@@ -59,8 +59,25 @@ function animateRate(target){
 }
 window.addEventListener('DOMContentLoaded',()=>{fetchLiveRate();setInterval(fetchLiveRate,5*60*1000)});
 
-/* === PWA: service worker === */
-if('serviceWorker' in navigator){window.addEventListener('load',()=>{navigator.serviceWorker.register('./sw.js').catch(()=>{})})}
+/* === PWA: service worker with auto-update === */
+if('serviceWorker' in navigator){
+  window.addEventListener('load',()=>{
+    navigator.serviceWorker.register('./sw.js').then(reg=>{
+      /* When a new SW is found waiting, tell it to skip waiting and take over */
+      function promote(w){if(w)w.postMessage({type:'SKIP_WAITING'})}
+      if(reg.waiting)promote(reg.waiting);
+      reg.addEventListener('updatefound',()=>{
+        const nw=reg.installing;
+        if(nw)nw.addEventListener('statechange',()=>{if(nw.state==='installed'&&navigator.serviceWorker.controller)promote(nw)});
+      });
+      /* When the active SW changes, reload once so the page picks up new shell */
+      let refreshed=false;
+      navigator.serviceWorker.addEventListener('controllerchange',()=>{if(refreshed)return;refreshed=true;location.reload()});
+      /* Force a check on every load */
+      reg.update().catch(()=>{});
+    }).catch(()=>{});
+  });
+}
 
 /* === Multi-image gallery from a single source === */
 function listingImages(it){
