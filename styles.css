@@ -1668,3 +1668,129 @@ h1,h2,.sec-title{text-wrap:balance}
 
 /* Save the conv-row right border for clean look without vtick */
 .conv-av,.mt-av{box-shadow:0 0 0 2px var(--paper),0 2px 8px -2px rgba(10,14,8,.15)}
+
+/* ============================================================
+   V2 REDESIGN PASS (2025-06-17) — visibly distinct, no animation deps
+   ============================================================ */
+
+/* Force FX live ticker visible immediately — never depend on reveal-hero animation */
+.fx-live{opacity:1!important;transform:none!important}
+.fx-live.reveal-hero{animation:fxBootIn .8s cubic-bezier(.2,.9,.2,1) .35s both!important}
+@keyframes fxBootIn{from{opacity:0;transform:translateY(10px) scale(.96)}to{opacity:1;transform:none}}
+
+/* Hero V2 — bolder, more dramatic */
+.hero.hero-compact{padding:54px 0 50px}
+.hero-h1-v2{
+  font-size:clamp(34px,5.4vw,60px)!important;
+  font-weight:900!important;
+  letter-spacing:-.04em!important;
+  line-height:1.02!important;
+  margin-bottom:18px!important;
+  text-wrap:balance
+}
+.hero-h1-v2 .h1-line-1{display:inline-block;color:var(--ink)}
+.hero-h1-v2 .h1-line-2{display:inline-block;color:var(--ink)}
+.hero-h1-v2 .hl{
+  position:relative;display:inline-block;
+  background:linear-gradient(135deg,var(--lime-deep) 0%,#a3ff4a 50%,var(--lime) 100%);
+  background-size:200% 100%;
+  -webkit-background-clip:text;background-clip:text;
+  -webkit-text-fill-color:transparent;color:transparent;
+  animation:gradShift 4s ease-in-out infinite
+}
+@keyframes gradShift{0%,100%{background-position:0% 50%}50%{background-position:100% 50%}}
+.hero-h1-v2 .hl::after{display:none}
+.hero-lede{
+  font-size:clamp(14px,1.5vw,16px);
+  color:var(--slate);
+  line-height:1.55;
+  max-width:480px;
+  margin:0 0 22px;
+  font-weight:500
+}
+.hero-lede.reveal-hero{opacity:0;transform:translateY(10px);animation:heroUp .7s cubic-bezier(.2,.8,.2,1) forwards;animation-delay:calc(.15s + 1.5*.08s)}
+
+/* Hero on small phones — keep impact, shrink padding */
+@media (max-width:480px){
+  .hero.hero-compact{padding:22px 0 22px}
+  .hero-h1-v2{font-size:30px!important;line-height:1.05!important;margin-bottom:12px!important}
+  .hero-lede{font-size:13.5px;margin-bottom:16px;max-width:none}
+}
+
+/* Stronger section titles globally */
+.sec-title,h2.sec-title{font-weight:800;letter-spacing:-.025em}
+.cat-head .sec-title{font-weight:800;letter-spacing:-.02em}
+
+/* Featured grid — slightly more breathing room on PC */
+@media (min-width:1080px){
+  .grid{gap:18px}
+  .card{border-radius:16px}
+}
+
+/* Stat cards in hero (eyebrow + lede + fx) — tighter spacing */
+.hero.hero-compact .hero-text{display:flex;flex-direction:column;gap:0}
+.hero.hero-compact .eyebrow{align-self:flex-start;margin-bottom:14px}
+.hero.hero-compact .chips{margin-top:14px}
+
+/* Visible "loaded" toast on first paint of new version (auto-fades) */
+.v2-flag{
+  position:fixed;top:14px;right:14px;z-index:200;
+  background:linear-gradient(135deg,var(--ink),#161c17);
+  color:var(--lime);
+  font-size:11.5px;font-weight:800;letter-spacing:.08em;
+  padding:8px 14px;border-radius:999px;
+  border:1px solid rgba(124,252,0,.4);
+  box-shadow:0 8px 24px -8px rgba(124,252,0,.4),0 0 0 4px rgba(124,252,0,.06);
+  display:inline-flex;align-items:center;gap:7px;
+  animation:v2FlagIn .5s cubic-bezier(.2,.9,.2,1),v2FlagOut .5s ease 3.2s forwards;
+  pointer-events:none
+}
+.v2-flag::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--lime);box-shadow:0 0 10px var(--lime);animation:fxPulseGlow 1.5s ease-in-out infinite}
+@keyframes v2FlagIn{from{opacity:0;transform:translateY(-14px) scale(.92)}to{opacity:1;transform:none}}
+@keyframes v2FlagOut{to{opacity:0;transform:translateY(-14px) scale(.92);visibility:hidden}}
+@media (max-width:480px){.v2-flag{top:auto;bottom:84px;right:50%;transform:translateX(50%);font-size:10.5px;padding:7px 12px}}
+
+/* Section paddings — tighter on desktop, more impact */
+section[data-block]{padding:42px 0}
+@media (max-width:480px){section[data-block]{padding:28px 0}}
+
+/* Impact band — more dramatic */
+.impact{
+  background:linear-gradient(155deg,#0a0e08 0%,#161c17 100%);
+  position:relative;
+  border-radius:28px;
+  padding:54px 50px;
+}
+.impact-stats .v{
+  font-size:clamp(28px,4.4vw,42px);
+  font-weight:900;
+  background:linear-gradient(135deg,var(--lime) 0%,#a3ff4a 100%);
+  -webkit-background-clip:text;background-clip:text;
+  -webkit-text-fill-color:transparent;color:transparent
+}
+.impact-head h2{font-weight:900;letter-spacing:-.025em}
+
+/* Sellcta — bolder */
+.sellcta-inner h2,.sellcta-inner h2 .g{font-weight:900;letter-spacing:-.025em}
+
+/* Better contrast on dark cards (levels) */
+.levels .lvl .nm{color:#fff}
+.levels h3{color:#fff;font-weight:900}
+
+/* About hero refresh */
+.about-hero h1{font-weight:900;letter-spacing:-.025em}
+
+/* Page heads bolder */
+.page-head h1,.browse-head .bh-title h1,.pw-head h1{font-weight:900;letter-spacing:-.025em}
+
+/* About / team / values consistent weights */
+.value h3,.member h4,.testi .ti b{font-weight:800;letter-spacing:-.01em}
+
+/* Cat-card name slightly stronger */
+.cat-name{font-weight:800}
+
+/* Step heading bolder */
+.step-card h3{font-weight:900;letter-spacing:-.022em}
+
+/* Trust list heading bolder */
+.trust-list .tl h4{font-weight:900;letter-spacing:-.018em}
