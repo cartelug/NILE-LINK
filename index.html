@@ -15,9 +15,9 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/css/tokens.css?v=20260619a">
-<link rel="stylesheet" href="assets/css/main.css?v=20260619a">
-<link rel="stylesheet" href="assets/css/home.css?v=20260619a">
+<link rel="stylesheet" href="assets/css/tokens.css?v=20260620a">
+<link rel="stylesheet" href="assets/css/main.css?v=20260620a">
+<link rel="stylesheet" href="assets/css/home.css?v=20260620a">
 </head>
 <body data-page="home" class="has-mobnav">
 
@@ -25,12 +25,13 @@
 <div class="preloader" id="preloader" role="status" aria-label="Loading Nile Link">
   <div class="pl-stage">
     <div class="pl-logo"><img src="assets/images/logo.png" alt="Nile Link" fetchpriority="high"></div>
+    <div class="pl-word" aria-hidden="true"><span class="pw-nile">Nile</span><span class="pw-link">Link</span></div>
     <div class="pl-tag">South Sudan's Marketplace</div>
     <div class="pl-bar"><i></i></div>
   </div>
 </div>
 <script>
-/* Preloader timing: always show the full reveal (~2.4s), hard cap 4.5s */
+/* Preloader timing: ~2.4s reveal, hard cap 4.5s */
 (function(){var pl=document.getElementById('preloader');if(!pl)return;var start=Date.now(),MIN=2400,CAP=4500,done=false;
 function hide(){if(done)return;done=true;pl.classList.add('done');setTimeout(function(){if(pl.parentNode)pl.remove()},700);}
 function sched(){setTimeout(hide,Math.max(MIN-(Date.now()-start),0));}
@@ -50,29 +51,29 @@ setTimeout(hide,CAP);})();
     <img src="assets/images/hero-mobile.jpg" alt="" loading="eager" fetchpriority="high">
   </picture>
   <div class="hero-inner">
-    <span class="hero-badge"><span class="dot"></span>Now live across 12 cities in South Sudan</span>
+    <span class="hero-badge" data-i18n="hero.badge"><span class="dot"></span>Now live across 12 cities in South Sudan</span>
     <h1 class="hero-h1">
-      <span class="ln hero-ss">South&nbsp;Sudan's</span>
-      <span class="ln"><span class="hero-leading">Leading</span> <span class="hero-market">Marketplace</span></span>
+      <span class="ln hero-ss" data-i18n="hero.h1.line1">South&nbsp;Sudan's</span>
+      <span class="ln"><span class="hero-leading" data-i18n="hero.h1.leading">Leading</span> <span class="hero-market" data-i18n="hero.h1.market">Marketplace</span></span>
     </h1>
-    <p class="hero-lead">Buy and sell phones, cars, property, fashion and services — safely, with verified sellers, right here at home.</p>
+    <p class="hero-lead" id="heroLead" data-i18n="hero.lead">Buy and sell phones, cars, property, fashion and services — safely, with verified sellers, right here at home.</p>
 
     <div class="hero-search">
       <div class="hero-search-bar">
         <svg class="s-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4-4"/></svg>
-        <input id="heroSearch" type="search" autocomplete="off" placeholder="Search phones, cars, land…" aria-label="Search the marketplace" aria-expanded="false">
-        <button class="btn btn-lime" id="heroSearchBtn"><span>Search</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" style="width:18px;height:18px"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
+        <input id="heroSearch" type="search" autocomplete="off" data-i18n-ph="hero.search" placeholder="Search phones, cars, land…" aria-label="Search the marketplace" aria-expanded="false">
+        <button class="btn btn-lime" id="heroSearchBtn"><span data-i18n="hero.btn.search">Search</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" style="width:18px;height:18px"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
       </div>
       <div class="search-dd" id="heroSearchDropdown" role="listbox"></div>
     </div>
 
     <div class="hero-pills">
-      <span class="pill"><span class="pdot"></span>43,000+ Listings</span>
-      <span class="pill"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M20 6L9 17l-5-5"/></svg>Verified Sellers</span>
-      <span class="pill"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 2l2.4 6.4L21 9l-5 4.5L17.5 21 12 17.3 6.5 21 8 13.5 3 9l6.6-.6z"/></svg>Free Forever</span>
+      <span class="pill"><span class="pdot"></span><span data-i18n="hero.pill.listings">43,000+ Listings</span></span>
+      <span class="pill"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M20 6L9 17l-5-5"/></svg><span data-i18n="hero.pill.verified">Verified Sellers</span></span>
+      <span class="pill"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 2l2.4 6.4L21 9l-5 4.5L17.5 21 12 17.3 6.5 21 8 13.5 3 9l6.6-.6z"/></svg><span data-i18n="hero.pill.free">Free Forever</span></span>
     </div>
 
-    <div class="fx-strip"><span class="fx-live-dot"></span>Live rate · <b>$1</b> = <b data-fx-rate>4,585</b> SSP</div>
+    <div class="fx-strip"><span class="fx-live-dot"></span><span data-i18n="hero.fx.label">Live rate</span> · <b>$1</b> = <b data-fx-rate>4,585</b> SSP</div>
   </div>
   <div class="hero-cue" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></div>
 </header>
@@ -80,8 +81,8 @@ setTimeout(hide,CAP);})();
 <!-- ============ CATEGORIES ============ -->
 <section class="sec wrap">
   <div class="sec-head reveal">
-    <div><span class="sec-eyebrow">Categories</span><h2 class="sec-title">Browse by category</h2></div>
-    <a class="sec-link" href="pages/browse.html">View all<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+    <div><span class="sec-eyebrow">Categories</span><h2 class="sec-title" data-i18n="home.cat.title">Browse by category</h2></div>
+    <a class="sec-link" href="pages/browse.html" data-i18n="home.cat.viewall">View all<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
   </div>
   <div class="cats-grid reveal" id="catGrid"></div>
 </section>
@@ -92,101 +93,148 @@ setTimeout(hide,CAP);})();
   <div class="rail" id="recentRail"></div>
 </section>
 
-<!-- ============ FEATURED LISTINGS ============ -->
-<section class="sec wrap" style="padding-top:0">
+<!-- ============ FEATURED LISTINGS (flows into dark "How it works") ============ -->
+<section class="sec wrap flow-into-ink2" style="padding-top:0">
   <div class="sec-head reveal">
-    <div><span class="sec-eyebrow">Fresh listings</span><h2 class="sec-title">Trending right now</h2></div>
-    <a class="sec-link" data-see-all href="pages/browse.html">See all<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+    <div><span class="sec-eyebrow" data-i18n="home.trending.eyebrow">Fresh listings</span><h2 class="sec-title" data-i18n="home.trending.title">Trending right now</h2></div>
+    <a class="sec-link" data-see-all href="pages/browse.html" data-i18n="home.trending.seeall">See all<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
   </div>
   <div class="home-tabs" id="homeTabs">
-    <button class="tab active" data-filter="all">All</button>
-    <button class="tab" data-filter="products">Products</button>
-    <button class="tab" data-filter="vehprop">Cars & Property</button>
-    <button class="tab" data-filter="services">Services</button>
+    <button class="tab active" data-filter="all" data-i18n="home.tabs.all">All</button>
+    <button class="tab" data-filter="products" data-i18n="home.tabs.products">Products</button>
+    <button class="tab" data-filter="vehprop" data-i18n="home.tabs.vehprop">Cars & Property</button>
+    <button class="tab" data-filter="services" data-i18n="home.tabs.services">Services</button>
   </div>
   <div class="grid" id="homeGrid"></div>
 </section>
 
-<!-- ============ HOW IT WORKS ============ -->
-<section class="sec how reveal" id="how">
+<!-- ============ HOW IT WORKS (flows into lime stats) ============ -->
+<section class="sec how reveal flow-into-lime" id="how">
   <div class="wrap center">
-    <span class="sec-eyebrow" style="justify-content:center">Simple & safe</span>
-    <h2 class="sec-title">How Nile Link works</h2>
-    <p class="sec-sub" style="margin-inline:auto">Whether you're buying or selling, you're three steps away from a deal.</p>
+    <span class="sec-eyebrow" style="justify-content:center" data-i18n="home.how.eyebrow">Simple & safe</span>
+    <h2 class="sec-title" data-i18n="home.how.title">How Nile Link works</h2>
+    <p class="sec-sub" style="margin-inline:auto" data-i18n="home.how.sub">Whether you're buying or selling, you're three steps away from a deal.</p>
     <div class="how-accent"></div>
     <div class="how-toggle" id="howToggle">
-      <button class="active" data-mode="buy">I'm buying</button>
-      <button data-mode="sell">I'm selling</button>
+      <button class="active" data-mode="buy" data-i18n="home.how.buy">I'm buying</button>
+      <button data-mode="sell" data-i18n="home.how.sell">I'm selling</button>
     </div>
     <div class="how-steps" id="howSteps"></div>
   </div>
 </section>
 
-<!-- ============ IMPACT STATS ============ -->
-<section class="sec stats" id="stats">
+<!-- ============ IMPACT STATS — premium rebuild ============ -->
+<section class="stats" id="stats">
+  <span class="stats-fade-top" aria-hidden="true"></span>
   <div class="wrap">
     <div class="stats-grid">
-      <div class="stat"><div class="num" data-count="43200" data-suffix="+">0</div><div class="lbl">Active Listings</div></div>
-      <div class="stat"><div class="num" data-count="8400" data-suffix="+">0</div><div class="lbl">Verified Sellers</div></div>
-      <div class="stat"><div class="num" data-count="12">0</div><div class="lbl">Cities Covered</div></div>
-      <div class="stat"><div class="num">Free</div><div class="lbl">Always & Forever</div></div>
+      <div class="stat-card reveal">
+        <span class="stat-delta"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 4l8 10H4z"/></svg>+340 this week</span>
+        <div class="stat-ring">
+          <svg viewBox="0 0 60 60"><circle class="rbg" cx="30" cy="30" r="27"/><circle class="rfg" cx="30" cy="30" r="27" transform="rotate(-90 30 30)"/></svg>
+          <div class="stat-ring-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg></div>
+        </div>
+        <div class="num" data-count="43200" data-suffix="+">0</div>
+        <div class="lbl" data-i18n="home.stats.listings">Active Listings</div>
+        <div class="spark"><svg viewBox="0 0 60 18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="2,14 12,12 20,9 30,10 38,6 48,7 58,2"/></svg></div>
+      </div>
+
+      <div class="stat-card reveal" data-d="1">
+        <span class="stat-delta"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 4l8 10H4z"/></svg>+82 this week</span>
+        <div class="stat-ring">
+          <svg viewBox="0 0 60 60"><circle class="rbg" cx="30" cy="30" r="27"/><circle class="rfg" cx="30" cy="30" r="27" transform="rotate(-90 30 30)"/></svg>
+          <div class="stat-ring-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l8 4v6c0 5-3.5 8-8 10-4.5-2-8-5-8-10V6z"/><path d="M9 12l2 2 4-4"/></svg></div>
+        </div>
+        <div class="num" data-count="8400" data-suffix="+">0</div>
+        <div class="lbl" data-i18n="home.stats.verified">Verified Sellers</div>
+        <div class="spark"><svg viewBox="0 0 60 18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="2,15 12,13 20,11 30,8 38,9 48,5 58,3"/></svg></div>
+      </div>
+
+      <div class="stat-card reveal" data-d="2">
+        <span class="stat-delta"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 4l8 10H4z"/></svg>2 added</span>
+        <div class="stat-ring">
+          <svg viewBox="0 0 60 60"><circle class="rbg" cx="30" cy="30" r="27"/><circle class="rfg" cx="30" cy="30" r="27" transform="rotate(-90 30 30)"/></svg>
+          <div class="stat-ring-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s7-5.5 7-11a7 7 0 1 0-14 0c0 5.5 7 11 7 11z"/><circle cx="12" cy="10" r="2.2"/></svg></div>
+        </div>
+        <div class="num" data-count="12">0</div>
+        <div class="lbl" data-i18n="home.stats.cities">Cities Covered</div>
+        <div class="spark"><svg viewBox="0 0 60 18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="2,15 18,13 32,9 46,7 58,4"/></svg></div>
+      </div>
+
+      <div class="stat-card reveal" data-d="3">
+        <span class="stat-delta" style="background:#0e1408;color:var(--lime)">★ Always</span>
+        <div class="stat-ring">
+          <svg viewBox="0 0 60 60"><circle class="rbg" cx="30" cy="30" r="27"/><circle class="rfg" cx="30" cy="30" r="27" transform="rotate(-90 30 30)"/></svg>
+          <div class="stat-ring-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 1v22M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></div>
+        </div>
+        <div class="num" style="letter-spacing:-.03em">Free</div>
+        <div class="lbl" data-i18n="home.stats.free">Always & Forever</div>
+        <div class="spark"><svg viewBox="0 0 60 18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="2,10 14,10 26,10 38,10 50,10 58,10"/></svg></div>
+      </div>
     </div>
-    <p class="stats-sub">South Sudan's marketplace is growing every single day.</p>
+
+    <div class="stats-sub"><span class="pulse"></span><span data-i18n="home.stats.live">Live numbers · updated daily</span> <a href="pages/about.html" data-i18n="home.stats.report">View full impact report<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a></div>
   </div>
+  <span class="stats-fade-bot" aria-hidden="true"></span>
 </section>
 
 <!-- ============ WHY / TRUST (bento) ============ -->
-<section class="sec wrap">
-  <div class="sec-head reveal"><div><span class="sec-eyebrow">Why Nile Link</span><h2 class="sec-title">Built on trust</h2></div></div>
+<section class="sec wrap flow-into-ink">
+  <div class="sec-head reveal"><div><span class="sec-eyebrow" data-i18n="home.why.eyebrow">Why Nile Link</span><h2 class="sec-title" data-i18n="home.why.title">Built on trust</h2></div></div>
   <div class="bento">
     <div class="bento-card bento-lg reveal">
       <div class="bento-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l8 4v6c0 5-3.5 8-8 10-4.5-2-8-5-8-10V6z"/><path d="M9 12l2 2 4-4"/></svg></div>
-      <h3>Verified sellers</h3>
-      <p>Every shop with the green tick has been checked by our team — so you know who you're dealing with before you pay.</p>
+      <h3 data-i18n="home.why.verified.h">Verified sellers</h3>
+      <p data-i18n="home.why.verified.p">Every shop with the green tick has been checked by our team — so you know who you're dealing with before you pay.</p>
       <div class="bento-art" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M12 2l8 4v6c0 5-3.5 8-8 10-4.5-2-8-5-8-10V6z"/><path d="M9 12l2 2 4-4"/></svg></div>
     </div>
     <div class="bento-card reveal" data-d="1">
       <div class="bento-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div>
-      <h3>Secure in-app chat</h3>
-      <p>Talk to buyers and sellers without sharing your number until you're ready.</p>
+      <h3 data-i18n="home.why.chat.h">Secure in-app chat</h3>
+      <p data-i18n="home.why.chat.p">Talk to buyers and sellers without sharing your number until you're ready.</p>
     </div>
     <div class="bento-card reveal" data-d="2">
       <div class="bento-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1v22"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></div>
-      <h3>Free to list</h3>
-      <p>Post as many items as you like, completely free. Boost only when you want more eyes.</p>
+      <h3 data-i18n="home.why.free.h">Free to list</h3>
+      <p data-i18n="home.why.free.p">Post as many items as you like, completely free. Boost only when you want more eyes.</p>
     </div>
   </div>
 </section>
 
-<!-- ============ SELLER CTA ============ -->
-<section class="seller-cta">
-  <div class="seller-map" aria-hidden="true">
-    <svg viewBox="0 0 200 200" fill="currentColor"><path d="M70 20l30 6 18 18 22 8 14 20-8 24 10 18-16 22-26 6-18 16-24-8-18-22 4-26-14-20 10-24 18-14z" opacity=".9"/></svg>
-  </div>
+<!-- ============ SELLER CTA — v3 redesigned ============ -->
+<section class="seller-cta flow-into-bg">
+  <div class="seller-mesh" aria-hidden="true"><span class="sm1"></span><span class="sm2"></span><span class="sm3"></span></div>
   <div class="seller-cta-inner">
     <div class="reveal">
-      <h2>Start selling today.<br><span class="hl">It's completely free.</span></h2>
-      <p>Reach thousands of buyers across South Sudan. Post your first listing in under two minutes — no fees, no catch.</p>
+      <h2>Start selling today.<br><span class="hl">It's completely</span> <span class="lime">free.</span></h2>
+      <p data-i18n="home.cta.p">Reach thousands of buyers across South Sudan. Post your first listing in under two minutes — no fees, no catch.</p>
+      <div class="seller-cta-chips">
+        <span class="c" data-i18n="home.cta.chip1">✓ Post in 2 min</span>
+        <span class="c" data-i18n="home.cta.chip2">✓ 0 commission</span>
+        <span class="c" data-i18n="home.cta.chip3">✓ Live in 12 cities</span>
+      </div>
       <div class="seller-cta-btns">
-        <a class="btn btn-lime btn-lg" href="pages/post.html" data-auth-required><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>Post a Listing</a>
-        <a class="btn btn-ghost btn-lg" href="pages/pricing.html" style="color:#fff;border-color:rgba(255,255,255,.25)">Learn more</a>
+        <a class="btn btn-lime btn-lg" href="pages/post.html" data-auth-required><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg><span data-i18n="home.cta.post">Post a Listing</span></a>
+        <a class="btn btn-ghost btn-lg" href="pages/pricing.html" style="color:#fff;border-color:rgba(255,255,255,.25)" data-i18n="home.cta.learn">Learn more</a>
       </div>
     </div>
-    <div class="seller-phone reveal" data-d="1">
-      <div class="phone-mock"><div class="phone-screen">
-        <div class="phone-ph img"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="8.5" cy="10" r="1.6"/><path d="M21 16l-5-5L5 21"/></svg></div>
-        <div class="phone-ph line w70"></div>
-        <div class="phone-ph line w40"></div>
-        <div class="phone-ph line"></div>
-        <div class="phone-ph btn"></div>
-      </div></div>
+    <div class="reveal" data-d="1">
+      <div class="float-stack" aria-hidden="true">
+        <div class="fc fc1"><div class="fc-img"><img src="https://images.unsplash.com/photo-1632661674596-df8be070a5c5?w=400&h=240&fit=crop&auto=format&q=80" alt=""></div><div class="fc-ttl">iPhone 13 Pro · 256GB</div><div class="fc-price">$720</div><div class="fc-meta"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s7-5.5 7-11a7 7 0 1 0-14 0c0 5.5 7 11 7 11z"/><circle cx="12" cy="10" r="2.2"/></svg>Juba, Hai Cinema</div></div>
+        <div class="fc fc2"><div class="fc-img"><img src="https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?w=400&h=240&fit=crop&auto=format&q=80" alt=""></div><div class="fc-ttl">Toyota Land Cruiser V8</div><div class="fc-price">$42,000</div><div class="fc-meta"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s7-5.5 7-11a7 7 0 1 0-14 0c0 5.5 7 11 7 11z"/><circle cx="12" cy="10" r="2.2"/></svg>Juba, Tongping</div></div>
+        <div class="fc fc3"><div class="fc-img"><img src="https://images.unsplash.com/photo-1564013799919-ab600027ffc6?w=400&h=240&fit=crop&auto=format&q=80" alt=""></div><div class="fc-ttl">3-Bedroom · Thongpiny</div><div class="fc-price">$850<span style="font-size:.7em">/mo</span></div><div class="fc-meta"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s7-5.5 7-11a7 7 0 1 0-14 0c0 5.5 7 11 7 11z"/><circle cx="12" cy="10" r="2.2"/></svg>Juba</div></div>
+      </div>
+      <div class="float-stack-mob" aria-hidden="true">
+        <div class="fc"><div class="fc-img"><img src="https://images.unsplash.com/photo-1632661674596-df8be070a5c5?w=400&h=240&fit=crop&auto=format&q=80" alt=""></div><div class="fc-ttl">iPhone 13 Pro · 256GB</div><div class="fc-price">$720</div></div>
+        <div class="fc"><div class="fc-img"><img src="https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?w=400&h=240&fit=crop&auto=format&q=80" alt=""></div><div class="fc-ttl">Land Cruiser V8</div><div class="fc-price">$42,000</div></div>
+      </div>
     </div>
   </div>
 </section>
 
 <!-- ============ TESTIMONIALS ============ -->
 <section class="sec wrap">
-  <div class="sec-head reveal"><div><span class="sec-eyebrow">Loved locally</span><h2 class="sec-title">Trusted across South Sudan</h2></div></div>
+  <div class="sec-head reveal"><div><span class="sec-eyebrow" data-i18n="home.tst.eyebrow">Loved locally</span><h2 class="sec-title" data-i18n="home.tst.title">Trusted across South Sudan</h2></div></div>
   <div class="tst-grid" id="tstGrid"></div>
 </section>
 
@@ -198,9 +246,10 @@ setTimeout(hide,CAP);})();
 <!-- ============ MOBILE BOTTOM NAV (injected) ============ -->
 <div data-nl-mobnav></div>
 
-<script defer src="assets/js/data.js?v=20260619a"></script>
-<script defer src="assets/js/api.js?v=20260619a"></script>
-<script defer src="assets/js/core.js?v=20260619a"></script>
-<script defer src="assets/js/home.js?v=20260619a"></script>
+<script defer src="assets/js/data.js?v=20260620a"></script>
+<script defer src="assets/js/api.js?v=20260620a"></script>
+<script defer src="assets/js/core.js?v=20260620a"></script>
+<script defer src="assets/js/i18n.js?v=20260620a"></script>
+<script defer src="assets/js/home.js?v=20260620a"></script>
 </body>
 </html>

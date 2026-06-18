@@ -63,6 +63,16 @@ svg{display:block}
   font-size:.7rem;font-weight:700;letter-spacing:.38em;text-transform:uppercase;
   color:var(--tx-inv-2);opacity:0;animation:plFade .6s ease .9s forwards;
 }
+
+/* Wordmark — Nile (glowing lime) + Link (white) */
+.pl-word{
+  font-weight:900;font-size:clamp(2rem,7vw,3.4rem);letter-spacing:-.02em;line-height:1;
+  opacity:0;animation:plWord .6s var(--ease-out) .6s forwards;
+}
+.pl-word .pw-nile{color:var(--lime);text-shadow:0 0 22px rgba(124,252,0,.55),0 0 6px rgba(124,252,0,.45)}
+.pl-word .pw-link{color:#fff;margin-left:.16em}
+@keyframes plWord{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+
 @keyframes plFade{to{opacity:1}}
 .pl-bar{
   width:140px;height:2.5px;border-radius:3px;overflow:hidden;
@@ -433,6 +443,48 @@ body.has-mobnav{padding-bottom:calc(64px + env(safe-area-inset-bottom))}
 .seller-map svg{width:min(90%,460px);height:auto;color:var(--lime)}
 
 /* ============================================================
+   UNIVERSAL SECTION-FADE SYSTEM
+   .flow-into-bg / .flow-into-ink / .flow-into-ink2 / .flow-into-lime
+   Adds a bottom gradient blending into the next section's colour.
+   120px on PC, 80px on mobile. Three-stop easing, no banding.
+   ============================================================ */
+.flow-into-bg,.flow-into-ink,.flow-into-ink2,.flow-into-lime{position:relative}
+.flow-into-bg::after,.flow-into-ink::after,.flow-into-ink2::after,.flow-into-lime::after{
+  content:"";position:absolute;left:0;right:0;bottom:0;
+  height:80px;pointer-events:none;z-index:3;
+}
+@media(min-width:768px){.flow-into-bg::after,.flow-into-ink::after,.flow-into-ink2::after,.flow-into-lime::after{height:120px}}
+.flow-into-bg::after{background:linear-gradient(180deg,transparent 0%,rgba(246,248,243,.55) 60%,var(--bg) 100%)}
+.flow-into-ink::after{background:linear-gradient(180deg,transparent 0%,rgba(10,14,8,.55) 60%,var(--ink) 100%)}
+.flow-into-ink2::after{background:linear-gradient(180deg,transparent 0%,rgba(13,17,9,.55) 60%,var(--ink-2) 100%)}
+.flow-into-lime::after{background:linear-gradient(180deg,transparent 0%,rgba(124,252,0,.55) 60%,var(--lime) 100%)}
+
+/* ============================================================
+   LANGUAGE PICKER  (first-visit modal)
+   ============================================================ */
+.lp-scrim{position:fixed;inset:0;z-index:9990;background:rgba(7,10,5,.62);backdrop-filter:blur(6px);opacity:0;visibility:hidden;transition:.3s}
+.lp-scrim.open{opacity:1;visibility:visible}
+.lp{
+  position:fixed;left:50%;top:50%;transform:translate(-50%,-44%) scale(.96);z-index:9991;
+  width:min(92vw,460px);background:var(--paper);border-radius:22px;box-shadow:var(--sh-4);
+  opacity:0;visibility:hidden;transition:opacity .35s var(--ease),transform .4s var(--spring),visibility .35s;
+}
+.lp.open{opacity:1;visibility:visible;transform:translate(-50%,-50%) scale(1)}
+.lp-inner{padding:28px 24px 22px;text-align:center}
+.lp-logo{width:60px;height:60px;margin:0 auto 14px;border-radius:14px;background:linear-gradient(135deg,#eef2e7,#fff);display:grid;place-items:center;box-shadow:var(--sh-1)}
+.lp-logo img{width:78%;height:78%;object-fit:contain}
+.lp h2{font-weight:900;font-size:1.35rem;letter-spacing:-.02em;line-height:1.18;margin-bottom:6px}
+.lp h2 span{font-weight:800;color:var(--tx-2);font-size:.92em}
+.lp p{color:var(--tx-3);font-weight:600;font-size:.88rem;margin-bottom:18px}
+.lp-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px}
+.lp-card{padding:14px 12px;border:1.5px solid var(--line-2);border-radius:14px;background:var(--paper);text-align:left;cursor:pointer;transition:.18s;display:flex;flex-direction:column;gap:2px}
+.lp-card:hover{border-color:var(--lime-700);background:var(--lime-soft)}
+.lp-card b{font-weight:800;font-size:1rem;color:var(--tx)}
+.lp-card span{font-size:.78rem;color:var(--tx-3);font-weight:600}
+.lp-skip{font-weight:700;color:var(--tx-3);font-size:.88rem;padding:8px 10px}
+.lp-skip:hover{color:var(--tx)}
+
+/* ============================================================
    UTILITIES
    ============================================================ */
 .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
@@ -440,3 +492,11 @@ body.has-mobnav{padding-bottom:calc(64px + env(safe-area-inset-bottom))}
 .muted{color:var(--tx-3)}
 .tag{display:inline-flex;align-items:center;gap:5px;padding:5px 11px;border-radius:var(--r-pill);font-size:.76rem;font-weight:700;background:var(--bg);color:var(--tx-2)}
 .divider{height:1px;background:var(--line);border:none;margin-block:24px}
+
+/* ============================================================
+   RTL adjustments
+   ============================================================ */
+html[dir="rtl"] .hero-inner{text-align:right;margin-right:max(32px,4vw);margin-left:auto}
+html[dir="rtl"] .nav-links>a::after,html[dir="rtl"] .nav-links>button::after{transform-origin:right}
+html[dir="rtl"] .sec-link svg,html[dir="rtl"] .mega-foot svg{transform:rotate(180deg)}
+html[dir="rtl"] .hero-cue{right:50%;transform:translateX(50%)}

@@ -91,15 +91,15 @@ window.NL=window.NL||{};
         (it.img?'<img src="'+it.img+'" alt="'+it.title+'" class="card-img" loading="lazy">':NL.glyph(it.key,62))+
       '</div>'+
       '<div class="body">'+
-        '<div class="ttl">'+it.title+'</div>'+
+        '<div class="ttl" data-i18n-live>'+it.title+'</div>'+
         '<div class="price">'+NL.usdLine(it)+'</div>'+
         '<div class="price-ssp">'+NL.sspLine(it)+'</div>'+
-        '<div class="meta"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s7-5.5 7-11a7 7 0 1 0-14 0c0 5.5 7 11 7 11z"/><circle cx="12" cy="10" r="2.2"/></svg><span class="meta-loc">'+it.loc+'</span>'+(verified?'<span class="vchip"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>Verified</span>':'')+'</div>'+
+        '<div class="meta"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s7-5.5 7-11a7 7 0 1 0-14 0c0 5.5 7 11 7 11z"/><circle cx="12" cy="10" r="2.2"/></svg><span class="meta-loc" data-i18n-live>'+it.loc+'</span>'+(verified?'<span class="vchip"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>Verified</span>':'')+'</div>'+
       '</div>'+
     '</article>';
   }
   NL.cardHTML=cardHTML;
-  NL.renderGrid=(el,list)=>{if(!el)return;el.innerHTML=list&&list.length?list.map((it,i)=>cardHTML(it,i)).join(''):'<div class="empty"><svg width="54" height="54" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4-4"/></svg><p style="font-weight:600">No listings match — try another category or search.</p></div>';};
+  NL.renderGrid=(el,list)=>{if(!el)return;el.innerHTML=list&&list.length?list.map((it,i)=>cardHTML(it,i)).join(''):'<div class="empty"><svg width="54" height="54" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4-4"/></svg><p style="font-weight:600">No listings match — try another category or search.</p></div>';if(window.NLi18n&&NLi18n.getLang()&&NLi18n.getLang()!=='en')document.dispatchEvent(new CustomEvent('nl:translate'))};
 
   /* ============================================================
      TOAST

@@ -124,10 +124,24 @@
     setInterval(()=>{if(document.activeElement===input||input.value)return;wi=(wi+1)%words.length;input.placeholder='Search '+words[wi]},2600);
   }
 
+  /* ---- Hero lead word-by-word reveal ---- */
+  function animateLead(){
+    const el=$('#heroLead');if(!el)return;
+    const text=el.textContent;
+    el.innerHTML=text.split(/(\s+)/).map((w,i)=>w.trim()?'<span class="w" style="animation-delay:'+(i*60+700)+'ms">'+w+'</span>':' ').join('');
+  }
+  /* ---- Stat-card reveal triggers ring + count-up ---- */
+  function bindStatCards(){
+    if(!('IntersectionObserver'in window))return;
+    const io=new IntersectionObserver(es=>es.forEach(en=>{if(en.isIntersecting){en.target.classList.add('in');io.unobserve(en.target)}}),{threshold:.25});
+    document.querySelectorAll('.stat-card').forEach(c=>io.observe(c));
+  }
+
   /* ---- Init ---- */
   function init(){
+    animateLead();
     renderCats();renderGrid();bindTabs();renderRecent();
-    renderSteps('buy');bindHow();renderTst();bindStats();bindSearch();
+    renderSteps('buy');bindHow();renderTst();bindStats();bindStatCards();bindSearch();
     document.addEventListener('nl:rate',renderGrid);
   }
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();
