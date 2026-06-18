@@ -1,597 +1,214 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Nile Link — Buy &amp; sell anything in South Sudan · Juba&rsquo;s marketplace</title>
-<meta name="description" content="South Sudan&rsquo;s marketplace for phones, cars, property, fashion and services. Verified sellers, in-app orders, prices in USD &amp; SSP. List free in minutes.">
-<meta name="keywords" content="South Sudan marketplace, Juba marketplace, buy sell South Sudan, classifieds, phones cars property Juba, Nile Link">
-<meta name="author" content="Nile Link">
-<link rel="canonical" href="https://nile-link.com/">
-<meta property="og:type" content="website">
-<meta property="og:site_name" content="Nile Link">
-<meta property="og:title" content="Nile Link — Buy &amp; sell anything in South Sudan">
-<meta property="og:description" content="South Sudan&rsquo;s marketplace for phones, cars, property, fashion and services. Verified sellers · In-app orders · USD &amp; SSP pricing.">
-<meta property="og:image" content="./hero-desktop.jpg">
-<meta property="og:image:alt" content="Nile Link — South Sudan&rsquo;s marketplace">
-<meta property="og:locale" content="en_SS">
-<meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Nile Link — South Sudan&rsquo;s marketplace">
-<meta name="twitter:description" content="Buy &amp; sell anything in South Sudan. Verified sellers, in-app orders, USD &amp; SSP pricing.">
-<meta name="twitter:image" content="./hero-desktop.jpg">
-<link rel="icon" type="image/svg+xml" href="./favicon.svg">
-<link rel="icon" type="image/png" sizes="48x48" href="./favicon-48.png">
-<link rel="icon" type="image/png" sizes="32x32" href="./favicon-32.png">
-<link rel="icon" type="image/png" sizes="16x16" href="./favicon-16.png">
-<link rel="apple-touch-icon" sizes="180x180" href="./apple-touch-icon.png">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Nile Link — South Sudan's Leading Marketplace</title>
+<meta name="description" content="Buy and sell phones, cars, property, fashion and services across South Sudan. Nile Link is the trusted marketplace built for Juba and beyond.">
 <meta name="theme-color" content="#0a0e08">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<link rel="manifest" href="./manifest.json">
-<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-<meta http-equiv="Pragma" content="no-cache">
-<meta http-equiv="Expires" content="0">
-<style>/* defensive: nuke the old build flag in case cached JS still injects it */
-.v2-flag,[class*="v2-flag"]{display:none!important;visibility:hidden!important;opacity:0!important;pointer-events:none!important;width:0!important;height:0!important;position:absolute!important;left:-9999px!important}</style>
-<script>
-/* Aggressive cleanup: unregister any service worker from earlier builds + purge all caches.
-   Runs before anything else so stale shells can't intercept this load. */
-(function(){
-  try{
-    if('serviceWorker' in navigator){
-      navigator.serviceWorker.getRegistrations().then(function(regs){
-        var hadAny=regs && regs.length>0;
-        Promise.all(regs.map(function(r){return r.unregister()})).then(function(){
-          if('caches' in window){
-            caches.keys().then(function(keys){
-              return Promise.all(keys.map(function(k){return caches.delete(k)}));
-            }).then(function(){
-              if(hadAny && !sessionStorage.getItem('nl_sw_purged')){
-                sessionStorage.setItem('nl_sw_purged','1');
-                location.reload();
-              }
-            }).catch(function(){});
-          }
-        }).catch(function(){});
-      }).catch(function(){});
-    }
-  }catch(e){}
-})();
-</script>
-<link rel="preload" as="image" href="./hero-desktop.jpg" media="(min-width:921px)" fetchpriority="high">
-<link rel="preload" as="image" href="./hero-mobile.jpg" media="(max-width:920px)" fetchpriority="high">
+<meta property="og:title" content="Nile Link — South Sudan's Leading Marketplace">
+<meta property="og:description" content="Buy and sell phones, cars, property, fashion and services across South Sudan.">
+<meta property="og:type" content="website">
+<link rel="icon" type="image/svg+xml" href="assets/images/favicon.svg">
+<link rel="icon" type="image/png" sizes="32x32" href="assets/images/favicon-32.png">
+<link rel="apple-touch-icon" href="assets/images/apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="preconnect" href="https://images.unsplash.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="styles.css?v=20250617f">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/tokens.css?v=20260618a">
+<link rel="stylesheet" href="assets/css/main.css?v=20260618a">
+<link rel="stylesheet" href="assets/css/home.css?v=20260618a">
 </head>
-<body>
-<a class="skip-link" href="#app">Skip to content</a>
-<div id="preloader" class="preloader" aria-label="Loading" role="status">
-  <div class="pl-bg" aria-hidden="true"></div>
-  <div class="pl-glow" aria-hidden="true"></div>
+<body data-page="home" class="has-mobnav">
+
+<!-- ============ CINEMATIC PRELOADER ============ -->
+<div class="preloader" id="preloader" role="status" aria-label="Loading Nile Link">
   <div class="pl-stage">
-    <div class="pl-ring-wrap">
-      <svg class="pl-ring-svg" viewBox="0 0 120 120" fill="none" aria-hidden="true">
-        <circle class="pl-ring-track" cx="60" cy="60" r="54"/>
-        <circle class="pl-ring-fill" cx="60" cy="60" r="54"/>
+    <div class="pl-mark">
+      <svg viewBox="0 0 100 100" aria-hidden="true">
+        <circle class="pl-ring" cx="50" cy="50" r="47"/>
+        <circle class="pl-ring-fg" cx="50" cy="50" r="47" transform="rotate(-90 50 50)"/>
+        <path class="pl-n" d="M34 70 V30 L66 70 V30"/>
       </svg>
-      <div class="pl-img-wrap">
-        <img src="./logo.png" class="pl-img" alt="" width="60" height="60">
-      </div>
     </div>
     <div class="pl-word" aria-hidden="true">
-      <span class="pl-word-n">Nile</span>
-      <span class="pl-word-sep"></span>
-      <span class="pl-word-l">Link</span>
+      <span style="animation-delay:.9s">N</span><span style="animation-delay:.96s">i</span><span style="animation-delay:1.02s">l</span><span style="animation-delay:1.08s">e</span>
+      <span class="sp"></span>
+      <span style="animation-delay:1.2s">L</span><span style="animation-delay:1.26s">i</span><span style="animation-delay:1.32s">n</span><span style="animation-delay:1.38s">k</span>
     </div>
-    <p class="pl-tag" aria-hidden="true">South Sudan&rsquo;s Marketplace</p>
-    <div class="pl-bar" aria-hidden="true"><span></span></div>
+    <div class="pl-tag">South Sudan's Marketplace</div>
+    <div class="pl-bar"><i></i></div>
   </div>
 </div>
-<header id="hdr"><div class="wrap nav">
-  <a href="#home" class="brand" aria-label="Nile Link home"><img src="./logo.png" alt="Nile Link" class="logomark" width="60" height="60"><div><div class="wordmark"><span class="wm-n">Nile</span><span class="wm-sep"></span><span class="wm-l">Link</span></div><div class="kick">South Sudan&rsquo;s Marketplace</div></div></a>
-  <nav class="nav-links"><a href="#browse" data-nav="browse">Browse</a><a href="#post" data-nav="post">Sell</a><a href="#pricing" data-nav="pricing">Pricing</a><a href="#about" data-nav="about">About</a><a href="#help" data-nav="help">Help</a></nav>
-  <div class="nav-search-wrap"><div class="nav-search"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4-4"/></svg><input id="navSearch" type="text" placeholder="Search the marketplace…" autocomplete="off" role="combobox" aria-expanded="false" aria-controls="navSearchDropdown"></div><div class="search-dropdown" id="navSearchDropdown" role="listbox" aria-label="Search suggestions"></div></div>
-  <div class="nav-actions">
-    <div class="nav-bell-wrap">
-      <button class="iconbtn desktop nav-bell" id="navBell" aria-label="Notifications" aria-expanded="false" aria-controls="notifDropdown">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 16v-5a6 6 0 0 0-12 0v5l-2 2v1h16v-1z"/><path d="M10 21a2 2 0 0 0 4 0"/></svg>
-        <span class="nav-bell-dot" data-notif-count aria-hidden="true"></span>
-      </button>
-      <div class="notif-dropdown" id="notifDropdown" role="dialog" aria-label="Notifications">
-        <div class="notif-head"><h3>Notifications</h3><button class="notif-clear" id="notifClear">Mark all read</button></div>
-        <div class="notif-list" id="notifList" role="list"></div>
-        <a href="#notifications" class="notif-see-all">View all notifications<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+<script>
+/* Preloader timing: always show the full reveal (~2.4s), hard cap 4.5s */
+(function(){var pl=document.getElementById('preloader');if(!pl)return;var start=Date.now(),MIN=2400,CAP=4500,done=false;
+function hide(){if(done)return;done=true;pl.classList.add('done');setTimeout(function(){if(pl.parentNode)pl.remove()},700);}
+function sched(){setTimeout(hide,Math.max(MIN-(Date.now()-start),0));}
+if(document.readyState==='complete')sched();else window.addEventListener('load',sched);
+setTimeout(hide,CAP);})();
+</script>
+
+<div class="app-shell">
+
+<!-- ============ NAV (injected) ============ -->
+<div data-nl-nav></div>
+
+<!-- ============ HERO ============ -->
+<header class="hero">
+  <div class="hero-mesh" aria-hidden="true"><span class="m1"></span><span class="m2"></span><span class="m3"></span></div>
+  <div class="hero-inner">
+    <span class="hero-badge"><span class="dot"></span>Now live across 12 cities in South Sudan</span>
+    <h1 class="hero-h1">
+      <span class="ln hero-ss">South&nbsp;Sudan's</span>
+      <span class="ln"><span class="hero-leading">Leading</span> <span class="hero-market">Marketplace</span></span>
+    </h1>
+    <p class="hero-lead">Buy and sell phones, cars, property, fashion and services — safely, with verified sellers, right here at home.</p>
+
+    <div class="hero-search">
+      <div class="hero-search-bar">
+        <svg class="s-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4-4"/></svg>
+        <input id="heroSearch" type="search" autocomplete="off" placeholder="Search phones, cars, land…" aria-label="Search the marketplace" aria-expanded="false">
+        <button class="btn btn-lime" id="heroSearchBtn"><span>Search</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" style="width:18px;height:18px"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
       </div>
+      <div class="search-dd" id="heroSearchDropdown" role="listbox"></div>
     </div>
-    <a href="#messages" class="iconbtn desktop nav-msg" data-nav="messages" aria-label="Messages">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h16v11H8l-4 4z"/></svg>
-      <span class="nav-msg-dot" data-msg-count aria-hidden="true"></span>
-    </a>
-    <a href="#dashboard" class="iconbtn desktop" data-nav="dashboard" aria-label="Your shop"><svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg></a>
-    <a href="#signin" class="btn btn-ghost btn-sm desktop" data-guest-only>Sign in</a>
-    <button class="btn btn-ghost btn-sm desktop" data-auth-only data-signout>Sign out</button>
-    <a href="#post" class="btn btn-lime btn-sm"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>Sell</a>
-    <button class="iconbtn hamb" id="openDrawer" aria-label="Menu" aria-expanded="false"><span class="hamb-lines" aria-hidden="true"><i></i><i></i><i></i></span></button>
+
+    <div class="hero-pills">
+      <span class="pill"><span class="pdot"></span>43,000+ Listings</span>
+      <span class="pill"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M20 6L9 17l-5-5"/></svg>Verified Sellers</span>
+      <span class="pill"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 2l2.4 6.4L21 9l-5 4.5L17.5 21 12 17.3 6.5 21 8 13.5 3 9l6.6-.6z"/></svg>Free Forever</span>
+    </div>
+
+    <div class="fx-strip"><span class="fx-live-dot"></span>Live rate · <b>$1</b> = <b data-fx-rate>4,585</b> SSP</div>
   </div>
-</div></header>
-<main id="app">
+  <div class="hero-cue" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></div>
+</header>
 
-<section class="page active" data-page="home">
-  <div class="hero hero-compact">
-    <div class="hero-glow"></div>
-    <div class="hero-bg" aria-hidden="true">
-      <picture class="hero-pic">
-        <source media="(max-width:920px)" srcset="./hero-mobile.jpg">
-        <source media="(min-width:921px)" srcset="./hero-desktop.jpg">
-        <img src="./hero-desktop.jpg" alt="" loading="eager" decoding="async" onerror="this.closest('.hero-bg').classList.add('no-img')">
-      </picture>
-    </div>
-    <div class="wrap hero-grid">
-      <div class="hero-text">
-        <span class="eyebrow reveal-hero" style="--d:0"><span class="tag"><i class="live-dot" aria-hidden="true"></i>LIVE</span> Now in Juba — South Sudan&rsquo;s first all-in-one marketplace</span>
-        <h1 class="reveal-hero hero-h1-v2" style="--d:1"><span class="h1-line-1">Everything,</span><br><span class="h1-line-2">sold <span class="hl">locally.</span></span></h1>
-        <p class="hero-lede reveal-hero" style="--d:1.5">Phones, cars, property, fashion &amp; services across South Sudan — verified sellers, in-app orders, dual-currency pricing.</p>
-        <div class="hero-search-wrap reveal-hero" style="--d:2">
-          <div class="hero-search" role="search">
-            <svg class="hs-ic" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4-4"/></svg>
-            <input id="heroSearch" type="search" inputmode="search" autocomplete="off" autocorrect="off" spellcheck="false" placeholder="Search phones, cars, houses, services…" aria-label="Search the marketplace" role="combobox" aria-expanded="false" aria-controls="heroSearchDropdown">
-            <button class="btn btn-ink hs-btn" id="heroSearchBtn" aria-label="Search">
-              <span class="hs-btn-text">Search</span>
-              <svg class="hs-btn-ic" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4-4"/></svg>
-            </button>
-          </div>
-          <div class="search-dropdown" id="heroSearchDropdown" role="listbox" aria-label="Search suggestions"></div>
-        </div>
-        <div class="chips reveal-hero" style="--d:3"><span class="lbl">Popular:</span><button class="chip" data-q="iPhone">iPhone</button><button class="chip" data-q="Land Cruiser">Land Cruiser</button><button class="chip" data-q="House">Houses</button><button class="chip" data-q="Photography">Photography</button><button class="chip" data-q="Generator">Generators</button></div>
-        <div class="fx-live reveal-hero" style="--d:4" aria-live="polite"><span class="fx-dot" aria-hidden="true"></span><span class="fx-label">LIVE</span><span class="fx-val">$1 = <b data-fx-rate>4,585</b> SSP</span><span class="fx-source">Mid-market rate · auto-updated</span></div>
-      </div>
-    </div>
+<!-- ============ CATEGORIES ============ -->
+<section class="sec wrap">
+  <div class="sec-head reveal">
+    <div><span class="sec-eyebrow">Categories</span><h2 class="sec-title">Browse by category</h2></div>
+    <a class="sec-link" href="pages/browse.html">View all<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
   </div>
-
-  <section data-block class="block-tight"><div class="wrap"><div class="cat-head reveal"><h2 class="sec-title">Browse categories</h2><a href="#browse" class="seelink">See all</a></div><div class="cat-strip reveal" id="catStrip"></div></div></section>
-
-  <section data-block class="block-tight" id="recentSection" hidden><div class="wrap">
-    <div class="cat-head reveal"><h2 class="sec-title">Recently viewed</h2><button class="seelink as-link" id="recentClear" type="button">Clear history</button></div>
-    <div class="recent-rail" id="recentRail" role="list"></div>
-  </div></section>
-
-  <section data-block class="block-tight"><div class="wrap">
-    <div class="cat-head reveal"><h2 class="sec-title">Fresh on the market</h2><a href="#browse" class="seelink">View all</a></div>
-    <div class="tabs reveal" id="homeTabs"><button class="tab active" data-filter="all">All</button><button class="tab" data-filter="products">Products</button><button class="tab" data-filter="vehprop">Cars &amp; Property</button><button class="tab" data-filter="services">Services</button></div>
-    <div class="grid" id="homeGrid"></div>
-    <div class="block-cta reveal"><a href="#browse" class="btn btn-ink btn-lg">Browse all listings<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a></div>
-  </div></section>
-
-  <div class="featband"><div class="wrap"><div class="feat-strip reveal">
-    <div class="feat"><span class="fic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l8 4v6c0 5-3.5 8-8 10-4.5-2-8-5-8-10V6z"/><path d="M9 12l2 2 4-4"/></svg></span><div><h4>Verified sellers</h4><p>Phone &amp; ID checked</p></div></div>
-    <div class="feat"><span class="fic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16v12H7l-3 3z"/><path d="M8 10h8M8 13h5"/></svg></span><div><h4>Order in-app</h4><p>No lost WhatsApp chats</p></div></div>
-    <div class="feat"><span class="fic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/><path d="M12 2v3M12 19v3"/></svg></span><div><h4>USD &amp; SSP</h4><p>$1 = 4,585 SSP</p></div></div>
-    <div class="feat"><span class="fic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s7-5.5 7-11a7 7 0 1 0-14 0c0 5.5 7 11 7 11z"/><circle cx="12" cy="10" r="2.2"/></svg></span><div><h4>Local to South Sudan</h4><p>Built for Juba &amp; beyond</p></div></div>
-  </div></div></div>
-
-  <section data-block><div class="wrap"><div class="sec-head reveal"><div><span class="sec-kick">For sellers</span><h2 class="sec-title">Your shop, your drafts, one place</h2><p class="sec-sub">Save listings as drafts, finish when ready, publish in a tap. Track live, pending &amp; sold.</p></div><a href="#dashboard" class="seelink">Open dashboard</a></div><div class="reveal" id="homeShop"></div></div></section>
-
-  <section data-block style="background:var(--paper);border-top:1px solid var(--line-2);border-bottom:1px solid var(--line-2)"><div class="wrap">
-    <div style="text-align:center;display:flex;flex-direction:column;align-items:center" class="reveal"><span class="sec-kick" style="justify-content:center">How it works</span><h2 class="sec-title">Simple from search to sold</h2><p class="sec-sub" style="text-align:center;margin:10px auto 26px">Discover, request inside the platform, and close with confidence.</p><div class="toggle" id="howToggle"><button class="active" data-mode="buy">I&rsquo;m buying</button><button data-mode="sell">I&rsquo;m selling</button></div></div>
-    <div class="steps reveal" id="steps"></div></div></section>
-
-  <section data-block><div class="wrap trust-grid">
-    <div class="reveal"><span class="sec-kick">Why Nile Link</span><h2 class="sec-title">Built on trust, not chance</h2><p class="sec-sub">Every listing is moderated, and every serious seller can earn a badge.</p>
-      <div class="trust-list">
-        <div class="tl"><span class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l8 4v6c0 5-3.5 8-8 10-4.5-2-8-5-8-10V6z"/><path d="M9 12l2 2 4-4"/></svg></span><div><h4>Verified sellers</h4><p>Phone, ID &amp; business badges so buyers know who they&rsquo;re dealing with.</p></div></div>
-        <div class="tl"><span class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M7 14l4-4 3 3 5-6"/></svg></span><div><h4>In-platform requests</h4><p>Orders, contacts &amp; quotes captured here first — clean records, no lost chats.</p></div></div>
-        <div class="tl"><span class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 8v4M12 16h.01"/></svg></span><div><h4>Report &amp; moderation</h4><p>One-tap reporting and active moderation keep scams out.</p></div></div>
-      </div></div>
-    <div class="levels reveal"><h3>Seller trust levels</h3><p class="sub">Climb the ladder. Earn more buyer confidence at every step.</p>
-      <div class="lvl"><span class="badge" style="background:rgba(255,255,255,.12);color:#fff">1</span><div><div class="nm">Normal Seller</div><div class="ds">Lists items, receives requests</div></div></div>
-      <div class="lvl"><span class="badge" style="background:rgba(124,252,0,.18);color:var(--lime)">2</span><div><div class="nm">Phone Verified</div><div class="ds">Number confirmed</div></div><span class="chk"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></span></div>
-      <div class="lvl"><span class="badge" style="background:rgba(124,252,0,.3);color:var(--lime)">3</span><div><div class="nm">ID Verified</div><div class="ds">Identity checked</div></div><span class="chk"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></span></div>
-      <div class="lvl"><span class="badge" style="background:var(--lime);color:var(--ink)">★</span><div><div class="nm">Trusted Seller</div><div class="ds">Strong history &amp; reviews</div></div><span class="chk"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></span></div>
-    </div></div></section>
-
-  <section data-block><div class="wrap">
-    <div class="sec-head reveal"><div><span class="sec-kick">Loved locally</span><h2 class="sec-title">What people are saying</h2><p class="sec-sub">Real buyers and sellers already using Nile Link across Juba.</p></div></div>
-    <div class="testi-grid">
-      <figure class="testi reveal"><div class="testi-stars"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.6 6.6L21.6 9l-5 4.6 1.4 6.9L12 17.2 6 20.5 7.4 13.6 2.4 9l6.9-.4z"/></svg><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.6 6.6L21.6 9l-5 4.6 1.4 6.9L12 17.2 6 20.5 7.4 13.6 2.4 9l6.9-.4z"/></svg><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.6 6.6L21.6 9l-5 4.6 1.4 6.9L12 17.2 6 20.5 7.4 13.6 2.4 9l6.9-.4z"/></svg><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.6 6.6L21.6 9l-5 4.6 1.4 6.9L12 17.2 6 20.5 7.4 13.6 2.4 9l6.9-.4z"/></svg><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.6 6.6L21.6 9l-5 4.6 1.4 6.9L12 17.2 6 20.5 7.4 13.6 2.4 9l6.9-.4z"/></svg></div><blockquote>&ldquo;Found a clean iPhone in Hai Cinema and ordered straight from the app. The seller called me within the hour — no endless WhatsApp back-and-forth.&rdquo;</blockquote><figcaption><span class="ta">A</span><span class="ti"><b>Achol Deng</b><i>Buyer · Juba</i></span></figcaption></figure>
-      <figure class="testi reveal"><div class="testi-stars"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.6 6.6L21.6 9l-5 4.6 1.4 6.9L12 17.2 6 20.5 7.4 13.6 2.4 9l6.9-.4z"/></svg><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.6 6.6L21.6 9l-5 4.6 1.4 6.9L12 17.2 6 20.5 7.4 13.6 2.4 9l6.9-.4z"/></svg><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.6 6.6L21.6 9l-5 4.6 1.4 6.9L12 17.2 6 20.5 7.4 13.6 2.4 9l6.9-.4z"/></svg><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.6 6.6L21.6 9l-5 4.6 1.4 6.9L12 17.2 6 20.5 7.4 13.6 2.4 9l6.9-.4z"/></svg><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.6 6.6L21.6 9l-5 4.6 1.4 6.9L12 17.2 6 20.5 7.4 13.6 2.4 9l6.9-.4z"/></svg></div><blockquote>&ldquo;I listed my shop&rsquo;s electronics in minutes and the verified badge made buyers trust me right away. Requests come in organized, not lost in my chats.&rdquo;</blockquote><figcaption><span class="ta">R</span><span class="ti"><b>TechHub SS</b><i>Verified seller · Juba</i></span></figcaption></figure>
-      <figure class="testi reveal"><div class="testi-stars"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.6 6.6L21.6 9l-5 4.6 1.4 6.9L12 17.2 6 20.5 7.4 13.6 2.4 9l6.9-.4z"/></svg><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.6 6.6L21.6 9l-5 4.6 1.4 6.9L12 17.2 6 20.5 7.4 13.6 2.4 9l6.9-.4z"/></svg><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.6 6.6L21.6 9l-5 4.6 1.4 6.9L12 17.2 6 20.5 7.4 13.6 2.4 9l6.9-.4z"/></svg><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.6 6.6L21.6 9l-5 4.6 1.4 6.9L12 17.2 6 20.5 7.4 13.6 2.4 9l6.9-.4z"/></svg><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.6 6.6L21.6 9l-5 4.6 1.4 6.9L12 17.2 6 20.5 7.4 13.6 2.4 9l6.9-.4z"/></svg></div><blockquote>&ldquo;Booked a photographer for my graduation through Nile Link. Seeing prices in both USD and SSP made it so easy to plan my budget.&rdquo;</blockquote><figcaption><span class="ta">M</span><span class="ti"><b>Mary Nyandeng</b><i>Buyer · Juba</i></span></figcaption></figure>
-    </div>
-  </div></section>
-
-  <section data-block><div class="wrap"><div class="impact reveal">
-    <div class="impact-bg" aria-hidden="true"></div>
-    <div class="impact-head"><span class="sec-kick">The bigger picture</span><h2>One trusted marketplace for all of South Sudan</h2><p>Scattered across WhatsApp and Facebook today — brought together here, with structure and trust.</p></div>
-    <div class="impact-stats"><div><div class="v">5</div><div class="k">Categories at launch</div></div><div><div class="v">100%</div><div class="k">Requests kept in-platform</div></div><div><div class="v">USD<span>/</span>SSP</div><div class="k">Dual-currency pricing</div></div><div><div class="v">24h</div><div class="k">Verification turnaround</div></div></div>
-  </div></div></section>
-
-  <section data-block><div class="wrap"><div class="sellcta-inner reveal"><div class="dots"></div>
-    <div><h2>Got something to sell?<br><span class="g">Start in minutes.</span></h2><p>Reach real buyers across South Sudan and grow with boosts and a verified shop.</p><div class="acts"><a href="#post" class="btn btn-lime">Become a seller<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a><a href="#pricing" class="btn btn-on-dark">See pricing</a></div></div>
-    <div class="perks"><div class="perk"><span class="ic"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></span><span><b>30 days free</b> — list with no fees</span></div><div class="perk"><span class="ic"><svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor"><path d="M13 2L3 14h7l-1 8 10-12h-7z"/></svg></span><span><b>3 free boosts</b> to get seen first</span></div><div class="perk"><span class="ic"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l8 4v6c0 5-3.5 8-8 10-4.5-2-8-5-8-10V6z"/></svg></span><span>Free <b>verified badge</b> setup</span></div></div>
-  </div></div></section>
+  <div class="cats-grid reveal" id="catGrid"></div>
 </section>
-<section class="page" data-page="browse">
-  <div class="back-bar"><div class="wrap back-bar-row">
-    <a href="#home" class="back-link" aria-label="Back to home"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></svg><span>Back</span></a>
-    <nav class="crumb-inline" aria-label="Breadcrumb"><a href="#home">Home</a><span class="sep">›</span><span class="cur">Browse</span></nav>
-  </div></div>
-  <div class="browse-head"><div class="wrap">
-    <div class="bh-top">
-      <div class="bh-title"><h1>Browse the marketplace</h1><p>Filter by category, type, location and price — everything for sale across South Sudan.</p></div>
+
+<!-- ============ RECENTLY VIEWED ============ -->
+<section class="sec wrap" id="recentSec" style="display:none;padding-top:0">
+  <div class="sec-head"><div><span class="sec-eyebrow">For you</span><h2 class="sec-title">Recently viewed</h2></div></div>
+  <div class="rail" id="recentRail"></div>
+</section>
+
+<!-- ============ FEATURED LISTINGS ============ -->
+<section class="sec wrap" style="padding-top:0">
+  <div class="sec-head reveal">
+    <div><span class="sec-eyebrow">Fresh listings</span><h2 class="sec-title">Trending right now</h2></div>
+    <a class="sec-link" href="pages/browse.html">See all<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+  </div>
+  <div class="home-tabs" id="homeTabs">
+    <button class="tab active" data-filter="all">All</button>
+    <button class="tab" data-filter="products">Products</button>
+    <button class="tab" data-filter="vehprop">Cars & Property</button>
+    <button class="tab" data-filter="services">Services</button>
+  </div>
+  <div class="grid" id="homeGrid"></div>
+</section>
+
+<!-- ============ HOW IT WORKS ============ -->
+<section class="sec how reveal" id="how">
+  <div class="wrap center">
+    <span class="sec-eyebrow" style="justify-content:center">Simple & safe</span>
+    <h2 class="sec-title">How Nile Link works</h2>
+    <p class="sec-sub" style="margin-inline:auto">Whether you're buying or selling, you're three steps away from a deal.</p>
+    <div class="how-accent"></div>
+    <div class="how-toggle" id="howToggle">
+      <button class="active" data-mode="buy">I'm buying</button>
+      <button data-mode="sell">I'm selling</button>
     </div>
-    <div class="cat-pills" id="catPills" role="tablist">
-      <button class="cat-pill on" data-cat="" role="tab" aria-selected="true"><span class="cp-ic"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg></span>All</button>
-      <button class="cat-pill" data-cat="electronics" role="tab" aria-selected="false">Phones &amp; Electronics</button>
-      <button class="cat-pill" data-cat="fashion" role="tab" aria-selected="false">Fashion &amp; Beauty</button>
-      <button class="cat-pill" data-cat="cars" role="tab" aria-selected="false">Cars &amp; Motorbikes</button>
-      <button class="cat-pill" data-cat="property" role="tab" aria-selected="false">Property &amp; Land</button>
-      <button class="cat-pill" data-cat="services" role="tab" aria-selected="false">Services</button>
-    </div>
-  </div></div>
-  <div class="wrap browse-layout">
-    <aside class="filters" id="filters">
-      <div class="filter-head"><h3>Filters</h3><button class="f-reset" id="resetFilters">Clear all</button></div>
-      <div class="filter-block">
-        <h4>Search</h4>
-        <div class="f-search"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4-4"/></svg><input id="browseSearch" type="text" placeholder="Search listings…"></div>
-      </div>
-      <div class="filter-block"><h4>Category</h4><div id="fltCats"></div></div>
-      <div class="filter-block">
-        <h4>Listing type</h4>
-        <label class="check"><input type="radio" name="ftype" value="all" checked> All types</label>
-        <label class="check"><input type="radio" name="ftype" value="products"> Products (Order)</label>
-        <label class="check"><input type="radio" name="ftype" value="vehprop"> Cars &amp; Property</label>
-        <label class="check"><input type="radio" name="ftype" value="services"> Services (Quote)</label>
-      </div>
-      <div class="filter-block">
-        <h4>Max price (USD)</h4>
-        <input id="priceRange" type="range" min="0" max="42000" value="42000" step="100" style="width:100%;accent-color:var(--lime-deep)">
-        <div class="price-label-row"><span class="pl-from">$0</span><span class="pl-to" id="priceLabel">Up to $42,000</span></div>
-      </div>
-    </aside>
-    <div class="browse-main">
-      <div class="browse-toolbar">
-        <div class="toolbar-left">
-          <button class="btn btn-ghost btn-sm filter-toggle" id="filterToggle"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M4 6h16M7 12h10M10 18h4"/></svg>Filters</button>
-          <span class="count"><b id="resCount">0</b> listings found</span>
-        </div>
-        <select class="sortsel" id="sortSel"><option value="featured">Sort: Featured</option><option value="low">Price: Low to High</option><option value="high">Price: High to Low</option><option value="az">Name: A–Z</option></select>
-      </div>
-      <div class="active-filters" id="activeFilters" aria-live="polite"></div>
-      <div class="browse-grid" id="browseGrid"></div>
-    </div>
+    <div class="how-steps" id="howSteps"></div>
   </div>
 </section>
 
-<section class="page" data-page="saved">
-  <div class="back-bar"><div class="wrap back-bar-row">
-    <a href="#home" class="back-link" aria-label="Back to home"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></svg><span>Back</span></a>
-    <nav class="crumb-inline" aria-label="Breadcrumb"><a href="#home">Home</a><span class="sep">›</span><span class="cur">Saved</span></nav>
-  </div></div>
-  <div class="browse-head"><div class="wrap"><div class="bh-top"><div class="bh-title"><h1>Saved listings</h1><p><b id="savedCount">0</b> items saved — tap the heart on any listing to add or remove.</p></div></div></div></div>
-  <div class="wrap" style="padding:8px 0 40px"><div class="grid" id="savedGrid"></div></div>
-</section>
-
-<section class="page" data-page="messages">
-  <div class="back-bar"><div class="wrap back-bar-row">
-    <a href="#home" class="back-link" aria-label="Back to home"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></svg><span>Back</span></a>
-    <nav class="crumb-inline" aria-label="Breadcrumb"><a href="#home">Home</a><span class="sep">›</span><span class="cur">Messages</span></nav>
-  </div></div>
-  <div class="wrap msg-layout" id="msgLayout">
-    <aside class="msg-list" id="msgList">
-      <div class="msg-list-head">
-        <h2>Messages</h2>
-        <span class="msg-list-count" id="msgListCount">0</span>
-      </div>
-      <div class="msg-search">
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4-4"/></svg>
-        <input id="msgSearch" type="text" placeholder="Search conversations…" autocomplete="off">
-      </div>
-      <div class="msg-conv-list" id="msgConvList" role="list"></div>
-    </aside>
-    <main class="msg-thread" id="msgThread">
-      <div class="msg-empty" id="msgEmpty">
-        <div class="me-ic"><svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h16v11H8l-4 4z"/></svg></div>
-        <h3>Select a conversation</h3>
-        <p>Pick a thread to read messages and reply.</p>
-      </div>
-      <div class="msg-thread-head" id="msgThreadHead" hidden>
-        <button class="msg-back" id="msgBack" aria-label="Back to conversations"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></svg></button>
-        <div class="mt-av" id="mtAv"></div>
-        <div class="mt-info"><div class="mt-name" id="mtName"></div><div class="mt-sub" id="mtSub"></div></div>
-        <a class="mt-view-listing" id="mtViewListing" href="#">View listing</a>
-      </div>
-      <div class="msg-thread-body" id="msgThreadBody" hidden></div>
-      <form class="msg-composer" id="msgComposer" hidden onsubmit="return false">
-        <button type="button" class="mc-attach" aria-label="Attach image"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.5l-8.5 8.5a5.5 5.5 0 0 1-7.8-7.8L13 5a3.7 3.7 0 0 1 5.2 5.2l-8.4 8.4a1.9 1.9 0 0 1-2.6-2.6L14 9.5"/></svg></button>
-        <textarea id="msgInput" rows="1" placeholder="Type a message…" aria-label="Message"></textarea>
-        <button type="button" class="mc-send" id="msgSend" aria-label="Send"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M3 11l18-8-8 18-2-7z"/></svg></button>
-      </form>
-    </main>
-  </div>
-</section>
-
-<section class="page" data-page="notifications">
-  <div class="back-bar"><div class="wrap back-bar-row">
-    <a href="#home" class="back-link" aria-label="Back to home"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></svg><span>Back</span></a>
-    <nav class="crumb-inline" aria-label="Breadcrumb"><a href="#home">Home</a><span class="sep">›</span><span class="cur">Notifications</span></nav>
-  </div></div>
-  <div class="browse-head"><div class="wrap"><div class="bh-top"><div class="bh-title"><h1>Notifications</h1><p>Activity on your listings, orders, and account.</p></div><button class="btn btn-ghost btn-sm" id="notifClearAll"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>Mark all read</button></div></div></div>
-  <div class="wrap" style="padding:8px 0 40px"><div class="notif-page" id="notifPage"></div></div>
-</section>
-
-<section class="page" data-page="listing">
-  <div class="page-head"><div class="wrap"><div class="crumb" id="pdpCrumb"></div></div></div>
-  <div class="wrap pdp" id="pdpContent"></div>
-  <section data-block><div class="wrap"><div class="sec-head"><div><span class="sec-kick">You might also like</span><h2 class="sec-title">Similar listings</h2></div></div><div class="grid" id="similarGrid"></div></div></section>
-</section>
-
-<section class="page" data-page="post">
-  <div class="back-bar"><div class="wrap back-bar-row">
-    <a href="#home" class="back-link" aria-label="Back to home"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></svg><span>Back</span></a>
-    <nav class="crumb-inline" aria-label="Breadcrumb"><a href="#home">Home</a><span class="sep">›</span><span class="cur">Sell</span></nav>
-  </div></div>
-  <div class="wrap post-wizard-wrap">
-    <header class="pw-head"><h1>Create a listing</h1><p>It takes about a minute. You can save as a draft any time.</p></header>
-    <ol class="pw-progress" id="pwProgress" aria-label="Listing steps">
-      <li class="pw-step on" data-step="1"><span class="pw-num">1</span><span class="pw-label">Category</span></li>
-      <li class="pw-step" data-step="2"><span class="pw-num">2</span><span class="pw-label">Photos &amp; details</span></li>
-      <li class="pw-step" data-step="3"><span class="pw-num">3</span><span class="pw-label">Price &amp; location</span></li>
-      <li class="pw-step" data-step="4"><span class="pw-num">4</span><span class="pw-label">Review</span></li>
-    </ol>
-    <div class="post-layout pw-layout">
-      <form class="post-form pw-form" id="postForm" onsubmit="return false">
-        <div class="pw-panel" data-panel="1">
-          <h2 class="pw-h">What are you selling?</h2>
-          <p class="pw-sub">Pick the category that fits best and write a clear title.</p>
-          <div class="cta-hint" id="ctaHint"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l8 4v6c0 5-3.5 8-8 10-4.5-2-8-5-8-10V6z"/></svg><span>Buyers will see an <b id="ctaHintLabel">Order Now</b> button on this listing.</span><span class="pill" id="ctaHintPill">Order</span></div>
-          <div class="field"><label>Category</label>
-            <div class="pw-cats" id="pwCats"></div>
-            <select id="pCat" hidden><option value="electronics">Phones &amp; Electronics</option><option value="fashion">Fashion &amp; Beauty</option><option value="cars">Cars &amp; Motorbikes</option><option value="property">Property &amp; Land</option><option value="services">Services</option></select>
-          </div>
-          <div class="field"><label>Listing title <span class="hint" id="pTitleCount">0/60</span></label><input id="pTitle" type="text" placeholder="e.g. iPhone 13 Pro · 256GB · Clean" maxlength="60" aria-describedby="pTitleErr"><span class="field-err" id="pTitleErr" hidden></span></div>
-        </div>
-        <div class="pw-panel" data-panel="2" hidden>
-          <h2 class="pw-h">Add photos and details</h2>
-          <p class="pw-sub">Listings with clear photos get up to 3× more requests.</p>
-          <div class="field"><label>Photos <span class="hint">First photo is the cover · up to 6 photos</span></label>
-            <div class="pw-photos" id="pwPhotos" role="list"></div>
-            <input id="pwFile" type="file" accept="image/*" multiple hidden>
-            <button type="button" class="pw-add-btn" id="pwAddPhoto"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>Add photos</button>
-          </div>
-          <div class="field"><label>Description <span class="hint" id="pDescCount">0 chars</span></label><textarea id="pDesc" rows="5" placeholder="Describe condition, model, what's included, why you&rsquo;re selling…" aria-describedby="pDescErr"></textarea><span class="field-err" id="pDescErr" hidden></span></div>
-        </div>
-        <div class="pw-panel" data-panel="3" hidden>
-          <h2 class="pw-h">Set a price and location</h2>
-          <p class="pw-sub">Prices show in both USD and SSP based on today&rsquo;s live rate.</p>
-          <div class="field-row">
-            <div class="field"><label>Price (USD)</label><div class="price-input"><span class="dollar">$</span><input id="pPrice" type="number" min="0" placeholder="0" inputmode="numeric" aria-describedby="pPriceErr"></div><div class="ssp-preview" id="pSsp">≈ 0 SSP</div><span class="field-err" id="pPriceErr" hidden></span></div>
-            <div class="field"><label>Location</label><input id="pLoc" type="text" placeholder="e.g. Juba, Munuki" aria-describedby="pLocErr"><span class="field-err" id="pLocErr" hidden></span></div>
-          </div>
-        </div>
-        <div class="pw-panel" data-panel="4" hidden>
-          <h2 class="pw-h">Review your listing</h2>
-          <p class="pw-sub">Make sure everything looks right before publishing.</p>
-          <div class="pw-review" id="pwReview"></div>
-        </div>
-        <div class="pw-nav">
-          <button class="btn btn-ghost" id="pwBack" type="button" hidden><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></svg>Back</button>
-          <button class="btn btn-ghost" id="draftBtn" type="button">Save draft</button>
-          <button class="btn btn-ink pw-next-btn" id="pwNext" type="button">Continue<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg></button>
-          <button class="btn btn-lime pw-publish-btn" id="publishBtn" type="button" hidden><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>Publish listing</button>
-        </div>
-      </form>
-      <aside class="post-side">
-        <div class="preview-wrap"><div class="pl">Live preview</div><div id="previewCard"></div></div>
-        <div class="tips"><h4><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M13 2L3 14h7l-1 8 10-12h-7z"/></svg>Tips for a fast sale</h4><ul style="list-style:none"><li>Use a clear cover photo in good light</li><li>Be specific in the title (brand, model, size)</li><li>Set a fair price — buyers compare</li><li>Add your location so nearby buyers find you</li></ul></div>
-      </aside>
-    </div>
-  </div>
-</section>
-<section class="page" data-page="dashboard">
-  <div class="page-head"><div class="wrap"><div class="crumb"><a href="#home">Home</a> › <span>Your shop</span></div></div></div>
-  <div class="wrap" style="padding-bottom:20px"><div class="ws-panel">
-    <div class="ws-top"><div><span class="ws-kick">Your shop</span><h2>Welcome back, TechHub SS</h2><p>Manage your listings and drafts, and respond to buyer requests — all in one place.</p></div>
-      <div class="ws-shopcard"><div class="av">T</div><div><div class="nm">TechHub SS <span class="vbadge"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></span></div><div class="mt">Trusted Seller · Juba</div></div></div></div>
-    <div class="ws-stats"><div class="ws-stat"><div class="v lime" id="dLive">0</div><div class="k">Live listings</div></div><div class="ws-stat"><div class="v" id="dDraft">0</div><div class="k">Drafts</div></div><div class="ws-stat"><div class="v">128</div><div class="k">Views this week</div></div><div class="ws-stat"><div class="v lime">9</div><div class="k">Requests received</div></div></div>
-    <div class="ws-tabsbar"><div class="ws-tabs" id="dashTabs"><button class="ws-tab active" data-tab="listings">Listings</button><button class="ws-tab" data-tab="requests">Requests</button><button class="ws-tab" data-tab="verify">Get verified</button></div><a href="#post" class="btn btn-lime btn-sm"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>Create listing</a></div>
-    <div class="ws-pane" data-pane="listings">
-      <div class="ws-filters" id="dashFilters"><button class="ws-filt active" data-st="all">All <span class="ct" id="cAll">0</span></button><button class="ws-filt" data-st="live">Live <span class="ct" id="cLive">0</span></button><button class="ws-filt" data-st="draft">Drafts <span class="ct" id="cDraft">0</span></button><button class="ws-filt" data-st="pending">Pending <span class="ct" id="cPending">0</span></button><button class="ws-filt" data-st="sold">Sold <span class="ct" id="cSold">0</span></button></div>
-      <div class="ws-list" id="dashList"></div>
-    </div>
-    <div class="ws-pane" data-pane="requests" style="display:none"><div class="req-list" id="reqList"></div></div>
-    <div class="ws-pane" data-pane="verify" style="display:none">
-      <p style="color:#aab3a8;font-size:14px;margin-bottom:18px;max-width:520px">Get the verified badge on your shop and every listing. Verified sellers receive up to 3× more requests.</p>
-      <div class="verify-steps"><div class="vstep"><div class="n">1</div><h4>Confirm your phone</h4><p>Verify the number buyers will contact you on.</p></div><div class="vstep"><div class="n">2</div><h4>Upload your ID</h4><p>A national ID or passport — checked privately by our team.</p></div><div class="vstep"><div class="n">3</div><h4>Get your badge</h4><p>Usually approved within 24 hours. The badge appears everywhere.</p></div></div>
-      <button class="btn btn-lime" style="margin-top:20px" onclick="showToast('Verification request started')">Start verification</button>
-    </div>
-  </div></div>
-</section>
-
-<section class="page" data-page="shop">
-  <div class="page-head"><div class="wrap"><div class="crumb"><a href="#home">Home</a> › <a href="#browse">Sellers</a> › <span id="shopCrumbName">Shop</span></div></div></div>
-  <div class="wrap" id="shopContent"></div>
-</section>
-
-<section class="page" data-page="pricing">
-  <div class="page-head"><div class="wrap" style="text-align:center"><div class="crumb" style="justify-content:center"><a href="#home">Home</a> › <span>Pricing</span></div><h1>Free to list. Paid to grow.</h1><p style="margin-left:auto;margin-right:auto">List for free. Boost listings, verify your shop, or go pro when you&rsquo;re ready. All prices in USD &amp; SSP at $1 = 4,585 SSP.</p></div></div>
+<!-- ============ IMPACT STATS ============ -->
+<section class="sec stats" id="stats">
   <div class="wrap">
-    <div class="price-section"><div class="sec-head"><div><span class="sec-kick">Boosts</span><h2 class="sec-title">Get seen first</h2><p class="sec-sub">Push a listing to the top of its category and the homepage.</p></div></div><div class="boost-grid" id="boostGrid"></div></div>
-    <div class="price-section"><div class="sec-head"><div><span class="sec-kick">Verification</span><h2 class="sec-title">Earn buyer trust</h2><p class="sec-sub">A verified badge on your shop and every listing.</p></div></div><div class="two-cards" id="verifyGrid"></div></div>
-    <div class="price-section"><div class="sec-head"><div><span class="sec-kick">Shop plans</span><h2 class="sec-title">Grow your business</h2><p class="sec-sub">Monthly plans for serious sellers and dealers.</p></div></div><div class="plan-grid" id="planGrid"></div></div>
-    <div class="price-section"><div class="sec-head"><div><span class="sec-kick">Questions</span><h2 class="sec-title">Pricing FAQ</h2></div></div><div class="faq" id="pricingFaq"></div></div>
-  </div>
-</section>
-<section class="page" data-page="about">
-  <div class="wrap">
-    <div class="about-hero"><div class="crumb" style="justify-content:center;margin-bottom:14px"><a href="#home">Home</a> › <span>About</span></div><h1>The marketplace South Sudan <span class="hl">deserves</span>.</h1><p>South Sudan already trades digitally — on WhatsApp status, in Facebook groups, through word of mouth. It&rsquo;s scattered, unstructured, and hard to trust. Nile Link brings it together: one place to list, discover, and close with confidence.</p></div>
-    <div class="values">
-      <div class="value reveal"><div class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l8 4v6c0 5-3.5 8-8 10-4.5-2-8-5-8-10V6z"/><path d="M9 12l2 2 4-4"/></svg></div><h3>Trust first</h3><p>Verification, moderation, and seller history make every deal safer.</p></div>
-      <div class="value reveal"><div class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12h18M3 6h18M3 18h18"/></svg></div><h3>Built for here</h3><p>Phone-first, light on data, priced in USD and SSP — made for South Sudan.</p></div>
-      <div class="value reveal"><div class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L3 14h7l-1 8 10-12h-7z"/></svg></div><h3>Sellers win</h3><p>Free to list, simple to grow, and you keep your customers and reputation.</p></div>
+    <div class="stats-grid">
+      <div class="stat"><div class="num" data-count="43200" data-suffix="+">0</div><div class="lbl">Active Listings</div></div>
+      <div class="stat"><div class="num" data-count="8400" data-suffix="+">0</div><div class="lbl">Verified Sellers</div></div>
+      <div class="stat"><div class="num" data-count="12">0</div><div class="lbl">Cities Covered</div></div>
+      <div class="stat"><div class="num">Free</div><div class="lbl">Always & Forever</div></div>
     </div>
-    <div class="sec-head"><div><span class="sec-kick">The team</span><h2 class="sec-title">Two people, one mission</h2></div></div>
-    <div class="team"><div class="member reveal"><div class="av">N</div><div><h4>Neeza Shyaka</h4><div class="role">Product Lead &amp; Strategy</div><p>Drives product direction, the build, business model, and growth strategy.</p></div></div><div class="member reveal"><div class="av">R</div><div><h4>Rico Sunday</h4><div class="role">Design, Market Insight &amp; Growth</div><p>South Sudan market knowledge, seller relationships, and on-the-ground growth.</p></div></div></div>
-    <div class="band reveal"><h2>Ready to <span class="g">join the market?</span></h2><p>Whether you&rsquo;re buying or selling, Nile Link is built for you.</p><div class="acts"><a href="#post" class="btn btn-lime">Start selling</a><a href="#browse" class="btn btn-on-dark">Browse listings</a></div></div>
+    <p class="stats-sub">South Sudan's marketplace is growing every single day.</p>
   </div>
 </section>
 
-<section class="page" data-page="help">
-  <div class="page-head"><div class="wrap"><div class="crumb"><a href="#home">Home</a> › <span>Help &amp; Safety</span></div><h1>Help &amp; safety</h1><p>How to stay safe, get the most out of Nile Link, and reach us.</p></div></div>
-  <div class="wrap">
-    <div class="price-section"><div class="sec-head"><div><span class="sec-kick">Stay safe</span><h2 class="sec-title">Safety tips</h2></div></div>
-      <div class="values">
-        <div class="value"><div class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l8 4v6c0 5-3.5 8-8 10-4.5-2-8-5-8-10V6z"/></svg></div><h3>Meet in public</h3><p>For in-person deals, meet in a busy public place during the day.</p></div>
-        <div class="value"><div class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 8v4M12 16h.01"/></svg></div><h3>Check the badge</h3><p>Prefer verified sellers. Look for the verified badge on listings.</p></div>
-        <div class="value"><div class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M7 14l4-4 3 3 5-6"/></svg></div><h3>Inspect before paying</h3><p>Always inspect the item and confirm it works before handing over money.</p></div>
-      </div></div>
-    <div class="price-section"><div class="sec-head"><div><span class="sec-kick">Questions</span><h2 class="sec-title">Frequently asked</h2></div></div><div class="faq" id="helpFaq"></div></div>
-    <div class="price-section"><div class="sec-head"><div><span class="sec-kick">Contact</span><h2 class="sec-title">Still need help?</h2></div></div>
-      <form class="post-form" style="max-width:560px" onsubmit="return false"><div class="field-row"><div class="field"><label>Your name</label><input type="text" placeholder="Full name"></div><div class="field"><label>Phone or email</label><input type="text" placeholder="+211 9XX XXX XXX"></div></div><div class="field"><label>Message</label><textarea rows="4" placeholder="How can we help?"></textarea></div><button class="btn btn-lime" onclick="showToast('Message sent — we&apos;ll reply soon')">Send message</button></form>
+<!-- ============ WHY / TRUST (bento) ============ -->
+<section class="sec wrap">
+  <div class="sec-head reveal"><div><span class="sec-eyebrow">Why Nile Link</span><h2 class="sec-title">Built on trust</h2></div></div>
+  <div class="bento">
+    <div class="bento-card bento-lg reveal">
+      <div class="bento-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l8 4v6c0 5-3.5 8-8 10-4.5-2-8-5-8-10V6z"/><path d="M9 12l2 2 4-4"/></svg></div>
+      <h3>Verified sellers</h3>
+      <p>Every shop with the green tick has been checked by our team — so you know who you're dealing with before you pay.</p>
+      <div class="bento-art" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M12 2l8 4v6c0 5-3.5 8-8 10-4.5-2-8-5-8-10V6z"/><path d="M9 12l2 2 4-4"/></svg></div>
+    </div>
+    <div class="bento-card reveal" data-d="1">
+      <div class="bento-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div>
+      <h3>Secure in-app chat</h3>
+      <p>Talk to buyers and sellers without sharing your number until you're ready.</p>
+    </div>
+    <div class="bento-card reveal" data-d="2">
+      <div class="bento-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1v22"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></div>
+      <h3>Free to list</h3>
+      <p>Post as many items as you like, completely free. Boost only when you want more eyes.</p>
     </div>
   </div>
 </section>
 
-<section class="page" data-page="signin">
-  <div class="wrap auth-wrap"><div class="auth-card"><img src="./logo.png" alt="Nile Link" class="logomark" width="64" height="64">
-    <h1>Welcome back</h1><p class="sub">Log in to manage your shop and requests.</p>
-    <div class="field"><label>Phone number</label><input type="tel" placeholder="+211 9XX XXX XXX"></div>
-    <div class="field"><label>Password</label><input type="password" placeholder="Your password"></div>
-    <button class="btn btn-ink btn-block" onclick="location.hash='#dashboard'">Log in</button>
-    <div class="divider">or</div>
-    <button class="btn btn-ghost btn-block" onclick="showToast('Phone OTP login coming with backend')">Continue with phone OTP</button>
-    <div class="auth-switch">New to Nile Link? <a href="#signup">Create an account</a></div>
-  </div></div>
-</section>
-
-<section class="page" data-page="signup">
-  <div class="wrap auth-wrap"><div class="auth-card"><img src="./logo.png" alt="Nile Link" class="logomark" width="64" height="64">
-    <h1>Create your account</h1><p class="sub">Join South Sudan&rsquo;s marketplace in under a minute.</p>
-    <div class="role-row"><div class="role-opt on" data-role="buyer">I&rsquo;m buying</div><div class="role-opt" data-role="seller">I&rsquo;m selling</div></div>
-    <div class="field"><label>Full name</label><input type="text" placeholder="e.g. Achol Deng"></div>
-    <div class="field"><label>Phone number</label><input type="tel" placeholder="+211 9XX XXX XXX"></div>
-    <div class="field"><label>Password</label><input type="password" placeholder="Create a password"></div>
-    <button class="btn btn-lime btn-block" onclick="location.hash='#dashboard'">Create account</button>
-    <div class="auth-switch">Already have an account? <a href="#signin">Log in</a></div>
-  </div></div>
-</section>
-
-</main>
-
-<footer><div class="wrap">
-  <div class="foot-grid">
-    <div class="foot-brand"><div class="brandrow"><img src="./logo.png" alt="Nile Link" class="foot-mark" width="36" height="36"><div class="wordmark"><span class="wm-n">Nile</span><span class="wm-sep"></span><span class="wm-l">Link</span></div></div>
-      <p>South Sudan&rsquo;s marketplace for products, cars, property &amp; services — discover online, request in-platform, close with confidence.</p>
-      <div class="tagline">Buy. Sell. Chat. Close.</div>
-      <div class="socials" style="margin-top:16px">
-        <a href="#" aria-label="WhatsApp"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 0 0-8.6 15l-1.3 4.8 4.9-1.3A10 10 0 1 0 12 2zm5.3 14.1c-.2.6-1.3 1.2-1.8 1.2-.5.1-1 .2-3.3-.7-2.8-1.1-4.5-3.9-4.7-4.1-.1-.2-1.1-1.4-1.1-2.7s.7-1.9.9-2.2c.2-.2.5-.3.7-.3h.5c.2 0 .4 0 .6.5l.8 1.9c.1.2.1.4 0 .5l-.4.5c-.1.2-.3.3-.1.6.1.3.7 1.1 1.4 1.7.9.8 1.7 1 2 1.2.2.1.4.1.5-.1l.7-.8c.2-.2.3-.2.6-.1l1.8.9c.2.1.4.2.5.3.1.3.1.7-.1 1.3z"/></svg></a>
-        <a href="#" aria-label="Instagram"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg></a>
-        <a href="#" aria-label="TikTok"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M16 3c.3 2.2 1.6 3.8 3.8 4v2.7c-1.3 0-2.6-.4-3.8-1.1v5.9c0 3.3-2.6 5.5-5.6 5.5A5.4 5.4 0 0 1 5 14.5c0-3 2.4-5.4 5.7-5.1v2.8c-.3-.1-.7-.2-1-.2-1.3 0-2.3 1-2.3 2.4s1 2.4 2.4 2.4c1.4 0 2.5-1 2.5-2.6V3z"/></svg></a>
-        <a href="#" aria-label="Facebook"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M14 9h3V6h-3c-2.2 0-4 1.8-4 4v2H8v3h2v7h3v-7h2.5l.5-3H13v-2c0-.6.4-1 1-1z"/></svg></a>
-      </div></div>
-    <div class="foot-col"><h5>Marketplace</h5><a href="#browse">Phones &amp; Electronics</a><a href="#browse">Fashion &amp; Beauty</a><a href="#browse">Cars &amp; Motorbikes</a><a href="#browse">Property &amp; Land</a><a href="#browse">Services</a></div>
-    <div class="foot-col"><h5>Selling</h5><a href="#post">Become a seller</a><a href="#pricing">Pricing &amp; boosts</a><a href="#dashboard">Get verified</a><a href="#dashboard">Your shop</a><a href="#help">Seller guide</a></div>
-    <div class="foot-col last"><h5>Company</h5><a href="#about">About us</a><a href="#help">Safety tips</a><a href="#help">Help center</a><a href="#help">Contact</a><a href="#about">Terms</a></div>
+<!-- ============ SELLER CTA ============ -->
+<section class="seller-cta">
+  <div class="seller-map" aria-hidden="true">
+    <svg viewBox="0 0 200 200" fill="currentColor"><path d="M70 20l30 6 18 18 22 8 14 20-8 24 10 18-16 22-26 6-18 16-24-8-18-22 4-26-14-20 10-24 18-14z" opacity=".9"/></svg>
   </div>
-  <div class="foot-bottom"><p>&copy; 2026 Nile Link. All rights reserved.</p><p class="rate-foot"><span class="fx-dot" aria-hidden="true"></span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/><path d="M12 2v3M12 19v3"/></svg>$1 = <b data-fx-rate>4,585</b> SSP</p><p class="made">Built for South Sudan <span class="made-flag" aria-label="South Sudan flag" role="img">🇸🇸</span> by Neeza &amp; Rico</p></div>
-</div></footer>
-
-<nav class="mob-bottom-nav" aria-label="Primary mobile navigation">
-  <a href="#home" data-nav="home" class="mn-item"><span class="mn-ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11L12 3l9 8"/><path d="M5 10v10h14V10"/><path d="M10 20v-5h4v5"/></svg></span><span class="mn-l">Home</span></a>
-  <a href="#browse" data-nav="browse" class="mn-item"><span class="mn-ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4-4"/></svg></span><span class="mn-l">Browse</span></a>
-  <a href="#post" data-nav="post" class="mn-item mn-cta"><span class="mn-ic-cta" aria-hidden="true"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></span><span class="mn-l">Sell</span></a>
-  <a href="#saved" data-nav="saved" class="mn-item"><span class="mn-ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 1 0-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 0 0 0-7.8z"/></svg></span><span class="mn-l">Saved</span><span class="mn-badge" data-saved-count aria-hidden="true"></span></a>
-  <a href="#dashboard" data-nav="dashboard" class="mn-item"><span class="mn-ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8.5" r="3.5"/><path d="M4 21c0-4 4-6.5 8-6.5s8 2.5 8 6.5"/></svg></span><span class="mn-l">Account</span></a>
-</nav>
-
-<div class="overlay" id="overlay"><div class="modal" role="dialog" aria-modal="true">
-  <div class="modal-head"><div class="mini" id="mMini"></div><div><div class="mt-cat" id="mCat"></div><div class="mt-ttl" id="mTtl"></div><div class="mt-price" id="mPrice"></div></div><button class="modal-close" id="closeModal" aria-label="Close"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
-  <div class="modal-body" id="mForm">
-    <div class="modal-note"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l8 4v6c0 5-3.5 8-8 10-4.5-2-8-5-8-10V6z"/><path d="M9 12l2 2 4-4"/></svg><p id="mNote"></p></div>
-    <div id="qtyField" class="field" style="display:none"><label>Quantity</label><div class="qty"><button type="button" id="qMinus">&minus;</button><input type="text" id="qVal" value="1" readonly><button type="button" id="qPlus">+</button></div></div>
-    <div class="field"><label>Full name</label><input type="text" id="fName" placeholder="e.g. Achol Deng"></div>
-    <div class="field-row"><div class="field"><label>Phone number</label><input type="tel" id="fPhone" placeholder="+211 9XX XXX XXX"></div><div class="field"><label>Location</label><input type="text" id="fLoc" placeholder="e.g. Juba, Munuki"></div></div>
-    <div class="field"><label id="lblMsg"></label><textarea id="fMsg" rows="3" placeholder="Add a note for the seller…"></textarea></div>
-    <button class="btn btn-block" id="submitReq">Send request</button>
-  </div>
-  <div class="modal-success" id="mSuccess"><div class="sic"><svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></div><h3 id="sTitle">Request sent!</h3><p id="sMsg"></p><span class="ref" id="sRef">REF · SSD-000000</span><button class="btn btn-ink btn-block" id="successDone">Keep browsing</button></div>
-</div></div>
-
-<div class="drawer" id="drawer" aria-hidden="true">
-  <div class="bg" id="drawerBg"></div>
-  <div class="panel" role="dialog" aria-label="Menu">
-    <div class="drawer-head">
-      <div class="drawer-brand">
-        <img src="./logo.png" alt="" class="logomark" width="36" height="36">
-        <div class="wordmark"><span class="wm-n">Nile</span><span class="wm-sep"></span><span class="wm-l">Link</span></div>
+  <div class="seller-cta-inner">
+    <div class="reveal">
+      <h2>Start selling today.<br><span class="hl">It's completely free.</span></h2>
+      <p>Reach thousands of buyers across South Sudan. Post your first listing in under two minutes — no fees, no catch.</p>
+      <div class="seller-cta-btns">
+        <a class="btn btn-lime btn-lg" href="pages/post.html" data-auth-required><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>Post a Listing</a>
+        <a class="btn btn-ghost btn-lg" href="pages/pricing.html" style="color:#fff;border-color:rgba(255,255,255,.25)">Learn more</a>
       </div>
-      <button class="iconbtn drawer-close" id="closeDrawer" aria-label="Close menu"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
     </div>
-    <div class="drawer-quick">
-      <a href="#messages" class="dq-tile drawer-nav" style="--i:0">
-        <span class="dq-ic dq-ic-msg"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h16v11H8l-4 4z"/></svg><span class="mn-badge" data-msg-count></span></span>
-        <span class="dq-label">Messages</span>
-      </a>
-      <a href="#notifications" class="dq-tile drawer-nav" style="--i:1">
-        <span class="dq-ic dq-ic-bell"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 16v-5a6 6 0 0 0-12 0v5l-2 2v1h16v-1z"/><path d="M10 21a2 2 0 0 0 4 0"/></svg><span class="mn-badge" data-notif-count></span></span>
-        <span class="dq-label">Alerts</span>
-      </a>
-      <a href="#saved" class="dq-tile drawer-nav" style="--i:2">
-        <span class="dq-ic dq-ic-heart"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 1 0-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 0 0 0-7.8z"/></svg></span>
-        <span class="dq-label">Saved</span>
-      </a>
-    </div>
-    <nav class="drawer-nav-list" aria-label="Primary">
-      <a href="#browse" class="dlink drawer-nav" style="--i:3" data-nav="browse">
-        <span class="dl-ic" style="--c1:#dbeafe;--c2:#bfdbfe;--cc:#1e40af"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4-4"/></svg></span>
-        <span class="dl-tx"><span class="dl-ttl">Browse listings</span><span class="dl-sub">Phones, cars, property, more</span></span>
-        <svg class="dl-arr" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M9 6l6 6-6 6"/></svg>
-      </a>
-      <a href="#post" class="dlink drawer-nav" style="--i:4" data-nav="post">
-        <span class="dl-ic" style="--c1:var(--lime-100);--c2:var(--lime-200);--cc:var(--lime-deeper)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg></span>
-        <span class="dl-tx"><span class="dl-ttl">Sell on Nile Link</span><span class="dl-sub">Free to list · 3 boosts free</span></span>
-        <svg class="dl-arr" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M9 6l6 6-6 6"/></svg>
-      </a>
-      <a href="#dashboard" class="dlink drawer-nav" style="--i:5" data-nav="dashboard">
-        <span class="dl-ic" style="--c1:#fef3c7;--c2:#fde68a;--cc:#92400e"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg></span>
-        <span class="dl-tx"><span class="dl-ttl">Your shop</span><span class="dl-sub">Listings, drafts, requests</span></span>
-        <svg class="dl-arr" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M9 6l6 6-6 6"/></svg>
-      </a>
-      <a href="#pricing" class="dlink drawer-nav" style="--i:6" data-nav="pricing">
-        <span class="dl-ic" style="--c1:#fce7f3;--c2:#fbcfe8;--cc:#9d174d"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M13 2L3 14h7l-1 8 10-12h-7z"/></svg></span>
-        <span class="dl-tx"><span class="dl-ttl">Pricing &amp; boosts</span><span class="dl-sub">Grow your shop faster</span></span>
-        <svg class="dl-arr" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M9 6l6 6-6 6"/></svg>
-      </a>
-      <a href="#about" class="dlink drawer-nav" style="--i:7" data-nav="about">
-        <span class="dl-ic" style="--c1:#ede9fe;--c2:#ddd6fe;--cc:#5b21b6"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 16v-4M12 8h.01"/></svg></span>
-        <span class="dl-tx"><span class="dl-ttl">About Nile Link</span><span class="dl-sub">Our story &amp; team</span></span>
-        <svg class="dl-arr" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M9 6l6 6-6 6"/></svg>
-      </a>
-      <a href="#help" class="dlink drawer-nav" style="--i:8" data-nav="help">
-        <span class="dl-ic" style="--c1:#dcfce7;--c2:#bbf7d0;--cc:#166534"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l8 4v6c0 5-3.5 8-8 10-4.5-2-8-5-8-10V6z"/></svg></span>
-        <span class="dl-tx"><span class="dl-ttl">Help &amp; safety</span><span class="dl-sub">Tips, FAQs, contact</span></span>
-        <svg class="dl-arr" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M9 6l6 6-6 6"/></svg>
-      </a>
-    </nav>
-    <div class="dacts">
-      <a href="#signin" class="btn btn-ghost btn-block drawer-nav" data-guest-only>Sign in</a>
-      <button class="btn btn-ghost btn-block drawer-nav" data-auth-only data-signout>Sign out</button>
-      <a href="#post" class="btn btn-lime btn-block drawer-nav">Start selling<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
-    </div>
-    <div class="drawer-foot">
-      <span class="df-flag" aria-hidden="true">🇸🇸</span>
-      <div class="df-text">Built for South Sudan<br><b>by Neeza &amp; Rico</b></div>
+    <div class="seller-phone reveal" data-d="1">
+      <div class="phone-mock"><div class="phone-screen">
+        <div class="phone-ph img"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="8.5" cy="10" r="1.6"/><path d="M21 16l-5-5L5 21"/></svg></div>
+        <div class="phone-ph line w70"></div>
+        <div class="phone-ph line w40"></div>
+        <div class="phone-ph line"></div>
+        <div class="phone-ph btn"></div>
+      </div></div>
     </div>
   </div>
-</div>
+</section>
 
-<div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-hidden="true">
-  <button class="lb-close" data-lb-close aria-label="Close image"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
-  <img alt="" id="lightboxImg">
-</div>
+<!-- ============ TESTIMONIALS ============ -->
+<section class="sec wrap">
+  <div class="sec-head reveal"><div><span class="sec-eyebrow">Loved locally</span><h2 class="sec-title">Trusted across South Sudan</h2></div></div>
+  <div class="tst-grid" id="tstGrid"></div>
+</section>
 
-<div class="toast" id="toast"><span class="ic"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></span><span id="toastMsg"></span></div>
-<script defer src="app.js?v=20250617f"></script>
+<!-- ============ FOOTER (injected) ============ -->
+<div data-nl-footer></div>
+
+</div><!-- /app-shell -->
+
+<!-- ============ MOBILE BOTTOM NAV (injected) ============ -->
+<div data-nl-mobnav></div>
+
+<script defer src="assets/js/data.js?v=20260618a"></script>
+<script defer src="assets/js/api.js?v=20260618a"></script>
+<script defer src="assets/js/core.js?v=20260618a"></script>
+<script defer src="assets/js/home.js?v=20260618a"></script>
 </body>
 </html>

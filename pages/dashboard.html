@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Dashboard — Nile Link</title>
+<meta name="theme-color" content="#0a0e08">
+<link rel="icon" type="image/svg+xml" href="../assets/images/favicon.svg">
+<link rel="apple-touch-icon" href="../assets/images/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/tokens.css?v=20260618a">
+<link rel="stylesheet" href="../assets/css/main.css?v=20260618a">
+<link rel="stylesheet" href="../assets/css/pages.css?v=20260618a">
+</head>
+<body data-page="account" class="has-mobnav">
+<div class="app-shell">
+<div data-nl-nav></div>
+
+<div class="page-head"><div class="wrap">
+  <div><h1>Hi, <span data-user-name>there</span> 👋</h1><div class="sub">Here's how your shop is doing</div></div>
+  <a class="btn btn-lime" href="post.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>New listing</a>
+</div></div>
+
+<main class="wrap dash">
+  <div class="dash-tabs" id="dashTabs">
+    <button class="dash-tab active" data-tab="listings">My Listings</button>
+    <button class="dash-tab" data-tab="requests">Requests</button>
+    <button class="dash-tab" data-tab="stats">Performance</button>
+    <button class="dash-tab" data-tab="profile">Profile</button>
+  </div>
+
+  <section class="dash-panel active" data-panel="listings">
+    <div class="dash-stats" id="dashStats"></div>
+    <div id="listingRows"></div>
+  </section>
+  <section class="dash-panel" data-panel="requests"><div id="reqRows"></div></section>
+  <section class="dash-panel" data-panel="stats">
+    <div class="dash-stats" id="perfStats"></div>
+    <div class="review-card"><h3 style="font-weight:800;margin-bottom:6px">Earnings (estimate)</h3><div class="review-row"><span class="k">This month (USD)</span><span class="v">$1,090</span></div><div class="review-row"><span class="k">This month (SSP)</span><span class="v" data-earn-ssp>—</span></div><div class="review-row"><span class="k">Items sold</span><span class="v">1</span></div></div>
+  </section>
+  <section class="dash-panel" data-panel="profile">
+    <div class="review-card">
+      <div class="seller-card" style="margin:0 0 16px"><div class="seller-av" data-user-initials>U</div><div style="flex:1"><div class="seller-name" data-user-name>You</div><div class="seller-sub"><span data-user-phone>+211</span> · <span data-user-city>Juba</span></div></div></div>
+      <div class="review-row"><span class="k">Account type</span><span class="v">Buyer & Seller</span></div>
+      <div class="review-row"><span class="k">Verification</span><span class="v"><span class="status-pill st-pending">Pending</span></span></div>
+      <div class="review-row"><span class="k">Member since</span><span class="v">2026</span></div>
+    </div>
+    <button class="btn btn-ghost btn-block" data-signout>Sign out</button>
+  </section>
+</main>
+
+<div data-nl-footer></div>
+</div>
+<div data-nl-mobnav></div>
+<script defer src="../assets/js/data.js?v=20260618a"></script>
+<script defer src="../assets/js/api.js?v=20260618a"></script>
+<script defer src="../assets/js/core.js?v=20260618a"></script>
+<script defer src="../assets/js/dashboard.js?v=20260618a"></script>
+</body>
+</html>

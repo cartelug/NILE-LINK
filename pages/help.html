@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Help Center — Nile Link</title>
+<meta name="theme-color" content="#0a0e08">
+<link rel="icon" type="image/svg+xml" href="../assets/images/favicon.svg">
+<link rel="apple-touch-icon" href="../assets/images/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/tokens.css?v=20260618a">
+<link rel="stylesheet" href="../assets/css/main.css?v=20260618a">
+<link rel="stylesheet" href="../assets/css/pages.css?v=20260618a">
+</head>
+<body data-page="help" class="has-mobnav">
+<div class="app-shell">
+<div data-nl-nav></div>
+
+<div class="page-head"><div class="wrap"><div style="margin-inline:auto;text-align:center">
+  <span class="sec-eyebrow" style="justify-content:center">Help Center</span>
+  <h1>How can we help?</h1>
+  <div class="sub">Answers to the most common questions.</div>
+</div></div></div>
+
+<main class="wrap prose">
+  <h2 id="faq">Frequently asked</h2>
+  <div id="faqList">
+    <div class="accordion"><button class="acc-q">Is Nile Link free to use?<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></button><div class="acc-a"><div class="acc-a-inner">Yes. Creating an account and posting listings is completely free, forever. You only pay if you choose to boost a listing or upgrade to Pro Seller for more reach.</div></div></div>
+    <div class="accordion"><button class="acc-q">How do I sell an item?<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></button><div class="acc-a"><div class="acc-a-inner">Tap <b>Sell</b>, pick a category, add a title, price, location and photos, then publish. Your listing goes live after a quick review.</div></div></div>
+    <div class="accordion" id="safety"><button class="acc-q">How do I stay safe when buying?<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></button><div class="acc-a"><div class="acc-a-inner">Always meet in a public place, inspect the item before paying, and never send money in advance to someone you don't know. Prefer sellers with the green verified badge.</div></div></div>
+    <div class="accordion"><button class="acc-q">What does the verified badge mean?<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></button><div class="acc-a"><div class="acc-a-inner">A green tick means our team has confirmed the seller's identity and shop details. It's a strong signal of trust, though you should still follow safe-trading tips.</div></div></div>
+    <div class="accordion" id="report"><button class="acc-q">How do I report a listing or user?<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></button><div class="acc-a"><div class="acc-a-inner">Open the listing and use the report option, or contact us below with the listing link. We review every report quickly.</div></div></div>
+    <div class="accordion"><button class="acc-q">Why are prices shown in USD and SSP?<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></button><div class="acc-a"><div class="acc-a-inner">Sellers set prices in USD for stability, and we show a live SSP estimate using the current exchange rate so everyone knows what to expect.</div></div></div>
+  </div>
+
+  <h2 id="terms">Still need help?</h2>
+  <p>Reach our team and we'll get back to you quickly.</p>
+  <div class="review-card">
+    <form id="contactForm">
+      <div class="field"><label>Your name</label><input type="text" required placeholder="Your name"></div>
+      <div class="field"><label>Email or phone</label><input type="text" required placeholder="How we reach you"></div>
+      <div class="field"><label>Message</label><textarea required placeholder="How can we help?"></textarea></div>
+      <button class="btn btn-lime btn-block btn-lg" type="submit">Send message</button>
+    </form>
+  </div>
+  <p class="center muted" style="margin:20px 0 50px;font-weight:600">Or email <b>support@nilelink.ss</b> · WhatsApp <b>+211 900 000 000</b></p>
+</main>
+
+<div data-nl-footer></div>
+</div>
+<div data-nl-mobnav></div>
+<script defer src="../assets/js/data.js?v=20260618a"></script>
+<script defer src="../assets/js/api.js?v=20260618a"></script>
+<script defer src="../assets/js/core.js?v=20260618a"></script>
+<script>
+document.addEventListener('click',function(e){var q=e.target.closest('.acc-q');if(!q)return;var acc=q.parentElement;var a=acc.querySelector('.acc-a');var open=acc.classList.toggle('open');a.style.maxHeight=open?a.scrollHeight+'px':'0'});
+document.addEventListener('submit',function(e){if(e.target.id==='contactForm'){e.preventDefault();e.target.reset();window.NL&&NL.toast('Message sent — we\'ll be in touch!',{type:'success'})}});
+</script>
+</body>
+</html>
