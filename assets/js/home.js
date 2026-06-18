@@ -25,6 +25,8 @@
   let filter='all';
   function renderGrid(){
     NL.api.listings.list({group:filter}).then(r=>NL.renderGrid($('#homeGrid'),r.data));
+    // update "See all" links contextually
+    document.querySelectorAll('.sec-link[data-see-all]').forEach(a=>{a.href=root+'pages/browse.html'+(filter!=='all'?'?group='+filter:'')});
   }
   function bindTabs(){
     $('#homeTabs').addEventListener('click',e=>{const t=e.target.closest('.tab');if(!t)return;document.querySelectorAll('#homeTabs .tab').forEach(x=>x.classList.remove('active'));t.classList.add('active');filter=t.dataset.filter;renderGrid()});

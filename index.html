@@ -9,33 +9,22 @@
 <meta property="og:title" content="Nile Link — South Sudan's Leading Marketplace">
 <meta property="og:description" content="Buy and sell phones, cars, property, fashion and services across South Sudan.">
 <meta property="og:type" content="website">
-<link rel="icon" type="image/svg+xml" href="assets/images/favicon.svg">
-<link rel="icon" type="image/png" sizes="32x32" href="assets/images/favicon-32.png">
-<link rel="apple-touch-icon" href="assets/images/apple-touch-icon.png">
+<link rel="icon" type="image/svg+xml" href="assets/images/favicon.svg?v=20260619a">
+<link rel="icon" type="image/png" sizes="32x32" href="assets/images/favicon-32.png?v=20260619a">
+<link rel="apple-touch-icon" href="assets/images/apple-touch-icon.png?v=20260619a">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/css/tokens.css?v=20260618a">
-<link rel="stylesheet" href="assets/css/main.css?v=20260618a">
-<link rel="stylesheet" href="assets/css/home.css?v=20260618a">
+<link rel="stylesheet" href="assets/css/tokens.css?v=20260619a">
+<link rel="stylesheet" href="assets/css/main.css?v=20260619a">
+<link rel="stylesheet" href="assets/css/home.css?v=20260619a">
 </head>
 <body data-page="home" class="has-mobnav">
 
 <!-- ============ CINEMATIC PRELOADER ============ -->
 <div class="preloader" id="preloader" role="status" aria-label="Loading Nile Link">
   <div class="pl-stage">
-    <div class="pl-mark">
-      <svg viewBox="0 0 100 100" aria-hidden="true">
-        <circle class="pl-ring" cx="50" cy="50" r="47"/>
-        <circle class="pl-ring-fg" cx="50" cy="50" r="47" transform="rotate(-90 50 50)"/>
-        <path class="pl-n" d="M34 70 V30 L66 70 V30"/>
-      </svg>
-    </div>
-    <div class="pl-word" aria-hidden="true">
-      <span style="animation-delay:.9s">N</span><span style="animation-delay:.96s">i</span><span style="animation-delay:1.02s">l</span><span style="animation-delay:1.08s">e</span>
-      <span class="sp"></span>
-      <span style="animation-delay:1.2s">L</span><span style="animation-delay:1.26s">i</span><span style="animation-delay:1.32s">n</span><span style="animation-delay:1.38s">k</span>
-    </div>
+    <div class="pl-logo"><img src="assets/images/logo.png" alt="Nile Link" fetchpriority="high"></div>
     <div class="pl-tag">South Sudan's Marketplace</div>
     <div class="pl-bar"><i></i></div>
   </div>
@@ -56,7 +45,10 @@ setTimeout(hide,CAP);})();
 
 <!-- ============ HERO ============ -->
 <header class="hero">
-  <div class="hero-mesh" aria-hidden="true"><span class="m1"></span><span class="m2"></span><span class="m3"></span></div>
+  <picture class="hero-bg" aria-hidden="true">
+    <source media="(min-width:900px)" srcset="assets/images/hero-desktop.jpg">
+    <img src="assets/images/hero-mobile.jpg" alt="" loading="eager" fetchpriority="high">
+  </picture>
   <div class="hero-inner">
     <span class="hero-badge"><span class="dot"></span>Now live across 12 cities in South Sudan</span>
     <h1 class="hero-h1">
@@ -104,7 +96,7 @@ setTimeout(hide,CAP);})();
 <section class="sec wrap" style="padding-top:0">
   <div class="sec-head reveal">
     <div><span class="sec-eyebrow">Fresh listings</span><h2 class="sec-title">Trending right now</h2></div>
-    <a class="sec-link" href="pages/browse.html">See all<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+    <a class="sec-link" data-see-all href="pages/browse.html">See all<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
   </div>
   <div class="home-tabs" id="homeTabs">
     <button class="tab active" data-filter="all">All</button>
@@ -206,9 +198,9 @@ setTimeout(hide,CAP);})();
 <!-- ============ MOBILE BOTTOM NAV (injected) ============ -->
 <div data-nl-mobnav></div>
 
-<script defer src="assets/js/data.js?v=20260618a"></script>
-<script defer src="assets/js/api.js?v=20260618a"></script>
-<script defer src="assets/js/core.js?v=20260618a"></script>
-<script defer src="assets/js/home.js?v=20260618a"></script>
+<script defer src="assets/js/data.js?v=20260619a"></script>
+<script defer src="assets/js/api.js?v=20260619a"></script>
+<script defer src="assets/js/core.js?v=20260619a"></script>
+<script defer src="assets/js/home.js?v=20260619a"></script>
 </body>
 </html>

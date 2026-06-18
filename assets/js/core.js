@@ -127,12 +127,37 @@ window.NL=window.NL||{};
   /* ============================================================
      CHROME — Nav, Drawer, Footer, Mobile nav
      ============================================================ */
+  const LOGO_IMG='<img src="'+href('assets/images/logo.png')+'" alt="Nile Link" width="36" height="36">';
   const LOGO_SVG='<svg viewBox="0 0 32 32" fill="none"><path d="M9 7.5v17h3.6V14.3l9.2 10.2h2.6v-17h-3.6v10.2L11.6 7.5z" fill="#7cfc00"/></svg>';
+  const SUBCATS={
+    electronics:['iPhone','Samsung','Laptops','TVs','Generators','Audio','Cameras','Accessories'],
+    fashion:['Men','Women','Kids','Shoes','Bags','Watches','Jewelry','Tailoring'],
+    cars:['Toyota','Nissan','Mitsubishi','Motorbikes','Trucks','Parts','Rental','Inspection'],
+    property:['For rent','For sale','Land','Apartments','Houses','Commercial','Shared','Short-stay'],
+    services:['Photography','Cleaning','Catering','Tutoring','Construction','Beauty','Events','Logistics']
+  };
+  const CAT_ICONS={
+    electronics:'<rect x="6.5" y="2" width="11" height="20" rx="2.6"/><path d="M10.5 18.5h3"/>',
+    fashion:'<path d="M8.5 3.5L4.5 6.5L7 9.5L8.5 8.5V21H15.5V8.5L17 9.5L19.5 6.5L15.5 3.5"/>',
+    cars:'<path d="M3.5 16V11.5L5.4 7.5C5.7 6.7 6.5 6.2 7.3 6.2H16.7C17.5 6.2 18.3 6.7 18.6 7.5L20.5 11.5V16"/><circle cx="7.5" cy="14.5" r="1.3"/><circle cx="16.5" cy="14.5" r="1.3"/>',
+    property:'<path d="M3.5 11L12 3.5L20.5 11"/><path d="M5.5 9.5V20H18.5V9.5"/>',
+    services:'<path d="M14.7 6.3a3.5 3.5 0 0 0-4.8 4.8L4 17l3 3 5.9-5.9a3.5 3.5 0 0 0 4.8-4.8l-2.5 2.5-1.5-1.5z"/>'
+  };
+  function megaHTML(){
+    const labels={electronics:'Electronics',fashion:'Fashion',cars:'Cars',property:'Property',services:'Services'};
+    const cols=Object.keys(SUBCATS).map(k=>
+      '<div class="mega-col"><h5><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">'+CAT_ICONS[k]+'</svg>'+labels[k]+'</h5>'+
+        SUBCATS[k].map(s=>'<a href="'+href('pages/browse.html')+'?cat='+k+'&q='+encodeURIComponent(s)+'">'+s+'</a>').join('')+
+      '</div>'
+    ).join('');
+    return '<div class="mega"><div class="mega-inner">'+cols+'</div><div class="mega-foot"><a href="'+href('pages/browse.html')+'">See all categories <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a></div></div>';
+  }
 
   function navHTML(){
     return '<nav class="nav" id="nlNav"><div class="nav-inner">'+
-      '<a class="nav-logo" href="'+href('index.html')+'"><span class="nav-logo-mark">'+LOGO_SVG+'</span><span class="nav-logo-txt">Nile<b>Link</b></span></a>'+
+      '<a class="nav-logo" href="'+href('index.html')+'"><span class="nav-logo-mark">'+LOGO_IMG+'</span><span class="nav-logo-txt">Nile<b>Link</b></span></a>'+
       '<div class="nav-links">'+
+        '<div class="has-mega"><button type="button">Categories <svg class="caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></button>'+megaHTML()+'</div>'+
         '<a data-nav="browse" href="'+href('pages/browse.html')+'">Browse</a>'+
         '<a data-nav="pricing" href="'+href('pages/pricing.html')+'">Pricing</a>'+
         '<a data-nav="about" href="'+href('pages/about.html')+'">About</a>'+
@@ -158,7 +183,7 @@ window.NL=window.NL||{};
       '<div class="drawer-head">'+
         '<div class="drawer-user">'+
           '<span class="drawer-av auth-only" data-user-initials>U</span>'+
-          '<span class="nav-logo-mark guest-only">'+LOGO_SVG+'</span>'+
+          '<span class="nav-logo-mark guest-only">'+LOGO_IMG+'</span>'+
           '<div><div style="font-weight:800" class="auth-only" data-user-name>You</div><div style="font-weight:800" class="guest-only">Welcome</div><div class="muted" style="font-size:.8rem">South Sudan\'s Marketplace</div></div>'+
         '</div>'+
         '<button class="icon-btn" data-drawer-close aria-label="Close"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button>'+
@@ -185,13 +210,14 @@ window.NL=window.NL||{};
 
   function footerHTML(){
     const so=(p)=>'<svg viewBox="0 0 24 24" fill="currentColor">'+p+'</svg>';
+    const FOOT_LOGO='<img src="'+href('assets/images/logo.png')+'" alt="Nile Link" width="36" height="36" style="border-radius:8px;background:#fff;padding:4px">';
     return '<section class="foot-news"><div class="foot-news-inner">'+
         '<div><h3>Never miss a deal</h3><p>Get notified when new listings drop in your favourite categories.</p></div>'+
         '<form class="foot-news-form" data-news-form><input type="email" placeholder="Your email address" required aria-label="Email"><button class="btn btn-lime" type="submit">Subscribe</button></form>'+
       '</div></section>'+
     '<footer class="foot"><div class="foot-grid">'+
       '<div class="foot-brand">'+
-        '<div class="foot-logo"><span class="foot-logo-mark">'+LOGO_SVG+'</span><span class="foot-logo-txt">Nile<b>Link</b></span></div>'+
+        '<div class="foot-logo"><span class="foot-logo-mark">'+FOOT_LOGO+'</span><span class="foot-logo-txt">Nile<b>Link</b></span></div>'+
         '<p class="foot-tag">South Sudan\'s marketplace for phones, cars, property, fashion & services. Buy and sell with confidence.</p>'+
         '<div class="foot-social">'+
           '<a href="#" aria-label="Facebook">'+so('<path d="M14 9h3V6h-3c-1.7 0-3 1.3-3 3v2H8v3h3v7h3v-7h2.5l.5-3H14V9z"/>')+'</a>'+
@@ -274,6 +300,8 @@ window.NL=window.NL||{};
     });
     // newsletter
     document.addEventListener('submit',e=>{const f=e.target.closest('[data-news-form]');if(f){e.preventDefault();f.reset();NL.toast('You\'re subscribed! 🎉',{type:'success'})}});
+    // language toggle (UI only — wires to your i18n)
+    document.addEventListener('click',e=>{const b=e.target.closest('.foot-lang button');if(!b)return;b.parentElement.querySelectorAll('button').forEach(x=>x.classList.remove('on'));b.classList.add('on');const ar=b.textContent.trim()!=='English';document.documentElement.lang=ar?'ar':'en';document.documentElement.dir=ar?'rtl':'ltr';NL.toast(ar?'تم تغيير اللغة إلى العربية':'Language set to English',{type:'info',duration:1800})});
     // nav scroll shadow
     const nav=()=>document.getElementById('nlNav');
     window.addEventListener('scroll',()=>{const n=nav();if(n)n.classList.toggle('scrolled',window.scrollY>8)},{passive:true});

@@ -5,33 +5,33 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Create account — Nile Link</title>
 <meta name="theme-color" content="#0a0e08">
-<link rel="icon" type="image/svg+xml" href="../assets/images/favicon.svg">
-<link rel="apple-touch-icon" href="../assets/images/apple-touch-icon.png">
+<link rel="icon" type="image/svg+xml" href="../assets/images/favicon.svg?v=20260619a">
+<link rel="apple-touch-icon" href="../assets/images/apple-touch-icon.png?v=20260619a">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="../assets/css/tokens.css?v=20260618a">
-<link rel="stylesheet" href="../assets/css/main.css?v=20260618a">
-<link rel="stylesheet" href="../assets/css/auth.css?v=20260618a">
+<link rel="stylesheet" href="../assets/css/tokens.css?v=20260619a">
+<link rel="stylesheet" href="../assets/css/main.css?v=20260619a">
+<link rel="stylesheet" href="../assets/css/auth.css?v=20260619a">
 </head>
 <body data-page="signup">
 <div class="auth">
-  <div class="auth-brand">
-    <div class="auth-brand-map"><svg viewBox="0 0 200 200" fill="currentColor"><path d="M70 20l30 6 18 18 22 8 14 20-8 24 10 18-16 22-26 6-18 16-24-8-18-22 4-26-14-20 10-24 18-14z"/></svg></div>
-    <div class="auth-brand-top"><a class="auth-brand-logo" href="../index.html"><span class="m"><svg viewBox="0 0 32 32" fill="none"><path d="M9 7.5v17h3.6V14.3l9.2 10.2h2.6v-17h-3.6v10.2L11.6 7.5z" fill="#7cfc00"/></svg></span>Nile<b>Link</b></a></div>
+  <aside class="auth-brand">
+    <div class="auth-brand-bg" aria-hidden="true"><img src="../assets/images/hero-desktop.jpg" alt=""></div>
+    <a class="auth-brand-logo" href="../index.html"><span class="m"><img src="../assets/images/logo.png" alt="Nile Link"></span>Nile<b>Link</b></a>
     <div class="auth-brand-mid">
-      <h2>Join <span class="hl">South Sudan's</span> leading marketplace.</h2>
+      <h2>Join <span class="hl">South&nbsp;Sudan's</span> leading marketplace.</h2>
       <p>Create a free account to buy, sell and connect across the country.</p>
     </div>
     <div class="auth-brand-quotes">
       <div class="auth-brand-quote"><span class="a" style="background:linear-gradient(135deg,#db2777,#f43f6e)">AD</span><div><div class="t">"I get custom orders every week."</div><div class="n">Achol Deng · Konyokonyo</div></div></div>
+      <div class="auth-brand-quote"><span class="a" style="background:linear-gradient(135deg,#0d9488,#10b981)">MN</span><div><div class="t">"Three rental requests the same evening."</div><div class="n">Mary Nyandeng · Thongpiny</div></div></div>
     </div>
-  </div>
+  </aside>
 
-  <div class="auth-form-wrap"><div class="auth-form">
-    <a class="auth-mobile-logo" href="../index.html"><span class="m"><svg viewBox="0 0 32 32" fill="none"><path d="M9 7.5v17h3.6V14.3l9.2 10.2h2.6v-17h-3.6v10.2L11.6 7.5z" fill="#7cfc00"/></svg></span>Nile<b>Link</b></a>
+  <main class="auth-form-wrap"><div class="auth-form"><div class="auth-card">
+    <a class="auth-mobile-logo" href="../index.html"><span class="m"><img src="../assets/images/logo.png" alt=""></span>Nile<b>Link</b></a>
     <div class="auth-dots"><span class="on"></span><span></span><span></span></div>
 
-    <!-- step 1: phone -->
     <div class="auth-step active" data-step="1">
       <h1>Create your account</h1>
       <p class="auth-sub">Start with your phone number.</p>
@@ -42,7 +42,6 @@
       <p class="auth-foot">Already have an account? <a href="signin.html">Sign in</a></p>
     </div>
 
-    <!-- step 2: name + role -->
     <div class="auth-step" data-step="2">
       <button class="auth-back" data-su-back="2"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M15 6l-6 6 6 6"/></svg>Back</button>
       <h1>Tell us about you</h1>
@@ -58,20 +57,19 @@
       <button class="btn btn-lime btn-block btn-lg" data-su-next="2">Continue</button>
     </div>
 
-    <!-- step 3: city -->
     <div class="auth-step" data-step="3">
       <button class="auth-back" data-su-back="3"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M15 6l-6 6 6 6"/></svg>Back</button>
       <h1>Where are you?</h1>
       <p class="auth-sub">Choose your city so buyers nearby can find you.</p>
       <div class="field"><label>City</label><select id="suCity"></select></div>
       <button class="btn btn-lime btn-block btn-lg" id="suFinish">Create account</button>
-      <p class="muted center" style="font-size:.78rem;margin-top:16px">By continuing you agree to our Terms & Privacy Policy.</p>
+      <p class="auth-tos">By continuing you agree to our <a href="help.html#terms">Terms</a> &amp; <a href="help.html#terms">Privacy Policy</a>.</p>
     </div>
-  </div></div>
+  </div></div></main>
 </div>
-<script defer src="../assets/js/data.js?v=20260618a"></script>
-<script defer src="../assets/js/api.js?v=20260618a"></script>
-<script defer src="../assets/js/core.js?v=20260618a"></script>
-<script defer src="../assets/js/auth.js?v=20260618a"></script>
+<script defer src="../assets/js/data.js?v=20260619a"></script>
+<script defer src="../assets/js/api.js?v=20260619a"></script>
+<script defer src="../assets/js/core.js?v=20260619a"></script>
+<script defer src="../assets/js/auth.js?v=20260619a"></script>
 </body>
 </html>

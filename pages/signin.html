@@ -5,35 +5,32 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Sign in — Nile Link</title>
 <meta name="theme-color" content="#0a0e08">
-<link rel="icon" type="image/svg+xml" href="../assets/images/favicon.svg">
-<link rel="apple-touch-icon" href="../assets/images/apple-touch-icon.png">
+<link rel="icon" type="image/svg+xml" href="../assets/images/favicon.svg?v=20260619a">
+<link rel="apple-touch-icon" href="../assets/images/apple-touch-icon.png?v=20260619a">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="../assets/css/tokens.css?v=20260618a">
-<link rel="stylesheet" href="../assets/css/main.css?v=20260618a">
-<link rel="stylesheet" href="../assets/css/auth.css?v=20260618a">
+<link rel="stylesheet" href="../assets/css/tokens.css?v=20260619a">
+<link rel="stylesheet" href="../assets/css/main.css?v=20260619a">
+<link rel="stylesheet" href="../assets/css/auth.css?v=20260619a">
 </head>
 <body data-page="signin">
 <div class="auth">
-  <!-- brand -->
-  <div class="auth-brand">
-    <div class="auth-brand-map"><svg viewBox="0 0 200 200" fill="currentColor"><path d="M70 20l30 6 18 18 22 8 14 20-8 24 10 18-16 22-26 6-18 16-24-8-18-22 4-26-14-20 10-24 18-14z"/></svg></div>
-    <div class="auth-brand-top"><a class="auth-brand-logo" href="../index.html"><span class="m"><svg viewBox="0 0 32 32" fill="none"><path d="M9 7.5v17h3.6V14.3l9.2 10.2h2.6v-17h-3.6v10.2L11.6 7.5z" fill="#7cfc00"/></svg></span>Nile<b>Link</b></a></div>
+  <aside class="auth-brand">
+    <div class="auth-brand-bg" aria-hidden="true"><img src="../assets/images/hero-desktop.jpg" alt=""></div>
+    <a class="auth-brand-logo" href="../index.html"><span class="m"><img src="../assets/images/logo.png" alt="Nile Link"></span>Nile<b>Link</b></a>
     <div class="auth-brand-mid">
-      <h2>Welcome back to<br><span class="hl">South Sudan's</span> marketplace.</h2>
-      <p>Sign in to message sellers, manage your listings, and track your requests.</p>
+      <h2>Welcome back to<br><span class="hl">South&nbsp;Sudan's</span> marketplace.</h2>
+      <p>Sign in to message sellers, manage your listings and track your requests.</p>
     </div>
     <div class="auth-brand-quotes">
       <div class="auth-brand-quote"><span class="a" style="background:linear-gradient(135deg,#ea580c,#f59e0b)">JW</span><div><div class="t">"Sold my car in four days."</div><div class="n">James Wani · Juba</div></div></div>
       <div class="auth-brand-quote"><span class="a" style="background:linear-gradient(135deg,#0d9488,#10b981)">MN</span><div><div class="t">"Three rental requests the same evening."</div><div class="n">Mary Nyandeng · Thongpiny</div></div></div>
     </div>
-  </div>
+  </aside>
 
-  <!-- form -->
-  <div class="auth-form-wrap"><div class="auth-form">
-    <a class="auth-mobile-logo" href="../index.html"><span class="m"><svg viewBox="0 0 32 32" fill="none"><path d="M9 7.5v17h3.6V14.3l9.2 10.2h2.6v-17h-3.6v10.2L11.6 7.5z" fill="#7cfc00"/></svg></span>Nile<b>Link</b></a>
+  <main class="auth-form-wrap"><div class="auth-form"><div class="auth-card">
+    <a class="auth-mobile-logo" href="../index.html"><span class="m"><img src="../assets/images/logo.png" alt=""></span>Nile<b>Link</b></a>
 
-    <!-- step 1: phone -->
     <div class="auth-step active" data-step="phone">
       <h1>Sign in</h1>
       <p class="auth-sub">Enter your phone number to continue.</p>
@@ -44,7 +41,6 @@
       <p class="auth-foot">New to Nile Link? <a href="signup.html">Create an account</a></p>
     </div>
 
-    <!-- step 2: OTP -->
     <div class="auth-step" data-step="otp">
       <button class="auth-back" data-back><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M15 6l-6 6 6 6"/></svg>Back</button>
       <h1>Verify your number</h1>
@@ -54,13 +50,13 @@
       </div>
       <button class="btn btn-lime btn-block btn-lg" id="siVerify" style="margin-top:18px">Verify & sign in</button>
       <p class="otp-resend">Didn't get it? <button id="siResend">Resend code</button></p>
-      <p class="muted center" style="font-size:.78rem;margin-top:16px">Demo: enter any 6 digits to continue.</p>
+      <p class="auth-tos">Demo: enter any 6 digits to continue.</p>
     </div>
-  </div></div>
+  </div></div></main>
 </div>
-<script defer src="../assets/js/data.js?v=20260618a"></script>
-<script defer src="../assets/js/api.js?v=20260618a"></script>
-<script defer src="../assets/js/core.js?v=20260618a"></script>
-<script defer src="../assets/js/auth.js?v=20260618a"></script>
+<script defer src="../assets/js/data.js?v=20260619a"></script>
+<script defer src="../assets/js/api.js?v=20260619a"></script>
+<script defer src="../assets/js/core.js?v=20260619a"></script>
+<script defer src="../assets/js/auth.js?v=20260619a"></script>
 </body>
 </html>

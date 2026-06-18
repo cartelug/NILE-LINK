@@ -13,9 +13,17 @@
   }
 
   function ctaBtns(it){
-    const labels={order:'Order Now',contact:'Contact Seller',quote:'Request Quote'};
     return '<a class="btn btn-lime btn-lg" href="messages.html?listing='+it.id+'" data-auth-required><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>Message Seller</a>'+
-      '<button class="btn btn-primary btn-lg" data-cta-order><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 7h14l-1 12H6z"/><path d="M9 7V5a3 3 0 0 1 6 0v2"/></svg>'+(labels[it.type]||'Order Now')+'</button>';
+      '<button class="btn btn-primary btn-lg" data-cta-offer><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1v22M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>Make an offer</button>';
+  }
+  function shareStrip(it){
+    const url=encodeURIComponent(location.href);
+    const txt=encodeURIComponent(it.title+' — '+(it.from?'From ':'')+NL.fmtUSD(it.usd)+' on Nile Link');
+    return '<div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:14px">'+
+      '<a class="btn btn-ghost btn-sm" target="_blank" rel="noopener" href="https://wa.me/?text='+txt+'%20'+url+'" style="color:#19a974;border-color:#bce4cc"><svg viewBox="0 0 24 24" fill="currentColor" style="width:16px;height:16px"><path d="M12 2a10 10 0 0 0-8.6 15l-1.3 4.8 4.9-1.3A10 10 0 1 0 12 2z"/></svg>Share on WhatsApp</a>'+
+      '<button class="btn btn-ghost btn-sm" data-copy-link><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" style="width:16px;height:16px"><path d="M10 13a5 5 0 0 0 7 0l3-3a5 5 0 1 0-7-7l-1 1M14 11a5 5 0 0 0-7 0l-3 3a5 5 0 1 0 7 7l1-1"/></svg>Copy link</button>'+
+      '<button class="btn btn-ghost btn-sm" data-report style="color:#dc2626;border-color:#fecaca"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" style="width:16px;height:16px"><path d="M3 21V4l9 4 9-4v13l-9 4-9-4z"/></svg>Report</button>'+
+    '</div>';
   }
 
   function render(it){
@@ -51,9 +59,10 @@
         '<div class="pdp-actions">'+ctaBtns(it)+
           '<button class="btn btn-ghost btn-lg" data-fav="'+it.id+'" aria-label="Save"><svg viewBox="0 0 24 24" fill="'+(NL.isFav(it.id)?'currentColor':'none')+'" stroke="currentColor" stroke-width="2"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 1 0-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 0 0 0-7.8z"/></svg></button>'+
         '</div>'+
+        shareStrip(it)+
         '<div class="seller-card">'+
           '<div class="seller-av">'+it.seller[0]+'</div>'+
-          '<div style="flex:1"><div class="seller-name">'+it.seller+(verified?' <span class="v"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M20 6L9 17l-5-5"/></svg></span>':'')+'</div><div class="seller-sub">Member · Responds quickly</div></div>'+
+          '<div style="flex:1"><div class="seller-name">'+it.seller+(verified?' <span class="v"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M20 6L9 17l-5-5"/></svg></span>':'')+'</div><div class="seller-sub"><svg viewBox="0 0 24 24" fill="currentColor" style="width:11px;height:11px;color:var(--lime-700);display:inline-block;vertical-align:-1px"><path d="M12 2l2.4 6.4L21 9l-5 4.5L17.5 21 12 17.3 6.5 21 8 13.5 3 9l6.6-.6z"/></svg> 4.8 · 92% reply rate · Active today</div></div>'+
           '<a class="btn btn-ghost btn-sm" href="messages.html?listing='+it.id+'" data-auth-required>Chat</a>'+
         '</div>'+
         '<div class="pdp-desc"><h3>Description</h3><p>'+it.desc+'</p></div>'+
@@ -88,8 +97,16 @@
     document.addEventListener('keydown',e=>{if(!lb.classList.contains('open'))return;if(e.key==='Escape'){lb.classList.remove('open');document.body.style.overflow=''}if(e.key==='ArrowLeft')setImg(gi-1);if(e.key==='ArrowRight')setImg(gi+1)});
   }
 
-  /* order modal (lightweight) */
-  document.addEventListener('click',e=>{if(e.target.closest('[data-cta-order]')){if(!NL.isAuthed()){location.href='signin.html?next='+encodeURIComponent('listing.html'+location.search);return}NL.toast('Request sent to the seller ✓',{type:'success'})}});
+  /* Make-an-offer + share + report */
+  document.addEventListener('click',e=>{
+    if(e.target.closest('[data-cta-offer]')){
+      if(!NL.isAuthed()){location.href='signin.html?next='+encodeURIComponent('listing.html'+location.search);return}
+      const amt=prompt('Your offer in USD:');if(!amt)return;
+      NL.toast('Offer of $'+amt+' sent to the seller ✓',{type:'success'});
+    }
+    if(e.target.closest('[data-copy-link]')){navigator.clipboard&&navigator.clipboard.writeText(location.href);NL.toast('Link copied',{type:'success'})}
+    if(e.target.closest('[data-report]')){NL.toast('Report submitted — thank you',{type:'info'})}
+  });
 
   /* sticky show on scroll */
   function bindSticky(){window.addEventListener('scroll',()=>{$('#pdpSticky').classList.toggle('show',window.scrollY>320)},{passive:true})}
