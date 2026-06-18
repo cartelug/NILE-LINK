@@ -63,21 +63,6 @@ window.addEventListener('DOMContentLoaded',()=>{fetchLiveRate();setInterval(fetc
    The inline cleanup script in <head> + sw.js kill-switch purge any stale
    caches/SWs from earlier builds. Re-enable a proper SW once stable. === */
 
-/* === Visible "fresh build" flag — auto-dismisses === */
-(function(){
-  function showFlag(){
-    if(document.querySelector('.v2-flag'))return;
-    var f=document.createElement('div');
-    f.className='v2-flag';
-    f.setAttribute('role','status');
-    f.textContent='Latest build · 2025.06.17';
-    document.body.appendChild(f);
-    setTimeout(function(){if(f.parentNode)f.parentNode.removeChild(f)},4200);
-  }
-  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',showFlag);
-  else showFlag();
-})();
-
 /* === Multi-image gallery from a single source === */
 function listingImages(it){
   if(!it||!it.img)return [];
