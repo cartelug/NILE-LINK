@@ -211,7 +211,7 @@ window.NL=window.NL||{};
   function footerHTML(){
     const so=(p)=>'<svg viewBox="0 0 24 24" fill="currentColor">'+p+'</svg>';
     const FOOT_LOGO='<img src="'+href('assets/images/logo.png')+'" alt="Nile Link" width="36" height="36" style="border-radius:8px;background:#fff;padding:4px">';
-    return '<section class="foot-news"><div class="foot-news-inner">'+
+    return '<section class="foot-news"><span class="fade-edge fade-top fade-from-bg"></span><div class="foot-news-inner">'+
         '<div><h3>Never miss a deal</h3><p>Get notified when new listings drop in your favourite categories.</p></div>'+
         '<form class="foot-news-form" data-news-form><input type="email" placeholder="Your email address" required aria-label="Email"><button class="btn btn-lime" type="submit">Subscribe</button></form>'+
       '</div></section>'+

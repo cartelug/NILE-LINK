@@ -321,8 +321,10 @@ svg{display:block}
    ============================================================ */
 .foot-news{
   background:linear-gradient(135deg,var(--ink-2),var(--night));color:var(--tx-inv);
-  padding:clamp(32px,5vw,52px) 0;
+  padding:clamp(40px,6vw,64px) 0 clamp(32px,5vw,52px);
+  position:relative;overflow:hidden;
 }
+.foot-news-inner{position:relative;z-index:2}
 .foot-news-inner{max-width:var(--maxw);margin-inline:auto;padding-inline:16px;display:flex;flex-direction:column;gap:18px;align-items:center;text-align:center}
 @media(min-width:768px){.foot-news-inner{flex-direction:row;justify-content:space-between;text-align:left}}
 .foot-news h3{font-size:clamp(1.3rem,3vw,1.8rem);font-weight:900;letter-spacing:-.02em}
@@ -443,21 +445,24 @@ body.has-mobnav{padding-bottom:calc(64px + env(safe-area-inset-bottom))}
 .seller-map svg{width:min(90%,460px);height:auto;color:var(--lime)}
 
 /* ============================================================
-   UNIVERSAL SECTION-FADE SYSTEM
-   .flow-into-bg / .flow-into-ink / .flow-into-ink2 / .flow-into-lime
-   Adds a bottom gradient blending into the next section's colour.
-   120px on PC, 80px on mobile. Three-stop easing, no banding.
+   SECTION-FADE SYSTEM v4
+   Each fade lives on a FULL-BLEED section (never on a .wrap
+   section), so it always spans the full viewport width. Exactly
+   ONE fade per boundary — no collisions, no black seam. Multi-stop
+   eased curves so the blend reads real, not banded. Concentrated
+   near the edge so it never sits behind section content.
+   Heights: 150px desktop / 100px mobile.
    ============================================================ */
-.flow-into-bg,.flow-into-ink,.flow-into-ink2,.flow-into-lime{position:relative}
-.flow-into-bg::after,.flow-into-ink::after,.flow-into-ink2::after,.flow-into-lime::after{
-  content:"";position:absolute;left:0;right:0;bottom:0;
-  height:80px;pointer-events:none;z-index:3;
-}
-@media(min-width:768px){.flow-into-bg::after,.flow-into-ink::after,.flow-into-ink2::after,.flow-into-lime::after{height:120px}}
-.flow-into-bg::after{background:linear-gradient(180deg,transparent 0%,rgba(246,248,243,.55) 60%,var(--bg) 100%)}
-.flow-into-ink::after{background:linear-gradient(180deg,transparent 0%,rgba(10,14,8,.55) 60%,var(--ink) 100%)}
-.flow-into-ink2::after{background:linear-gradient(180deg,transparent 0%,rgba(13,17,9,.55) 60%,var(--ink-2) 100%)}
-.flow-into-lime::after{background:linear-gradient(180deg,transparent 0%,rgba(124,252,0,.55) 60%,var(--lime) 100%)}
+.fade-edge{position:absolute;left:0;right:0;height:100px;z-index:1;pointer-events:none}
+@media(min-width:768px){.fade-edge{height:150px}}
+.fade-top{top:0}
+.fade-bot{bottom:0}
+/* TO a colour at the BOTTOM edge — blends down into the next section */
+.fade-to-bg{background:linear-gradient(180deg,transparent 0%,rgba(246,248,243,.05) 30%,rgba(246,248,243,.22) 52%,rgba(246,248,243,.55) 74%,rgba(246,248,243,.9) 90%,rgb(246,248,243) 100%)}
+.fade-to-ink2{background:linear-gradient(180deg,transparent 0%,rgba(13,17,9,.05) 30%,rgba(13,17,9,.22) 52%,rgba(13,17,9,.55) 74%,rgba(13,17,9,.9) 90%,rgb(13,17,9) 100%)}
+/* FROM a colour at the TOP edge — the section above bleeds down into this one */
+.fade-from-bg{background:linear-gradient(180deg,rgb(246,248,243) 0%,rgba(246,248,243,.9) 10%,rgba(246,248,243,.55) 26%,rgba(246,248,243,.22) 45%,rgba(246,248,243,.05) 66%,transparent 100%)}
+.fade-from-ink2{background:linear-gradient(180deg,rgb(13,17,9) 0%,rgba(13,17,9,.9) 10%,rgba(13,17,9,.55) 26%,rgba(13,17,9,.22) 45%,rgba(13,17,9,.05) 66%,transparent 100%)}
 
 /* ============================================================
    LANGUAGE PICKER  (first-visit modal)
