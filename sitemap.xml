@@ -6,6 +6,8 @@
   <url><loc>https://nile-link.com/pages/pricing.html</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
   <url><loc>https://nile-link.com/pages/about.html</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
   <url><loc>https://nile-link.com/pages/help.html</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://nile-link.com/pages/terms.html</loc><changefreq>yearly</changefreq><priority>0.5</priority></url>
+  <url><loc>https://nile-link.com/pages/privacy.html</loc><changefreq>yearly</changefreq><priority>0.5</priority></url>
   <url><loc>https://nile-link.com/pages/signin.html</loc><changefreq>yearly</changefreq><priority>0.4</priority></url>
   <url><loc>https://nile-link.com/pages/signup.html</loc><changefreq>yearly</changefreq><priority>0.4</priority></url>
 </urlset>

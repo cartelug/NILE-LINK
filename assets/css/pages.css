@@ -443,3 +443,13 @@
 .empty-state .ei svg{width:40px;height:40px}
 .empty-state h2{font-weight:900;font-size:1.4rem;margin-bottom:8px}
 .empty-state p{color:var(--tx-3);font-weight:600;margin-bottom:20px}
+
+/* ============================================================
+   SETTINGS toggles
+   ============================================================ */
+.set-toggle{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:12px 0;border-bottom:1px solid var(--line);font-weight:600}
+.set-toggle:last-of-type{border-bottom:none}
+.set-toggle input{width:46px;height:26px;-webkit-appearance:none;appearance:none;background:var(--line-2);border-radius:13px;position:relative;cursor:pointer;transition:.2s;flex-shrink:0}
+.set-toggle input::after{content:"";position:absolute;top:3px;left:3px;width:20px;height:20px;border-radius:50%;background:#fff;transition:.2s;box-shadow:0 1px 3px rgba(0,0,0,.2)}
+.set-toggle input:checked{background:var(--lime-700)}
+.set-toggle input:checked::after{left:23px}

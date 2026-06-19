@@ -243,12 +243,13 @@ window.NL=window.NL||{};
         '<a href="'+href('pages/help.html')+'">Help Center</a>'+
         '<a href="'+href('pages/help.html')+'#safety">Safety Tips</a>'+
         '<a href="'+href('pages/help.html')+'#report">Report a Listing</a>'+
-        '<a href="'+href('pages/help.html')+'#terms">Terms & Privacy</a>'+
+        '<a href="'+href('pages/terms.html')+'">Terms of Use</a>'+
+        '<a href="'+href('pages/privacy.html')+'">Privacy Policy</a>'+
       '</div>'+
     '</div>'+
     '<div class="foot-bottom"><div class="foot-flag"></div><div class="foot-bottom-inner">'+
       '<span>© '+new Date().getFullYear()+' Nile Link. Made in South Sudan 🇸🇸</span>'+
-      '<div class="foot-lang"><button class="on">English</button><button>العربية</button></div>'+
+      '<button class="foot-lang-btn" data-open-lang><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15 15 0 0 1 0 20 15 15 0 0 1 0-20z"/></svg><span data-no-translate>Language · العربية · Thuɔŋjäŋ</span></button>'+
     '</div></div></footer>';
   }
 
@@ -300,8 +301,8 @@ window.NL=window.NL||{};
     });
     // newsletter
     document.addEventListener('submit',e=>{const f=e.target.closest('[data-news-form]');if(f){e.preventDefault();f.reset();NL.toast('You\'re subscribed! 🎉',{type:'success'})}});
-    // language toggle (UI only — wires to your i18n)
-    document.addEventListener('click',e=>{const b=e.target.closest('.foot-lang button');if(!b)return;b.parentElement.querySelectorAll('button').forEach(x=>x.classList.remove('on'));b.classList.add('on');const ar=b.textContent.trim()!=='English';document.documentElement.lang=ar?'ar':'en';document.documentElement.dir=ar?'rtl':'ltr';NL.toast(ar?'تم تغيير اللغة إلى العربية':'Language set to English',{type:'info',duration:1800})});
+    // language: open the picker (managed by i18n.js)
+    document.addEventListener('click',e=>{if(e.target.closest('[data-open-lang]')&&window.NLi18n)NLi18n.openPicker()});
     // nav scroll shadow
     const nav=()=>document.getElementById('nlNav');
     window.addEventListener('scroll',()=>{const n=nav();if(n)n.classList.toggle('scrolled',window.scrollY>8)},{passive:true});

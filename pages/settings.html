@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Settings — Nile Link</title>
+<meta name="theme-color" content="#0a0e08">
+<link rel="icon" type="image/svg+xml" href="../assets/images/favicon.svg?v=20260622a">
+<link rel="apple-touch-icon" href="../assets/images/apple-touch-icon.png?v=20260622a">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/tokens.css?v=20260622a">
+<link rel="stylesheet" href="../assets/css/main.css?v=20260622a">
+<link rel="stylesheet" href="../assets/css/pages.css?v=20260622a">
+</head>
+<body data-page="account" class="has-mobnav">
+<div class="app-shell">
+<div data-nl-nav></div>
+
+<div class="page-head"><div class="wrap"><div>
+  <div class="crumbs"><a href="dashboard.html">Dashboard</a><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M9 6l6 6-6 6"/></svg><span>Settings</span></div>
+  <h1>Settings</h1>
+  <div class="sub">Manage your account, notifications and language</div>
+</div></div></div>
+
+<main class="wrap" style="max-width:680px;padding-block:24px">
+  <div class="review-card">
+    <h3 style="font-weight:800;margin-bottom:14px">Account</h3>
+    <div class="field"><label>Full name</label><input type="text" id="setName" data-user-name></div>
+    <div class="field"><label>Phone number</label><div class="with-prefix"><span>+211</span><input type="tel" id="setPhone" placeholder="9X XXX XXXX"></div></div>
+    <div class="field"><label>City</label><select id="setCity"></select></div>
+    <button class="btn btn-lime" id="saveAccount">Save changes</button>
+  </div>
+
+  <div class="review-card">
+    <h3 style="font-weight:800;margin-bottom:6px">Notifications</h3>
+    <p class="muted" style="font-weight:600;margin-bottom:8px">Choose what we ping you about.</p>
+    <label class="set-toggle"><span>Order &amp; quote requests</span><input type="checkbox" checked data-pref="orders"></label>
+    <label class="set-toggle"><span>New messages</span><input type="checkbox" checked data-pref="messages"></label>
+    <label class="set-toggle"><span>Price drops on saved items</span><input type="checkbox" checked data-pref="pricedrops"></label>
+    <label class="set-toggle"><span>Tips &amp; marketing</span><input type="checkbox" data-pref="marketing"></label>
+  </div>
+
+  <div class="review-card">
+    <h3 style="font-weight:800;margin-bottom:6px">Language</h3>
+    <p class="muted" style="font-weight:600;margin-bottom:12px">Read Nile Link in your language.</p>
+    <button class="btn btn-ghost" data-open-lang><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:18px;height:18px"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15 15 0 0 1 0 20 15 15 0 0 1 0-20z"/></svg>Change language</button>
+  </div>
+
+  <div class="review-card" style="border-color:#f3c0c0">
+    <h3 style="font-weight:800;margin-bottom:6px;color:#dc2626">Danger zone</h3>
+    <p class="muted" style="font-weight:600;margin-bottom:12px">Permanently delete your account and all your listings.</p>
+    <button class="btn btn-ghost" id="deleteAcct" style="color:#dc2626;border-color:#f3c0c0">Delete my account</button>
+  </div>
+  <button class="btn btn-ghost btn-block" data-signout style="margin-bottom:30px">Sign out</button>
+</main>
+
+<div data-nl-footer></div>
+</div>
+<div data-nl-mobnav></div>
+<script defer src="../assets/js/data.js?v=20260622a"></script>
+<script defer src="../assets/js/api.js?v=20260622a"></script>
+<script defer src="../assets/js/core.js?v=20260622a"></script>
+<script defer src="../assets/js/i18n.js?v=20260622a"></script>
+<script>
+(function(){
+  function init(){
+    if(!window.NL)return setTimeout(init,50);
+    if(!NL.isAuthed()){location.href='signin.html?next='+encodeURIComponent('settings.html');return}
+    var u=NL.getUser()||{};
+    var sel=document.getElementById('setCity');
+    sel.innerHTML=(window.NLDATA?NLDATA.CITIES:['Juba']).map(function(c){return '<option'+((u.city||'Juba')===c?' selected':'')+'>'+c+'</option>'}).join('');
+    if(u.phone)document.getElementById('setPhone').value=(u.phone+'').replace('+211','').trim();
+    document.getElementById('saveAccount').addEventListener('click',function(){
+      u.name=document.getElementById('setName').value||u.name;u.city=sel.value;u.phone='+211 '+document.getElementById('setPhone').value;
+      NL.setUser(u);NL.toast('Changes saved',{type:'success'});
+    });
+    document.querySelectorAll('[data-pref]').forEach(function(cb){
+      var k='nl_pref_'+cb.dataset.pref;if(localStorage.getItem(k)==='0')cb.checked=false;
+      cb.addEventListener('change',function(){localStorage.setItem(k,cb.checked?'1':'0')});
+    });
+    document.getElementById('deleteAcct').addEventListener('click',function(){
+      if(confirm('Delete your account permanently? This cannot be undone.')){NL.signOut();}
+    });
+  }
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();
+})();
+</script>
+</body>
+</html>

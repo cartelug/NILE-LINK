@@ -195,7 +195,7 @@
 /* ============================================================
    HOW IT WORKS  — dark connected timeline
    ============================================================ */
-.how{background:linear-gradient(180deg,var(--ink-2),var(--ink));color:var(--tx-inv);position:relative;overflow:hidden;padding-top:clamp(70px,9vw,120px)}
+.how{background:linear-gradient(180deg,var(--ink-2),var(--ink));color:var(--tx-inv);position:relative;overflow:hidden;padding-top:clamp(96px,13vw,165px)}
 .how .wrap{position:relative;z-index:2}
 .how .sec-title{color:#fff}
 .how .sec-sub{color:var(--tx-inv-2)}
@@ -282,16 +282,17 @@
    ============================================================ */
 .hero::before{
   content:"";position:absolute;left:0;right:0;bottom:0;
-  height:170px;z-index:1;pointer-events:none;
+  height:200px;z-index:1;pointer-events:none;
   background:linear-gradient(180deg,
-    transparent 0%,
-    rgba(246,248,243,.05) 30%,
-    rgba(246,248,243,.22) 52%,
-    rgba(246,248,243,.55) 74%,
-    rgba(246,248,243,.9) 90%,
+    rgba(246,248,243,0) 0%,
+    rgba(246,248,243,.03) 15%,
+    rgba(246,248,243,.13) 35%,
+    rgba(246,248,243,.38) 55%,
+    rgba(246,248,243,.72) 76%,
+    rgba(246,248,243,.93) 90%,
     rgb(246,248,243) 100%);
 }
-@media(max-width:767px){.hero::before{height:120px}}
+@media(max-width:767px){.hero::before{height:140px}}
 /* slight extra darken so hero text is bolder against image */
 .hero-bg::before{content:"";position:absolute;inset:0;background:rgba(7,10,5,.10);z-index:1}
 
@@ -301,7 +302,7 @@
    ============================================================ */
 .stats{
   background:var(--lime);color:var(--ink);position:relative;
-  padding-block:clamp(70px,11vw,130px);
+  padding-block:clamp(100px,13vw,160px);
   clip-path:none;overflow:hidden;
   isolation:isolate;
 }
@@ -312,29 +313,31 @@
     radial-gradient(70% 50% at 50% 0%,rgba(255,255,255,.22) 0%,transparent 60%),
     radial-gradient(circle,rgba(10,14,8,.06) 1px,transparent 1.5px) 0 0/22px 22px;
 }
-/* Top fade-in FROM dark "How it works" (single fade — How has none) */
+/* Top fade-in FROM dark "How it works" — ends at lime(0), no grey band */
 .stats .stats-fade-top{
-  position:absolute;left:0;right:0;top:0;height:150px;z-index:1;pointer-events:none;
+  position:absolute;left:0;right:0;top:0;height:200px;z-index:1;pointer-events:none;
   background:linear-gradient(180deg,
     rgb(13,17,9) 0%,
-    rgba(13,17,9,.9) 10%,
-    rgba(13,17,9,.55) 26%,
-    rgba(13,17,9,.22) 45%,
-    rgba(13,17,9,.05) 66%,
-    transparent 100%);
+    rgba(13,17,9,.93) 10%,
+    rgba(13,17,9,.72) 24%,
+    rgba(13,17,9,.38) 45%,
+    rgba(13,17,9,.13) 65%,
+    rgba(13,17,9,.03) 85%,
+    rgba(13,17,9,0) 100%);
 }
 /* Bottom fade-out INTO light "Why" bento */
 .stats .stats-fade-bot{
-  position:absolute;left:0;right:0;bottom:0;height:150px;z-index:1;pointer-events:none;
+  position:absolute;left:0;right:0;bottom:0;height:200px;z-index:1;pointer-events:none;
   background:linear-gradient(180deg,
-    transparent 0%,
-    rgba(246,248,243,.05) 30%,
-    rgba(246,248,243,.22) 52%,
-    rgba(246,248,243,.55) 74%,
-    rgba(246,248,243,.9) 90%,
+    rgba(246,248,243,0) 0%,
+    rgba(246,248,243,.03) 15%,
+    rgba(246,248,243,.13) 35%,
+    rgba(246,248,243,.38) 55%,
+    rgba(246,248,243,.72) 76%,
+    rgba(246,248,243,.93) 90%,
     rgb(246,248,243) 100%);
 }
-@media(max-width:767px){.stats .stats-fade-top,.stats .stats-fade-bot{height:100px}}
+@media(max-width:767px){.stats .stats-fade-top,.stats .stats-fade-bot{height:140px}}
 .stats .wrap{position:relative;z-index:2}
 
 .stats-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;text-align:left}
@@ -383,7 +386,7 @@
 @keyframes smDrift2{50%{transform:translate(-12%,-10%) scale(1.12)}}
 @keyframes smDrift3{50%{transform:translate(-14%,16%) scale(1.22)}}
 @media(prefers-reduced-motion:reduce){.seller-mesh span{animation:none}}
-.seller-cta-inner{max-width:var(--maxw);margin-inline:auto;padding:clamp(56px,8vw,96px) 16px;display:grid;gap:36px;align-items:center;position:relative;z-index:2}
+.seller-cta-inner{max-width:var(--maxw);margin-inline:auto;padding:clamp(100px,13vw,165px) 16px clamp(96px,12vw,150px);display:grid;gap:36px;align-items:center;position:relative;z-index:2}
 @media(min-width:900px){.seller-cta-inner{grid-template-columns:1.1fr .9fr;padding-inline:32px}}
 .seller-cta h2{font-size:clamp(1.9rem,5vw,3.2rem);font-weight:900;letter-spacing:-.03em;line-height:1.04}
 .seller-cta h2 .hl{

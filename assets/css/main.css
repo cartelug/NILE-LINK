@@ -354,9 +354,9 @@ svg{display:block}
 .foot-flag{height:4px;background:linear-gradient(90deg,var(--ss-black) 0 20%,var(--ss-white) 20% 25%,var(--ss-red) 25% 45%,var(--ss-white) 45% 50%,var(--ss-green) 50% 70%,var(--ss-blue) 70% 100%)}
 .foot-bottom-inner{max-width:var(--maxw);margin-inline:auto;padding:20px 16px;display:flex;flex-direction:column;gap:10px;align-items:center;text-align:center;color:var(--tx-inv-2);font-size:.85rem}
 @media(min-width:768px){.foot-bottom-inner{flex-direction:row;justify-content:space-between;padding-inline:32px}}
-.foot-lang{display:flex;gap:6px}
-.foot-lang button{padding:5px 12px;border-radius:8px;border:1px solid var(--line-dark);color:var(--tx-inv-2);font-size:.8rem;font-weight:600}
-.foot-lang button.on{background:var(--lime);color:var(--ink);border-color:var(--lime)}
+.foot-lang-btn{display:inline-flex;align-items:center;gap:8px;padding:8px 14px;border-radius:var(--r-pill);border:1px solid var(--line-dark);color:var(--tx-inv);font-size:.82rem;font-weight:700;transition:.2s}
+.foot-lang-btn:hover{background:rgba(255,255,255,.06);border-color:var(--lime)}
+.foot-lang-btn svg{width:16px;height:16px;color:var(--lime)}
 
 /* ============================================================
    MOBILE BOTTOM NAV  (< 768px)
@@ -445,24 +445,24 @@ body.has-mobnav{padding-bottom:calc(64px + env(safe-area-inset-bottom))}
 .seller-map svg{width:min(90%,460px);height:auto;color:var(--lime)}
 
 /* ============================================================
-   SECTION-FADE SYSTEM v4
-   Each fade lives on a FULL-BLEED section (never on a .wrap
-   section), so it always spans the full viewport width. Exactly
-   ONE fade per boundary — no collisions, no black seam. Multi-stop
-   eased curves so the blend reads real, not banded. Concentrated
-   near the edge so it never sits behind section content.
-   Heights: 150px desktop / 100px mobile.
+   SECTION-FADE SYSTEM v6
+   Pro-grade. The classic mistake is fading to `transparent`, which is
+   transparent-BLACK — interpolation drags through a grey haze and reads
+   fake. Here every fade ends at rgba(targetColor,0): constant hue, only
+   alpha changes, so there is never a grey band. 6-stop eased curve,
+   220px desktop / 140px mobile, concentrated near the edge so it never
+   sits behind section content. One fade per boundary.
    ============================================================ */
-.fade-edge{position:absolute;left:0;right:0;height:100px;z-index:1;pointer-events:none}
-@media(min-width:768px){.fade-edge{height:150px}}
+.fade-edge{position:absolute;left:0;right:0;height:140px;z-index:1;pointer-events:none}
+@media(min-width:768px){.fade-edge{height:220px}}
 .fade-top{top:0}
 .fade-bot{bottom:0}
 /* TO a colour at the BOTTOM edge — blends down into the next section */
-.fade-to-bg{background:linear-gradient(180deg,transparent 0%,rgba(246,248,243,.05) 30%,rgba(246,248,243,.22) 52%,rgba(246,248,243,.55) 74%,rgba(246,248,243,.9) 90%,rgb(246,248,243) 100%)}
-.fade-to-ink2{background:linear-gradient(180deg,transparent 0%,rgba(13,17,9,.05) 30%,rgba(13,17,9,.22) 52%,rgba(13,17,9,.55) 74%,rgba(13,17,9,.9) 90%,rgb(13,17,9) 100%)}
+.fade-to-bg{background:linear-gradient(180deg,rgba(246,248,243,0) 0%,rgba(246,248,243,.03) 15%,rgba(246,248,243,.13) 35%,rgba(246,248,243,.38) 55%,rgba(246,248,243,.72) 76%,rgba(246,248,243,.93) 90%,rgb(246,248,243) 100%)}
+.fade-to-ink2{background:linear-gradient(180deg,rgba(13,17,9,0) 0%,rgba(13,17,9,.03) 15%,rgba(13,17,9,.13) 35%,rgba(13,17,9,.38) 55%,rgba(13,17,9,.72) 76%,rgba(13,17,9,.93) 90%,rgb(13,17,9) 100%)}
 /* FROM a colour at the TOP edge — the section above bleeds down into this one */
-.fade-from-bg{background:linear-gradient(180deg,rgb(246,248,243) 0%,rgba(246,248,243,.9) 10%,rgba(246,248,243,.55) 26%,rgba(246,248,243,.22) 45%,rgba(246,248,243,.05) 66%,transparent 100%)}
-.fade-from-ink2{background:linear-gradient(180deg,rgb(13,17,9) 0%,rgba(13,17,9,.9) 10%,rgba(13,17,9,.55) 26%,rgba(13,17,9,.22) 45%,rgba(13,17,9,.05) 66%,transparent 100%)}
+.fade-from-bg{background:linear-gradient(180deg,rgb(246,248,243) 0%,rgba(246,248,243,.93) 10%,rgba(246,248,243,.72) 24%,rgba(246,248,243,.38) 45%,rgba(246,248,243,.13) 65%,rgba(246,248,243,.03) 85%,rgba(246,248,243,0) 100%)}
+.fade-from-ink2{background:linear-gradient(180deg,rgb(13,17,9) 0%,rgba(13,17,9,.93) 10%,rgba(13,17,9,.72) 24%,rgba(13,17,9,.38) 45%,rgba(13,17,9,.13) 65%,rgba(13,17,9,.03) 85%,rgba(13,17,9,0) 100%)}
 
 /* ============================================================
    LANGUAGE PICKER  (first-visit modal)
