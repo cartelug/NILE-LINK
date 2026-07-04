@@ -1,5 +1,6 @@
 /* ============================================================
    NILE LINK — notifications.js
+   v2: realtime-aware (re-renders on nl:new-notification)
    ============================================================ */
 (function(){
   const D=window.NLDATA;const $=s=>document.querySelector(s);
@@ -13,8 +14,8 @@
   };
   function render(){
     NL.api.notifications.list().then(r=>{
-      const today=r.data.filter(n=>/m ago|h ago/.test(n.time));
-      const earlier=r.data.filter(n=>!/m ago|h ago/.test(n.time));
+      const today=r.data.filter(n=>/m ago|h ago|Just now/.test(n.time));
+      const earlier=r.data.filter(n=>!/m ago|h ago|Just now/.test(n.time));
       const grp=(label,items)=>items.length?'<div class="notif-group-label">'+label+'</div>'+items.map(card).join(''):'';
       $('#notifList').innerHTML=grp('Today',today)+grp('Earlier',earlier);
       NL.updateBadges();
@@ -28,6 +29,8 @@
     '</a>';
   }
   document.addEventListener('click',e=>{const a=e.target.closest('[data-nid]');if(a)NL.api.notifications.markRead(a.dataset.nid)});
+  document.addEventListener('nl:new-notification', ()=>{ render(); NL.toast&&NL.toast('New notification',{type:'info'}); });
+
   function init(){
     if(!NL.isAuthed()){location.href='signin.html?next='+encodeURIComponent('notifications.html');return}
     render();

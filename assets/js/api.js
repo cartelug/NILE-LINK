@@ -1,15 +1,21 @@
 /* ============================================================
-   NILE LINK — api.js
-   Thin, Promise-returning data facade. Today it wraps in-memory
-   mock data (NLDATA). To go live, replace each method body with
-   a fetch() to your backend — call sites never change.
+   NILE LINK — api.js  (v2, Supabase-backed with mock fallback)
+
+   Response shape: every method resolves to { ok, data } (or
+   { ok:false, error }). Keeps the pre-Supabase call sites intact.
+
+   Backend selection:
+     - If NL.sb (from supabase-client.js) is set, real Supabase is used.
+     - Otherwise, methods wrap the in-memory NLDATA arrays (mock).
    ============================================================ */
 window.NL=window.NL||{};
 (function(){
   const D=window.NLDATA;
-  const ok=(data)=>new Promise(res=>setTimeout(()=>res({ok:true,data}),120));
+  const ok=(data)=>Promise.resolve({ok:true,data});
+  const err=(error)=>Promise.resolve({ok:false,error});
+  const useSb=()=>!!NL.sb;
 
-  /* ---- Live USD → SSP rate ---- */
+  /* ---- Live USD → SSP rate (kept as-is) ---- */
   let RATE=4585;
   NL.getRate=()=>RATE;
   async function fetchLiveRate(){
@@ -44,10 +50,69 @@ window.NL=window.NL||{};
   }
   window.addEventListener('DOMContentLoaded',()=>{fetchLiveRate();setInterval(fetchLiveRate,5*60*1000)});
 
-  /* ---- API facade ---- */
-  NL.api={
-    listings:{
-      list:(opts={})=>{
+  /* ---- Row → UI shape mapper (Supabase row → what pages expect) ---- */
+  function rowToListing(r){
+    if(!r) return null;
+    return {
+      id: r.id,
+      title: r.title,
+      cat: r.cat,
+      key: r.key,
+      group: r.group,
+      type: r.type,
+      usd: Number(r.usd)||0,
+      from: !!r.from,
+      note: r.note || '',
+      loc: r.loc,
+      seller: r.seller_name || 'Seller',
+      badges: r.badges || [],
+      desc: r.descr || '',
+      img: r.img || '',
+      imgs: r.imgs || []
+    };
+  }
+  function rowToConversation(r){
+    if(!r) return null;
+    const me = NL.sb && NL.sb.auth.getUser ? null : null; // resolved by caller when needed
+    return {
+      id: r.id,
+      listingId: r.listing_id,
+      listingTitle: r.listing_title || '',
+      buyerId: r.buyer_id,
+      sellerId: r.seller_id,
+      // "with" is filled in when we know which side we are
+      with: '',
+      lastMsg: r.last_msg || '',
+      lastTime: r.last_time ? relativeTime(r.last_time) : '',
+      unread: 0,
+      verified: false,
+      avInitial: ''
+    };
+  }
+  function relativeTime(iso){
+    const d = new Date(iso).getTime(); if(!d) return '';
+    const diff = Math.max(0, Date.now() - d);
+    const m = Math.floor(diff/60000);
+    if(m < 1) return 'Just now';
+    if(m < 60) return m+'m ago';
+    const h = Math.floor(m/60); if(h < 24) return h+'h ago';
+    const days = Math.floor(h/24); if(days < 7) return days+'d ago';
+    return new Date(iso).toLocaleDateString();
+  }
+
+  async function currentUid(){
+    if(!useSb()) return null;
+    const { data } = await NL.sb.auth.getUser();
+    return data && data.user ? data.user.id : null;
+  }
+
+  /* ============================================================
+     LISTINGS
+     ============================================================ */
+  const listings = {
+    async list(opts={}){
+      if(!useSb()){
+        // ---- mock ----
         let r=D.LISTINGS.slice();
         if(opts.cats&&opts.cats.length)r=r.filter(x=>opts.cats.includes(x.key));
         if(opts.group&&opts.group!=='all')r=r.filter(x=>x.group===opts.group);
@@ -57,31 +122,277 @@ window.NL=window.NL||{};
         else if(opts.sort==='high')r.sort((a,b)=>b.usd-a.usd);
         else r.sort((a,b)=>(b.badges.includes('feat')?2:b.badges.includes('boost')?1:0)-(a.badges.includes('feat')?2:a.badges.includes('boost')?1:0));
         return ok(r);
-      },
-      get:(id)=>ok(D.LISTINGS.find(x=>x.id===+id)||null),
-      related:(id)=>{const it=D.LISTINGS.find(x=>x.id===+id);return ok(it?D.LISTINGS.filter(x=>x.key===it.key&&x.id!==it.id).slice(0,4):[])},
-      mine:()=>ok(D.SHOP),
-      create:(p)=>ok({id:Date.now(),...p}),
-      saveDraft:(p)=>ok({id:'d'+Date.now(),...p})
+      }
+      // ---- live ----
+      let q = NL.sb.from('v_listings').select('*').eq('status','live');
+      if(opts.cats && opts.cats.length) q = q.in('key', opts.cats);
+      if(opts.group && opts.group !== 'all') q = q.eq('group', opts.group);
+      if(opts.max) q = q.lte('usd', opts.max);
+      if(opts.search){
+        const s = String(opts.search).replace(/[%_]/g,'').trim();
+        if(s) q = q.or(`title.ilike.%${s}%,loc.ilike.%${s}%,cat.ilike.%${s}%`);
+      }
+      if(opts.sort==='low') q = q.order('usd',{ascending:true});
+      else if(opts.sort==='high') q = q.order('usd',{ascending:false});
+      else q = q.order('created_at',{ascending:false});
+      const { data, error } = await q.limit(120);
+      if(error) return err(error.message);
+      return ok((data||[]).map(rowToListing));
     },
-    requests:{list:()=>ok(D.REQUESTS)},
-    messages:{
-      conversations:()=>ok(D.CONVERSATIONS),
-      thread:(id)=>ok(D.MESSAGES[id]||[]),
-      send:(convId,text)=>{const m={from:'me',text,time:'Just now'};(D.MESSAGES[convId]=D.MESSAGES[convId]||[]).push(m);const c=D.CONVERSATIONS.find(x=>x.id===convId);if(c){c.lastMsg=text;c.lastTime='Just now'}return ok(m)}
+
+    async get(id){
+      if(!useSb()) return ok(D.LISTINGS.find(x=>x.id===+id)||null);
+      const { data, error } = await NL.sb.from('v_listings').select('*').eq('id', +id).maybeSingle();
+      if(error) return err(error.message);
+      return ok(rowToListing(data));
     },
-    notifications:{
-      list:()=>ok(D.NOTIFICATIONS),
-      unread:()=>ok(D.NOTIFICATIONS.filter(n=>!n.read).length),
-      markRead:(id)=>{const n=D.NOTIFICATIONS.find(x=>x.id===id);if(n)n.read=true;return ok(n)},
-      markAllRead:()=>{D.NOTIFICATIONS.forEach(n=>n.read=true);return ok(D.NOTIFICATIONS)}
+
+    async related(id){
+      if(!useSb()){
+        const it=D.LISTINGS.find(x=>x.id===+id);
+        return ok(it?D.LISTINGS.filter(x=>x.key===it.key&&x.id!==it.id).slice(0,4):[]);
+      }
+      const { data: item } = await NL.sb.from('listings').select('key').eq('id', +id).maybeSingle();
+      if(!item) return ok([]);
+      const { data, error } = await NL.sb.from('v_listings').select('*')
+        .eq('status','live').eq('key', item.key).neq('id', +id).limit(4);
+      if(error) return err(error.message);
+      return ok((data||[]).map(rowToListing));
     },
-    /* ---- Auth (UI-ready; wire to your backend / OTP provider) ---- */
-    auth:{
-      requestOtp:(phone)=>ok({phone,sent:true}),
-      verifyOtp:(phone,code)=>code&&code.length===6?ok({token:'demo',user:{name:'Neeza',phone,initials:'NS',role:'both',city:'Juba'}}):Promise.resolve({ok:false,error:'Invalid code'}),
-      signUp:(p)=>ok({token:'demo',user:{name:p.name||'New User',phone:p.phone,initials:(p.name||'NU').split(' ').map(s=>s[0]).slice(0,2).join('').toUpperCase(),role:p.role||'buyer',city:p.city||'Juba'}})
+
+    async mine(){
+      if(!useSb()) return ok(D.SHOP);
+      const uid = await currentUid(); if(!uid) return ok([]);
+      const { data, error } = await NL.sb.from('v_listings').select('*').eq('owner_id', uid).order('created_at',{ascending:false});
+      if(error) return err(error.message);
+      return ok((data||[]).map(rowToListing));
     },
-    rate:{get:()=>ok(RATE)}
+
+    async create(p){
+      if(!useSb()) return ok({id:Date.now(),...p});
+      const uid = await currentUid(); if(!uid) return err('Not signed in');
+      const row = {
+        owner_id: uid,
+        title: p.title || 'Untitled',
+        cat: p.cat || 'Other',
+        key: p.key || 'electronics',
+        "group": D.groupForCat(p.key) || 'products',
+        type: D.typeForCat(p.key) || 'order',
+        usd: p.usd || 0,
+        "from": !!p.from,
+        note: p.note || '',
+        loc: p.loc || 'Juba',
+        descr: p.desc || '',
+        img: p.img || (p.imgs && p.imgs[0]) || '',
+        imgs: p.imgs || [],
+        status: 'live'
+      };
+      const { data, error } = await NL.sb.from('listings').insert(row).select().single();
+      if(error) return err(error.message);
+      return ok({id: data.id, ...p});
+    },
+
+    async saveDraft(p){
+      if(!useSb()) return ok({id:'d'+Date.now(),...p});
+      const uid = await currentUid(); if(!uid) return err('Not signed in');
+      const { data, error } = await NL.sb.from('drafts').insert({
+        owner_id: uid,
+        payload: p,
+        pct: p.pct || 30,
+        missing: p.missing || ''
+      }).select().single();
+      if(error) return err(error.message);
+      return ok({id: data.id, ...p});
+    }
   };
+
+  /* ============================================================
+     MESSAGES
+     ============================================================ */
+  const messages = {
+    async conversations(){
+      if(!useSb()) return ok(D.CONVERSATIONS);
+      const uid = await currentUid(); if(!uid) return ok([]);
+      const { data, error } = await NL.sb.from('v_conversations').select('*')
+        .or(`buyer_id.eq.${uid},seller_id.eq.${uid}`)
+        .order('updated_at',{ascending:false});
+      if(error) return err(error.message);
+      const rows = (data||[]).map(r=>{
+        const isBuyer = r.buyer_id === uid;
+        return {
+          id: r.id,
+          listingId: r.listing_id,
+          listingTitle: r.listing_title || '',
+          with: isBuyer ? (r.seller_name||'Seller') : (r.buyer_name||'Buyer'),
+          lastMsg: r.last_msg || '',
+          lastTime: r.last_time ? relativeTime(r.last_time) : '',
+          unread: isBuyer ? (r.unread_for_buyer||0) : (r.unread_for_seller||0),
+          verified: isBuyer ? !!r.seller_verified : !!r.buyer_verified,
+          avInitial: ((isBuyer ? r.seller_name : r.buyer_name) || '?').charAt(0).toUpperCase()
+        };
+      });
+      return ok(rows);
+    },
+
+    async thread(id){
+      if(!useSb()) return ok(D.MESSAGES[id]||[]);
+      const uid = await currentUid();
+      const { data, error } = await NL.sb.from('messages').select('*')
+        .eq('conversation_id', id).order('created_at',{ascending:true}).limit(300);
+      if(error) return err(error.message);
+      // Mark thread read for this user
+      const conv = await NL.sb.from('conversations').select('buyer_id,seller_id').eq('id',id).maybeSingle();
+      if(conv.data){
+        const patch = conv.data.buyer_id === uid ? {unread_for_buyer:0} : {unread_for_seller:0};
+        await NL.sb.from('conversations').update(patch).eq('id', id);
+      }
+      const rows = (data||[]).map(m=>({
+        from: m.sender_id === uid ? 'me' : 'them',
+        text: m.body,
+        image: m.image_url || undefined,
+        time: relativeTime(m.created_at)
+      }));
+      return ok(rows);
+    },
+
+    async send(convId, text){
+      if(!useSb()){
+        const m={from:'me',text,time:'Just now'};
+        (D.MESSAGES[convId]=D.MESSAGES[convId]||[]).push(m);
+        const c=D.CONVERSATIONS.find(x=>x.id===convId);
+        if(c){c.lastMsg=text;c.lastTime='Just now'}
+        return ok(m);
+      }
+      const uid = await currentUid(); if(!uid) return err('Not signed in');
+      const { data, error } = await NL.sb.from('messages').insert({
+        conversation_id: convId, sender_id: uid, body: text
+      }).select().single();
+      if(error) return err(error.message);
+      return ok({from:'me', text, time:'Just now', id:data.id});
+    },
+
+    // New: start (or return existing) conversation about a listing
+    async startWith(listingId){
+      if(!useSb()) return ok({id:'c-mock', with:'Seller'});
+      const uid = await currentUid(); if(!uid) return err('Not signed in');
+      const { data: l } = await NL.sb.from('listings').select('owner_id').eq('id', +listingId).maybeSingle();
+      if(!l) return err('Listing not found');
+      const sellerId = l.owner_id;
+      if(sellerId === uid) return err("You can't message yourself");
+      // upsert
+      const { data, error } = await NL.sb.from('conversations')
+        .upsert({ listing_id:+listingId, buyer_id: uid, seller_id: sellerId }, { onConflict: 'listing_id,buyer_id,seller_id' })
+        .select().single();
+      if(error) return err(error.message);
+      return ok({id: data.id});
+    }
+  };
+
+  /* ============================================================
+     NOTIFICATIONS
+     ============================================================ */
+  const notifications = {
+    async list(){
+      if(!useSb()) return ok(D.NOTIFICATIONS);
+      const uid = await currentUid(); if(!uid) return ok([]);
+      const { data, error } = await NL.sb.from('notifications').select('*')
+        .eq('user_id', uid).order('created_at',{ascending:false}).limit(50);
+      if(error) return err(error.message);
+      return ok((data||[]).map(n=>({
+        id: n.id, type: n.type, title: n.title, body: n.body,
+        time: relativeTime(n.created_at), read: !!n.read, link: n.link, icon: n.icon
+      })));
+    },
+    async unread(){
+      if(!useSb()) return ok(D.NOTIFICATIONS.filter(n=>!n.read).length);
+      const uid = await currentUid(); if(!uid) return ok(0);
+      const { count, error } = await NL.sb.from('notifications')
+        .select('id', {count:'exact', head:true}).eq('user_id', uid).eq('read', false);
+      if(error) return err(error.message);
+      return ok(count||0);
+    },
+    async markRead(id){
+      if(!useSb()){const n=D.NOTIFICATIONS.find(x=>x.id===id);if(n)n.read=true;return ok(n)}
+      const { data, error } = await NL.sb.from('notifications').update({read:true}).eq('id', id).select().maybeSingle();
+      if(error) return err(error.message);
+      return ok(data);
+    },
+    async markAllRead(){
+      if(!useSb()){D.NOTIFICATIONS.forEach(n=>n.read=true);return ok(D.NOTIFICATIONS)}
+      const uid = await currentUid(); if(!uid) return ok([]);
+      const { error } = await NL.sb.from('notifications').update({read:true}).eq('user_id', uid).eq('read', false);
+      if(error) return err(error.message);
+      return ok([]);
+    }
+  };
+
+  /* ============================================================
+     REQUESTS (kept as mock — surfaces on dashboard only)
+     ============================================================ */
+  const requests = { list: ()=> ok(D.REQUESTS) };
+
+  /* ============================================================
+     AUTH (mock kept per project decision — real OTP wired later)
+     supabase-client.js already signs the user in anonymously so
+     Supabase writes (listings/messages/etc.) have a valid uid.
+     ============================================================ */
+  const auth = {
+    async requestOtp(phone){ return ok({phone, sent:true}); },
+    async verifyOtp(phone, code){
+      if(!(code && code.length===6)) return err('Invalid code');
+      const uid = await currentUid();
+      const user = {
+        id: uid, name:'Neeza', phone, initials:'NS', role:'both', city:'Juba'
+      };
+      // Persist name/phone/role to profiles so listings show a real seller name
+      if(useSb() && uid){
+        await NL.sb.from('profiles').upsert({
+          id: uid, name: user.name, phone, role:'both', city:'Juba'
+        });
+      }
+      return ok({token:'demo', user});
+    },
+    async signUp(p){
+      const uid = await currentUid();
+      const user = {
+        id: uid,
+        name: p.name || 'New User',
+        phone: p.phone,
+        initials: (p.name||'NU').split(' ').map(s=>s[0]).slice(0,2).join('').toUpperCase(),
+        role: p.role || 'buyer',
+        city: p.city || 'Juba'
+      };
+      if(useSb() && uid){
+        await NL.sb.from('profiles').upsert({
+          id: uid, name: user.name, phone: user.phone, role: user.role, city: user.city
+        });
+      }
+      return ok({token:'demo', user});
+    }
+  };
+
+  /* ============================================================
+     Storage helpers (used by post.js photo upload)
+     ============================================================ */
+  const storage = {
+    async uploadPhoto(file){
+      if(!useSb()){
+        return new Promise(res=>{
+          const r=new FileReader();
+          r.onload=e=>res({ok:true, data:{url:e.target.result}});
+          r.readAsDataURL(file);
+        });
+      }
+      const uid = await currentUid(); if(!uid) return err('Not signed in');
+      const path = `${uid}/${Date.now()}-${(file.name||'photo').replace(/[^A-Za-z0-9._-]/g,'_')}`;
+      const { error } = await NL.sb.storage.from(NL.sbBucket).upload(path, file, {
+        cacheControl:'3600', upsert:false, contentType: file.type || 'image/jpeg'
+      });
+      if(error) return err(error.message);
+      const { data } = NL.sb.storage.from(NL.sbBucket).getPublicUrl(path);
+      return ok({url: data.publicUrl, path});
+    }
+  };
+
+  NL.api = { listings, messages, notifications, requests, auth, storage, rate:{get:()=>ok(RATE)} };
 })();

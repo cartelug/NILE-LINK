@@ -1,5 +1,5 @@
 /* ============================================================
-   NILE LINK — messages.js  (v2 — premium chat)
+   NILE LINK — messages.js  (v3 — premium chat + realtime)
    ============================================================ */
 (function(){
   const D=window.NLDATA;const $=s=>document.querySelector(s);
@@ -8,6 +8,7 @@
   const ONLINE={c1:true,c2:false,c3:true,c4:false,c5:true};
   const QREPLIES=['Is it still available?','Best price?','Where can we meet?','Can you deliver?','I\'ll take it','Send more photos'];
   const EMOJIS=['😀','😁','😂','🤣','😊','😍','🥰','😘','😎','🤔','😅','😢','😡','👍','👎','🙏','👏','💪','🤝','❤️','🔥','💯','✨','🎉','✅','❌','⚡','💰','📦','🚗','🏠','📱'];
+  const isLive = ()=> !!NL.sb;
 
   function renderList(filter){
     const f=(filter||'').toLowerCase();
@@ -24,11 +25,6 @@
       '</div>').join('');
   }
 
-  function dateLabel(i,arr){
-    if(i===0)return 'Today';
-    return null;
-  }
-
   function bubble(m){
     if(m.img)return '<div class="bubble with-img '+(m.from==='me'?'me':'them')+'"><img src="'+m.img+'" alt="image" loading="lazy"><span class="b-time">'+m.time+(m.from==='me'?receiptHTML(m):'')+'</span></div>';
     return '<div class="bubble '+(m.from==='me'?'me':'them')+'">'+m.text+'<span class="b-time">'+m.time+(m.from==='me'?receiptHTML(m):'')+'</span></div>';
@@ -39,6 +35,8 @@
   }
 
   function listingPin(c){
+    // In live mode we don't have the full listing cached — fall back to title only.
+    if(isLive()) return c.listingTitle ? '<div class="thread-pinned"><a href="listing.html?id='+c.listingId+'"><div class="pi"><b>'+c.listingTitle+'</b></div></a></div>' : '';
     const it=D.LISTINGS.find(l=>l.id===c.listingId);
     if(!it)return '';
     return '<div class="thread-pinned"><a href="listing.html?id='+it.id+'"><div class="pt">'+(it.img?'<img src="'+it.img+'" alt="">':NL.glyph(it.key,22))+'</div><div class="pi"><b>'+it.title+'</b><span>'+(it.from?'From ':'')+NL.fmtUSD(it.usd)+(it.note||'')+'</span></div><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" style="width:18px;height:18px;color:var(--tx-3)"><path d="M9 6l6 6-6 6"/></svg></a></div>';
@@ -81,12 +79,21 @@
   }
 
   function bindCompose(id,c,body){
-    const pending=[];
+    const pending=[]; // in mock mode: base64 data URLs. In live mode: uploaded URLs.
     const inp=$('#composeInput');
     const prev=$('#composePrev');
     $('#attachBtn').addEventListener('click',()=>$('#photoInput').click());
-    $('#photoInput').addEventListener('change',e=>{
-      [...e.target.files].slice(0,4-pending.length).forEach(f=>{const r=new FileReader();r.onload=ev=>{pending.push(ev.target.result);renderPrev()};r.readAsDataURL(f)});
+    $('#photoInput').addEventListener('change', async e=>{
+      const files=[...e.target.files].slice(0,4-pending.length);
+      for(const f of files){
+        if(isLive()){
+          const r=await NL.api.storage.uploadPhoto(f);
+          if(r.ok) pending.push(r.data.url);
+        }else{
+          await new Promise(res=>{const r=new FileReader();r.onload=ev=>{pending.push(ev.target.result);res()};r.readAsDataURL(f)});
+        }
+      }
+      renderPrev();
       e.target.value='';
     });
     function renderPrev(){
@@ -101,19 +108,38 @@
 
     document.querySelectorAll('[data-qr]').forEach(b=>b.addEventListener('click',()=>{inp.value=b.dataset.qr;inp.focus()}));
 
-    $('#composeForm').addEventListener('submit',e=>{
+    $('#composeForm').addEventListener('submit', async e=>{
       e.preventDefault();
       const txt=inp.value.trim();
       // send images first
-      pending.forEach(img=>{const m={from:'me',img,time:'Now',seen:false};D.MESSAGES[id].push(m);body.insertAdjacentHTML('beforeend',bubble(m))});
+      for(const img of pending){
+        if(isLive()){
+          // TODO: extend NL.api.messages.send to accept an image_url — for now,
+          // send an image message via a direct insert.
+          const uid = (await NL.sb.auth.getUser()).data.user.id;
+          await NL.sb.from('messages').insert({conversation_id:id, sender_id:uid, body:'', image_url: img});
+        }else{
+          const m={from:'me',img,time:'Now',seen:false};D.MESSAGES[id].push(m);body.insertAdjacentHTML('beforeend',bubble(m));
+        }
+      }
       pending.length=0;renderPrev();
-      if(txt){NL.api.messages.send(id,txt).then(res=>{res.data.seen=false;body.insertAdjacentHTML('beforeend',bubble(res.data));body.scrollTop=body.scrollHeight;renderList()});inp.value=''}
+      if(txt){
+        const res = await NL.api.messages.send(id,txt);
+        if(res.ok){
+          if(!isLive()){ res.data.seen=false; body.insertAdjacentHTML('beforeend',bubble(res.data)); }
+          // in live mode, the realtime listener will echo it back
+          inp.value='';
+          renderList();
+        }else{
+          NL.toast(res.error||'Send failed',{type:'error'});
+        }
+      }
       body.scrollTop=body.scrollHeight;
-      // simulate typing + reply
-      setTimeout(()=>{const t=document.createElement('div');t.className='typing';t.id='typing';t.innerHTML='<span></span><span></span><span></span>';body.appendChild(t);body.scrollTop=body.scrollHeight},700);
-      setTimeout(()=>{const t=$('#typing');if(t)t.remove();const reply={from:'them',text:'Thanks! Let me check and get back to you.',time:'Just now'};D.MESSAGES[id].push(reply);body.insertAdjacentHTML('beforeend',bubble(reply));// mark previous as seen
-        document.querySelectorAll('.bubble.me .receipts').forEach(r=>r.classList.add('seen'));
-        body.scrollTop=body.scrollHeight;renderList();},2100);
+      // mock-mode only: simulate typing + reply
+      if(!isLive()){
+        setTimeout(()=>{const t=document.createElement('div');t.className='typing';t.id='typing';t.innerHTML='<span></span><span></span><span></span>';body.appendChild(t);body.scrollTop=body.scrollHeight},700);
+        setTimeout(()=>{const t=$('#typing');if(t)t.remove();const reply={from:'them',text:'Thanks! Let me check and get back to you.',time:'Just now'};D.MESSAGES[id].push(reply);body.insertAdjacentHTML('beforeend',bubble(reply));document.querySelectorAll('.bubble.me .receipts').forEach(r=>r.classList.add('seen'));body.scrollTop=body.scrollHeight;renderList();},2100);
+      }
     });
 
     // image lightbox
@@ -124,11 +150,41 @@
 
   document.addEventListener('click',e=>{const c=e.target.closest('[data-conv]');if(c)openConv(c.dataset.conv)});
 
+  /* ------------ Realtime hooks ------------ */
+  async function myUid(){
+    if(!NL.sb) return null;
+    const { data } = await NL.sb.auth.getUser();
+    return data && data.user ? data.user.id : null;
+  }
+  document.addEventListener('nl:new-message', async ev=>{
+    const m = ev.detail; if(!m) return;
+    const uid = await myUid();
+    // If the message belongs to the open conversation, append it
+    if(m.conversation_id === active){
+      const body = $('#threadBody'); if(!body) return;
+      // Suppress our own echo if it's already rendered (mock did that; live doesn't)
+      const bub = { from: m.sender_id===uid ? 'me' : 'them', text: m.body||'', img: m.image_url||undefined, time:'Just now', seen: false };
+      body.insertAdjacentHTML('beforeend', bubble(bub));
+      body.scrollTop = body.scrollHeight;
+    }else{
+      // Bump the conv list preview
+      const c = convs.find(x=>x.id===m.conversation_id);
+      if(c){ c.lastMsg = m.body || (m.image_url?'📷 Photo':''); c.lastTime='Just now'; c.unread=(c.unread||0)+1; renderList($('#convSearch')?$('#convSearch').value:''); NL.updateBadges(); }
+      else{
+        // New conversation — refetch the list
+        NL.api.messages.conversations().then(r=>{ convs=r.data; renderList($('#convSearch')?$('#convSearch').value:''); });
+      }
+    }
+  });
+  document.addEventListener('nl:conv-updated', ()=>{
+    // Cheap refresh — bump order + previews
+    NL.api.messages.conversations().then(r=>{ convs=r.data; renderList($('#convSearch')?$('#convSearch').value:''); });
+  });
+
   function init(){
     if(!NL.isAuthed()){location.href='signin.html?next='+encodeURIComponent('messages.html');return}
     NL.api.messages.conversations().then(r=>{
       convs=r.data;
-      // inject search bar above conv list
       const head=document.querySelector('.conv-list-head');
       if(head&&!document.getElementById('convSearch')){
         const sb=document.createElement('div');sb.className='conv-search';sb.innerHTML='<input id="convSearch" type="search" placeholder="Search conversations…">';head.after(sb);
@@ -138,7 +194,18 @@
       const p=new URLSearchParams(location.search);
       const cid=p.get('c');const listing=p.get('listing');
       if(cid)openConv(cid);
-      else if(listing){const c=convs.find(x=>x.listingId===+listing);if(c)openConv(c.id)}
+      else if(listing){
+        // Start a conversation with the seller of this listing (live only)
+        if(isLive()){
+          NL.api.messages.startWith(listing).then(res=>{
+            if(res.ok){
+              NL.api.messages.conversations().then(r2=>{ convs=r2.data; renderList(); openConv(res.data.id); });
+            }
+          });
+        }else{
+          const c=convs.find(x=>x.listingId===+listing);if(c)openConv(c.id);
+        }
+      }
       else if(window.innerWidth>=768&&convs.length)openConv(convs[0].id);
     });
   }
