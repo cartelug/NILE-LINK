@@ -105,7 +105,14 @@
       NL.toast('Offer of $'+amt+' sent to the seller ✓',{type:'success'});
     }
     if(e.target.closest('[data-copy-link]')){navigator.clipboard&&navigator.clipboard.writeText(location.href);NL.toast('Link copied',{type:'success'})}
-    if(e.target.closest('[data-report]')){NL.toast('Report submitted — thank you',{type:'info'})}
+    if(e.target.closest('[data-report]')){
+      if(!NL.isAuthed()){location.href='signin.html?next='+encodeURIComponent('listing.html'+location.search);return}
+      const reason=prompt('Why are you reporting this listing? (e.g. scam, wrong info, already sold)');
+      if(reason===null)return;
+      NL.api.reports.file(id,reason||'Reported').then(r=>{
+        NL.toast(r.ok?'Report submitted — thank you':(r.error||'Could not submit report'),{type:r.ok?'success':'error'});
+      });
+    }
   });
 
   /* sticky show on scroll */

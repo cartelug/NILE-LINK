@@ -332,6 +332,21 @@ window.NL=window.NL||{};
   const requests = { list: ()=> ok(D.REQUESTS) };
 
   /* ============================================================
+     REPORTS — file a listing report (feeds the admin moderation queue)
+     ============================================================ */
+  const reports = {
+    async file(listingId, reason){
+      if(!useSb()) return ok({filed:true});
+      const uid = await currentUid(); if(!uid) return err('Please sign in to report');
+      const { error } = await NL.sb.from('reports').insert({
+        listing_id: +listingId, reporter_id: uid, reason: (reason||'Reported').slice(0,300), details:''
+      });
+      if(error) return err(error.message);
+      return ok({filed:true});
+    }
+  };
+
+  /* ============================================================
      AUTH — real email/password + Google (Supabase Auth).
      When NL.sb is present these hit Supabase; otherwise a mock
      fallback keeps the site usable without keys.
@@ -422,5 +437,5 @@ window.NL=window.NL||{};
     }
   };
 
-  NL.api = { listings, messages, notifications, requests, auth, storage, rate:{get:()=>ok(RATE)} };
+  NL.api = { listings, messages, notifications, requests, reports, auth, storage, rate:{get:()=>ok(RATE)} };
 })();

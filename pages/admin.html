@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Admin — Nile Link</title>
+<meta name="robots" content="noindex,nofollow">
+<meta name="theme-color" content="#0a0e08">
+<link rel="icon" type="image/svg+xml" href="../assets/images/favicon.svg?v=20260704c">
+<link rel="apple-touch-icon" href="../assets/images/apple-touch-icon.png?v=20260704c">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@0,400;0,500;0,600;0,700;0,800;0,900&display=swap" rel="stylesheet">
+<style>
+  :root{ --lime:#7CFC00; --ink:#0a0e08; --slate:#69736b; --line:#e7ebe4; --deep:#4d7c0f; --soft:#f3fbe8; --paper:#fff; }
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:'Montserrat',system-ui,sans-serif;background:#f6f8f3;color:var(--ink);min-height:100vh}
+  a{color:inherit}
+  /* Gate */
+  #adminGate{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px;background:var(--ink)}
+  .gate-card{background:var(--paper);border-radius:18px;padding:34px 28px;max-width:400px;width:100%;box-shadow:0 24px 60px rgba(0,0,0,.35)}
+  .gate-logo{display:flex;align-items:center;gap:10px;justify-content:center;margin-bottom:18px}
+  .gate-logo img{width:42px;height:42px;border-radius:10px}
+  .gate-logo b{font-size:20px;font-weight:800}
+  .gate-logo b span{color:var(--deep)}
+  .gate-card h1{font-size:20px;text-align:center;margin-bottom:6px}
+  .gate-card p{color:var(--slate);text-align:center;font-size:.85rem;margin-bottom:18px;font-weight:600}
+  .gate-card input{width:100%;padding:13px 15px;border:1.5px solid var(--line);border-radius:12px;font-size:1rem;font-weight:600;font-family:inherit}
+  .gate-card input:focus{outline:none;border-color:var(--lime)}
+  .gate-card button{width:100%;margin-top:12px;padding:13px;border:0;border-radius:12px;background:var(--lime);color:var(--ink);font-weight:800;font-size:1rem;cursor:pointer;font-family:inherit}
+  #gateErr{color:#c0392b;font-size:.8rem;text-align:center;margin-top:10px;font-weight:700;min-height:1em}
+  /* App */
+  #adminApp{display:none;max-width:1080px;margin:0 auto;padding:20px 16px 60px}
+  .topbar{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:18px;flex-wrap:wrap}
+  .brand{display:flex;align-items:center;gap:10px}
+  .brand img{width:34px;height:34px;border-radius:9px}
+  .brand b{font-size:18px;font-weight:800}
+  .brand b span{color:var(--deep)}
+  .brand .tag{font-size:.62rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;background:var(--ink);color:var(--lime);padding:3px 8px;border-radius:6px;margin-left:4px}
+  .topbtns{display:flex;gap:8px}
+  .topbtns button{border:1.5px solid var(--line);background:var(--paper);border-radius:10px;padding:8px 14px;font-weight:700;font-size:.82rem;cursor:pointer;font-family:inherit}
+  .stats{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-bottom:18px}
+  .stat{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:14px}
+  .stat .v{font-size:1.5rem;font-weight:800;line-height:1}
+  .stat .k{font-size:.72rem;color:var(--slate);font-weight:700;margin-top:5px}
+  .stat.live .v{color:var(--deep)} .stat.warn .v{color:#b8860b}
+  .atabs{display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap}
+  .atab{border:1.5px solid var(--line);background:var(--paper);border-radius:999px;padding:9px 18px;font-weight:700;font-size:.85rem;cursor:pointer;font-family:inherit}
+  .atab.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+  .tblwrap{overflow-x:auto;background:var(--paper);border:1px solid var(--line);border-radius:14px}
+  table.atbl{width:100%;border-collapse:collapse;font-size:.86rem;min-width:560px}
+  table.atbl th{text-align:left;background:#fafcf7;color:var(--slate);font-size:.72rem;letter-spacing:.03em;text-transform:uppercase;padding:11px 14px;border-bottom:1px solid var(--line)}
+  table.atbl td{padding:12px 14px;border-bottom:1px solid var(--line);vertical-align:middle}
+  table.atbl tr:last-child td{border-bottom:0}
+  table.atbl .sub{color:var(--slate);font-size:.74rem;font-weight:600;margin-top:2px}
+  td.num,td.right{text-align:right;white-space:nowrap} th:last-child{text-align:right}
+  .chip{display:inline-block;padding:3px 9px;border-radius:999px;font-size:.68rem;font-weight:800;text-transform:capitalize}
+  .chip.ok{background:var(--soft);color:var(--deep)} .chip.bad{background:#fde8e8;color:#c0392b} .chip.warn{background:#fff3d6;color:#8a5a00} .chip.muted{background:#eef0ec;color:var(--slate)}
+  .mini{border:1.5px solid var(--line);background:var(--paper);border-radius:8px;padding:6px 11px;font-weight:700;font-size:.76rem;cursor:pointer;font-family:inherit;margin-left:6px}
+  .mini.danger{color:#c0392b;border-color:#f3c0c0}
+  .lnk{color:var(--deep);font-weight:700;font-size:.76rem;text-decoration:none;margin-left:6px}
+  .loading,.empty,.err{padding:40px 16px;text-align:center;color:var(--slate);font-weight:600}
+  .err{color:#c0392b}
+  @media(max-width:640px){ .stats{grid-template-columns:repeat(2,1fr)} }
+</style>
+</head>
+<body>
+
+<!-- GATE -->
+<div id="adminGate">
+  <form class="gate-card" id="gateForm">
+    <div class="gate-logo"><img src="../assets/images/logo.png" alt=""><b>Nile<span>Link</span></b></div>
+    <h1>Admin access</h1>
+    <p>Enter your admin key to manage listings, reports and sellers.</p>
+    <input id="gateKey" type="password" placeholder="Admin key" autocomplete="off" autocapitalize="off" spellcheck="false">
+    <button type="submit">Unlock</button>
+    <div id="gateErr"></div>
+  </form>
+</div>
+
+<!-- APP -->
+<div id="adminApp">
+  <div class="topbar">
+    <div class="brand"><img src="../assets/images/logo.png" alt=""><b>Nile<span>Link</span></b><span class="tag">Admin</span></div>
+    <div class="topbtns">
+      <button id="refreshBtn">↻ Refresh</button>
+      <button id="lockBtn">Lock</button>
+    </div>
+  </div>
+
+  <div class="stats" id="stats"></div>
+
+  <div class="atabs">
+    <button class="atab on" data-tab="listings">Listings</button>
+    <button class="atab" data-tab="reports">Reports</button>
+    <button class="atab" data-tab="sellers">Sellers</button>
+  </div>
+
+  <div id="tabBody"></div>
+</div>
+
+<script defer src="../assets/js/supabase-config.js?v=20260704c"></script>
+<script defer src="../assets/js/supabase-client.js?v=20260704c"></script>
+<script defer src="../assets/js/data.js?v=20260704c"></script>
+<script defer src="../assets/js/api.js?v=20260704c"></script>
+<script defer src="../assets/js/core.js?v=20260704c"></script>
+<script defer src="../assets/js/admin.js?v=20260704c"></script>
+</body>
+</html>
