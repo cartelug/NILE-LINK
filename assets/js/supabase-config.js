@@ -7,7 +7,7 @@
    ============================================================ */
 window.NL_SUPABASE = {
   // From: Supabase Dashboard → Project Settings → API
-  url: '',                // e.g. 'https://xxxxxxxxxxxx.supabase.co'
-  anonKey: '',            // long JWT starting with 'eyJhbGciOi...'
+  url: 'https://eztxmvkwkgjlqkcwhqqv.supabase.co',
+  anonKey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImV6dHhtdmt3a2dqbHFrY3docXF2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODMxNjA1ODUsImV4cCI6MjA5ODczNjU4NX0.c6SkIgTkE0G1F4-ABWvWS8i9wrrGW4ms7p0a21yD5Uo',
   storageBucket: 'listing-photos'
 };
