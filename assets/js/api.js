@@ -332,42 +332,70 @@ window.NL=window.NL||{};
   const requests = { list: ()=> ok(D.REQUESTS) };
 
   /* ============================================================
-     AUTH (mock kept per project decision — real OTP wired later)
-     supabase-client.js already signs the user in anonymously so
-     Supabase writes (listings/messages/etc.) have a valid uid.
+     AUTH — real email/password + Google (Supabase Auth).
+     When NL.sb is present these hit Supabase; otherwise a mock
+     fallback keeps the site usable without keys.
+     The site's nl_user localStorage mirror is kept in sync by
+     supabase-client.js (NL.syncUser) on every auth state change.
      ============================================================ */
+  function mockUser(p){
+    const name = p.name || (p.email? p.email.split('@')[0] : 'You');
+    return { id:'mock', name, email:p.email||'', phone:'', initials:(name).split(' ').map(s=>s[0]).slice(0,2).join('').toUpperCase(), role:p.role||'both', city:p.city||'Juba' };
+  }
   const auth = {
-    async requestOtp(phone){ return ok({phone, sent:true}); },
-    async verifyOtp(phone, code){
-      if(!(code && code.length===6)) return err('Invalid code');
-      const uid = await currentUid();
-      const user = {
-        id: uid, name:'Neeza', phone, initials:'NS', role:'both', city:'Juba'
-      };
-      // Persist name/phone/role to profiles so listings show a real seller name
-      if(useSb() && uid){
-        await NL.sb.from('profiles').upsert({
-          id: uid, name: user.name, phone, role:'both', city:'Juba'
-        });
+    // Create account with email + password
+    async signUpEmail(p){
+      if(!useSb()) return ok({ user: mockUser(p), needsConfirm:false });
+      const { data, error } = await NL.sb.auth.signUp({
+        email: p.email, password: p.password,
+        options: { data: { name: p.name || '' } }
+      });
+      if(error) return err(error.message);
+      // If a session came back (email confirmation OFF), write the profile now.
+      if(data.session && data.user){
+        try{ await NL.sb.from('profiles').upsert({
+          id: data.user.id, name: p.name || '', role: p.role || 'both', city: p.city || 'Juba'
+        }); }catch(_){}
       }
-      return ok({token:'demo', user});
+      return ok({ user: data.user, needsConfirm: !data.session });
     },
-    async signUp(p){
-      const uid = await currentUid();
-      const user = {
-        id: uid,
-        name: p.name || 'New User',
-        phone: p.phone,
-        initials: (p.name||'NU').split(' ').map(s=>s[0]).slice(0,2).join('').toUpperCase(),
-        role: p.role || 'buyer',
-        city: p.city || 'Juba'
-      };
-      if(useSb() && uid){
-        await NL.sb.from('profiles').upsert({
-          id: uid, name: user.name, phone: user.phone, role: user.role, city: user.city
-        });
-      }
-      return ok({token:'demo', user});
+
+    // Sign in with email + password
+    async signInEmail(p){
+      if(!useSb()) return ok({ user: mockUser(p) });
+      const { data, error } = await NL.sb.auth.signInWithPassword({ email:p.email, password:p.password });
+      if(error) return err(error.message);
+      return ok({ user: data.user });
+    },
+
+    // Google OAuth. redirectTo = where Google sends the user back.
+    async signInGoogle(redirectTo){
+      if(!useSb()) return err('Google sign-in needs the live backend');
+      const { error } = await NL.sb.auth.signInWithOAuth({
+        provider: 'google',
+        options: { redirectTo }
+      });
+      if(error) return err(error.message);
+      return ok({ redirecting:true });
+    },
+
+    async resetPassword(email, redirectTo){
+      if(!useSb()) return ok({ sent:true });
+      const { error } = await NL.sb.auth.resetPasswordForEmail(email, { redirectTo });
+      if(error) return err(error.message);
+      return ok({ sent:true });
+    },
+
+    async updatePassword(newPassword){
+      if(!useSb()) return ok({});
+      const { error } = await NL.sb.auth.updateUser({ password:newPassword });
+      if(error) return err(error.message);
+      return ok({});
+    },
+
+    async signOut(){
+      if(useSb()){ try{ await NL.sb.auth.signOut(); }catch(_){} }
+      return ok({});
     }
   };
 

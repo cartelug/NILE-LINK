@@ -26,7 +26,10 @@ window.NL=window.NL||{};
      ============================================================ */
   function getUser(){try{return JSON.parse(localStorage.getItem('nl_user')||'null')}catch(e){return null}}
   function setUser(u){localStorage.setItem('nl_user',JSON.stringify(u));applyAuthState();}
-  function signOut(){localStorage.removeItem('nl_user');applyAuthState();location.href=href('index.html');}
+  async function signOut(){
+    try{ if(window.NL&&NL.sb){ await NL.sb.auth.signOut(); } }catch(_){/* ignore */}
+    localStorage.removeItem('nl_user');applyAuthState();location.href=href('index.html');
+  }
   NL.getUser=getUser;NL.setUser=setUser;NL.signOut=signOut;
   NL.isAuthed=()=>!!getUser();
 
