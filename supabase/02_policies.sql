@@ -134,3 +134,26 @@ create policy reports_read_self on public.reports
 -- (Object path convention: <owner_uid>/<listing_id>/<file>)
 -- Authed update/delete only own path:
 --   bucket_id = 'listing-photos' and (auth.uid()::text = (storage.foldername(name))[1])
+
+-- ============================================================
+-- API ROLE GRANTS (required when "Automatically expose new
+-- tables" is disabled at project creation — the recommended
+-- setting). Without these, the Data API returns
+-- "permission denied for table ..." even with correct RLS.
+-- RLS policies above still control per-row access.
+-- ============================================================
+grant usage on schema public to anon, authenticated;
+
+grant select, insert, update, delete
+  on all tables in schema public
+  to anon, authenticated;
+
+grant usage, select
+  on all sequences in schema public
+  to anon, authenticated;
+
+alter default privileges in schema public
+  grant select, insert, update, delete on tables to anon, authenticated;
+
+alter default privileges in schema public
+  grant usage, select on sequences to anon, authenticated;
