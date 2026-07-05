@@ -453,3 +453,27 @@
 .set-toggle input::after{content:"";position:absolute;top:3px;left:3px;width:20px;height:20px;border-radius:50%;background:#fff;transition:.2s;box-shadow:0 1px 3px rgba(0,0,0,.2)}
 .set-toggle input:checked{background:var(--lime-700)}
 .set-toggle input:checked::after{left:23px}
+
+
+/* ============================================================
+   BROWSE POLISH (v=20260705b) — tighter mobile funnel + scroll hints
+   ============================================================ */
+.browse-tools{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:14px;flex-wrap:wrap}
+.browse-tools-r{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+/* Fade the right edge of scrollable pill rows so users know there is more */
+.browse-pills,.cat-strip{
+  -webkit-mask-image:linear-gradient(90deg,#000 0,#000 calc(100% - 34px),transparent 100%);
+  mask-image:linear-gradient(90deg,#000 0,#000 calc(100% - 34px),transparent 100%);
+}
+@media(max-width:767px){
+  .cat-strip{padding:10px 12px;gap:8px}
+  .browse-bar{gap:8px;margin-bottom:10px}
+  .browse-sort{padding:9px 12px;font-size:.84rem}
+  .browse-pills{margin-bottom:10px}
+  .browse-tools{margin-bottom:10px;gap:8px;flex-wrap:nowrap}
+  .browse-tools .browse-count{font-size:.8rem;white-space:nowrap}
+  .browse-tools-r{gap:6px;flex-wrap:nowrap}
+  .save-search{padding:7px 10px;font-size:.76rem}
+  .save-search svg{width:13px;height:13px}
+  .view-toggle button{padding:7px 10px;font-size:.76rem}
+}

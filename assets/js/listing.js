@@ -32,8 +32,8 @@
     imgs=images(it);
     const verified=it.badges.includes('verified');
     const bdg=it.badges.map(b=>{
-      if(b==='feat')return '<span class="bdg bdg-feat">★ Featured</span>';
-      if(b==='boost')return '<span class="bdg bdg-boost">⚡ Boosted</span>';
+      if(b==='feat')return '<span class="bdg bdg-feat" title="Premium placement chosen by Nile Link">★ Featured</span>';
+      if(b==='boost')return '<span class="bdg bdg-boost" title="The seller paid to promote this listing">⚡ Sponsored</span>';
       if(b==='verified')return '<span class="bdg bdg-verified"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M20 6L9 17l-5-5"/></svg>Verified</span>';
       return '';
     }).join('');

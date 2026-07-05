@@ -87,7 +87,7 @@ window.NL=window.NL||{};
     const verified=it.badges&&it.badges.includes('verified');
     let topBadge='';
     if(it.badges&&it.badges.includes('feat'))topBadge='<span class="bdg bdg-feat"><svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.6 6.6L21.6 9l-5 4.6 1.4 6.9L12 17.2 6 20.5 7.4 13.6 2.4 9l6.9-.4z"/></svg>Featured</span>';
-    else if(it.badges&&it.badges.includes('boost'))topBadge='<span class="bdg bdg-boost"><svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><path d="M13 2L3 14h7l-1 8 10-12h-7z"/></svg>Boosted</span>';
+    else if(it.badges&&it.badges.includes('boost'))topBadge='<span class="bdg bdg-boost" title="The seller paid to promote this listing"><svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><path d="M13 2L3 14h7l-1 8 10-12h-7z"/></svg>Sponsored</span>';
     return '<article class="card" data-id="'+it.id+'" data-group="'+it.group+'" style="animation-delay:'+((i||0)*40)+'ms">'+
       '<div class="media">'+topBadge+
         '<button class="fav'+(NL.isFav(it.id)?' on':'')+'" data-fav="'+it.id+'" aria-label="Save"><svg width="16" height="16" viewBox="0 0 24 24" fill="'+(NL.isFav(it.id)?'currentColor':'none')+'" stroke="currentColor" stroke-width="2.2"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 1 0-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 0 0 0-7.8z"/></svg></button>'+
