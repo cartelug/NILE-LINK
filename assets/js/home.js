@@ -35,10 +35,12 @@
   /* ---- Recently viewed ---- */
   function renderRecent(){
     const ids=NL.recent();if(!ids.length)return;
-    const items=ids.map(id=>D.LISTINGS.find(l=>l.id===+id)).filter(Boolean);
-    if(!items.length)return;
-    $('#recentSec').style.display='';
-    $('#recentRail').innerHTML=items.map((it,i)=>NL.cardHTML(it,i)).join('');
+    NL.api.listings.getMany(ids).then(r=>{
+      const items=(r&&r.data)||[];
+      if(!items.length)return;
+      $('#recentSec').style.display='';
+      $('#recentRail').innerHTML=items.map((it,i)=>NL.cardHTML(it,i)).join('');
+    });
   }
 
   /* ---- How it works ---- */
@@ -93,16 +95,20 @@
 
   /* ---- Search ---- */
   function goSearch(q){location.href=root+'pages/browse.html'+(q?'?q='+encodeURIComponent(q):'')}
-  function buildSuggestions(q){
+  async function buildSuggestions(q){
     q=(q||'').trim().toLowerCase();if(!q)return[];
     const out=[];
     D.CATEGORIES.forEach(c=>{if(c.name.toLowerCase().includes(q))out.push({type:'cat',data:c})});
-    D.LISTINGS.forEach(l=>{if((l.title+' '+l.cat+' '+l.seller+' '+l.loc).toLowerCase().includes(q))out.push({type:'item',data:l})});
+    const r=await NL.api.listings.list({search:q});
+    (((r&&r.data)||[]).slice(0,6)).forEach(l=>out.push({type:'item',data:l}));
     return out.slice(0,7);
   }
-  function renderDropdown(input,dd){
-    const q=input.value;const items=buildSuggestions(q);
+  let sdSeq=0;
+  async function renderDropdown(input,dd){
+    const q=input.value;const mySeq=++sdSeq;
     if(!q.trim()){dd.classList.remove('show');return}
+    const items=await buildSuggestions(q);
+    if(mySeq!==sdSeq)return;
     if(!items.length){dd.innerHTML='<div class="sd-empty">No matches for "<b>'+q.replace(/[<>]/g,'')+'</b>"<div class="sd-empty-sub">Try another word or browse all listings.</div></div>';dd.classList.add('show');return}
     const arrow='<svg class="sd-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M9 6l6 6-6 6"/></svg>';
     dd.innerHTML=items.map(s=>{
@@ -116,7 +122,7 @@
     const input=$('#heroSearch'),dd=$('#heroSearchDropdown'),btn=$('#heroSearchBtn');
     btn.addEventListener('click',()=>goSearch(input.value));
     input.addEventListener('keydown',e=>{if(e.key==='Enter')goSearch(input.value);if(e.key==='Escape'){dd.classList.remove('show');input.blur()}});
-    let t;input.addEventListener('input',()=>{clearTimeout(t);t=setTimeout(()=>renderDropdown(input,dd),80)});
+    let t;input.addEventListener('input',()=>{clearTimeout(t);t=setTimeout(()=>renderDropdown(input,dd),220)});
     input.addEventListener('focus',()=>{if(input.value.trim())renderDropdown(input,dd)});
     document.addEventListener('click',e=>{if(!input.contains(e.target)&&!dd.contains(e.target))dd.classList.remove('show')});
     // rotating placeholder

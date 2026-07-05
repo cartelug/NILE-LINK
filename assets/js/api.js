@@ -150,6 +150,16 @@ window.NL=window.NL||{};
       return ok(rowToListing(data));
     },
 
+    async getMany(ids){
+      ids=(ids||[]).map(Number).filter(Boolean);
+      if(!ids.length) return ok([]);
+      if(!useSb()) return ok(ids.map(id=>D.LISTINGS.find(l=>l.id===id)).filter(Boolean));
+      const { data, error } = await NL.sb.from('v_listings').select('*').in('id', ids);
+      if(error) return err(error.message);
+      const by={}; (data||[]).map(rowToListing).forEach(r=>{by[r.id]=r});
+      return ok(ids.map(i=>by[i]).filter(Boolean));
+    },
+
     async related(id){
       if(!useSb()){
         const it=D.LISTINGS.find(x=>x.id===+id);

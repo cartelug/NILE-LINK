@@ -3,9 +3,10 @@
    ============================================================ */
 (function(){
   const D=window.NLDATA;const $=s=>document.querySelector(s);
-  function render(){
+  async function render(){
     const ids=NL.favs();
-    const items=ids.map(id=>D.LISTINGS.find(l=>l.id===+id)).filter(Boolean);
+    const rr=await NL.api.listings.getMany(ids);
+    const items=(rr&&rr.data)||[];
     $('#savedSub').textContent=items.length?items.length+' saved item'+(items.length!==1?'s':''):'Items you\'ve hearted';
     if(!items.length){
       $('#savedRoot').innerHTML='<div class="empty-state"><div class="ei"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 1 0-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 0 0 0-7.8z"/></svg></div><h2>No saved items yet</h2><p>Tap the heart on any listing to save it here for later.</p><a class="btn btn-lime" href="browse.html">Browse listings</a></div>';

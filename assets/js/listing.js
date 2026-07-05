@@ -3,7 +3,7 @@
    ============================================================ */
 (function(){
   const D=window.NLDATA;const $=s=>document.querySelector(s);
-  const id=+(new URLSearchParams(location.search).get('id')||1);
+  const id=parseInt(new URLSearchParams(location.search).get('id')||'',10);
   let imgs=[],gi=0;
 
   function images(it){
@@ -131,6 +131,6 @@
 
   document.addEventListener('nl:rate',()=>{NL.api.listings.get(id).then(r=>{const el=document.querySelector('[data-pdp-ssp]');if(el&&r.data)el.textContent='≈ '+NL.fmtSSP(r.data.usd*NL.getRate())+(r.data.note||'')})});
 
-  function init(){NL.api.listings.get(id).then(r=>render(r.data));bindLightbox();bindSticky()}
+  function init(){if(!id){render(null);return}NL.api.listings.get(id).then(r=>render(r.data));bindLightbox();bindSticky()}
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();
 })();
