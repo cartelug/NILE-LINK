@@ -68,7 +68,10 @@ window.NL=window.NL||{};
       badges: r.badges || [],
       desc: r.descr || '',
       img: r.img || '',
-      imgs: r.imgs || []
+      imgs: r.imgs || [],
+      status: r.status || 'live',
+      views: r.views || 0,
+      requests: r.requests || 0
     };
   }
   function rowToConversation(r){
@@ -203,6 +206,57 @@ window.NL=window.NL||{};
       }).select().single();
       if(error) return err(error.message);
       return ok({id: data.id, ...p});
+    },
+
+    // Update own listing (RLS enforces ownership). patch keys map to columns.
+    async update(id, patch){
+      if(!useSb()) return ok({id, ...patch});
+      const uid = await currentUid(); if(!uid) return err('Not signed in');
+      const row = {};
+      if(patch.title!=null) row.title = patch.title;
+      if(patch.usd!=null) row.usd = patch.usd;
+      if(patch.loc!=null) row.loc = patch.loc;
+      if(patch.desc!=null) row.descr = patch.desc;
+      if(patch.note!=null) row.note = patch.note;
+      if(patch.status!=null) row.status = patch.status;
+      if(patch.img!=null) row.img = patch.img;
+      if(patch.imgs!=null) row.imgs = patch.imgs;
+      const { data, error } = await NL.sb.from('listings').update(row).eq('id', +id).eq('owner_id', uid).select().maybeSingle();
+      if(error) return err(error.message);
+      return ok(rowToListing ? {id:+id, ...patch} : data);
+    },
+
+    async setStatus(id, status){ return listings.update(id, {status}); },
+
+    // Permanently delete own listing
+    async remove(id){
+      if(!useSb()) return ok({id});
+      const uid = await currentUid(); if(!uid) return err('Not signed in');
+      const { error } = await NL.sb.from('listings').delete().eq('id', +id).eq('owner_id', uid);
+      if(error) return err(error.message);
+      return ok({id});
+    }
+  };
+
+  /* ============================================================
+     PROFILE — the signed-in user's own profile row
+     ============================================================ */
+  const profile = {
+    async get(){
+      if(!useSb()) return ok(null);
+      const uid = await currentUid(); if(!uid) return ok(null);
+      const { data, error } = await NL.sb.from('profiles').select('*').eq('id', uid).maybeSingle();
+      if(error) return err(error.message);
+      return ok(data);
+    },
+    async update(patch){
+      if(!useSb()) return ok(patch);
+      const uid = await currentUid(); if(!uid) return err('Not signed in');
+      const row = {};
+      ['name','phone','city','role'].forEach(k=>{ if(patch[k]!=null) row[k]=patch[k]; });
+      const { data, error } = await NL.sb.from('profiles').update(row).eq('id', uid).select().maybeSingle();
+      if(error) return err(error.message);
+      return ok(data);
     }
   };
 
@@ -285,6 +339,16 @@ window.NL=window.NL||{};
         .select().single();
       if(error) return err(error.message);
       return ok({id: data.id});
+    },
+
+    // Start a conversation with the seller and send an opening/offer message.
+    async sendOffer(listingId, text){
+      if(!useSb()) return ok({id:'c-mock'});
+      const conv = await messages.startWith(listingId);
+      if(!conv.ok) return conv;
+      const sent = await messages.send(conv.data.id, text);
+      if(!sent.ok) return sent;
+      return ok({ convId: conv.data.id });
     }
   };
 
@@ -437,5 +501,5 @@ window.NL=window.NL||{};
     }
   };
 
-  NL.api = { listings, messages, notifications, requests, reports, auth, storage, rate:{get:()=>ok(RATE)} };
+  NL.api = { listings, messages, notifications, requests, reports, profile, auth, storage, rate:{get:()=>ok(RATE)} };
 })();

@@ -102,7 +102,18 @@
     if(e.target.closest('[data-cta-offer]')){
       if(!NL.isAuthed()){location.href='signin.html?next='+encodeURIComponent('listing.html'+location.search);return}
       const amt=prompt('Your offer in USD:');if(!amt)return;
-      NL.toast('Offer of $'+amt+' sent to the seller ✓',{type:'success'});
+      const n=parseFloat(String(amt).replace(/[^0-9.]/g,''));
+      if(isNaN(n)||n<=0){NL.toast('Enter a valid amount',{type:'error'});return}
+      const close=NL.toast('Sending offer…',{type:'loading'});
+      NL.api.messages.sendOffer(id, 'Hi! I would like to offer $'+n.toLocaleString('en-US')+' for this. Is that okay?').then(r=>{
+        if(close&&close.call)close();
+        if(r.ok){
+          NL.toast('Offer sent — opening chat',{type:'success'});
+          setTimeout(()=>location.href='messages.html?c='+encodeURIComponent(r.data.convId),700);
+        }else{
+          NL.toast(r.error||'Could not send offer',{type:'error'});
+        }
+      });
     }
     if(e.target.closest('[data-copy-link]')){navigator.clipboard&&navigator.clipboard.writeText(location.href);NL.toast('Link copied',{type:'success'})}
     if(e.target.closest('[data-report]')){

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Offline — Nile Link</title>
+<meta name="robots" content="noindex">
+<link rel="icon" type="image/svg+xml" href="assets/images/favicon.svg">
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:'Montserrat',system-ui,-apple-system,sans-serif;background:#0a0e08;color:#fff;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px;text-align:center}
+  .wrap{max-width:400px}
+  .logo{display:flex;align-items:center;gap:10px;justify-content:center;margin-bottom:28px}
+  .logo img{width:44px;height:44px;border-radius:11px}
+  .logo b{font-size:22px;font-weight:800}
+  .logo b span{color:#7CFC00}
+  .icon{width:74px;height:74px;border-radius:20px;background:rgba(124,252,0,.12);border:1px solid rgba(124,252,0,.35);color:#7CFC00;display:grid;place-items:center;margin:0 auto 20px}
+  h1{font-size:24px;font-weight:800;margin-bottom:10px}
+  p{color:#c8d0c4;line-height:1.6;margin-bottom:24px}
+  .btn{display:inline-block;background:#7CFC00;color:#0a0e08;font-weight:800;padding:13px 26px;border-radius:12px;border:0;font-size:1rem;cursor:pointer;font-family:inherit;text-decoration:none}
+  .hint{margin-top:18px;font-size:.8rem;color:#69736b}
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="logo"><img src="assets/images/logo.png" alt=""><b>Nile<span>Link</span></b></div>
+    <div class="icon">
+      <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M1 1l22 22"/><path d="M16.7 16.7A6 6 0 0 1 12 19c-3.3 0-6-2.7-6-6 0-1.1.3-2.1.8-3"/><path d="M5 12.5A9 9 0 0 1 12 4c2.5 0 4.8 1 6.4 2.6"/><path d="M12 8.5a4.5 4.5 0 0 1 4.5 4.5"/>
+      </svg>
+    </div>
+    <h1>You're offline</h1>
+    <p>Nile Link can't reach the internet right now. Check your connection and try again — pages you've already opened will still work.</p>
+    <button class="btn" onclick="location.reload()">Try again</button>
+    <div class="hint">Your connection will reconnect automatically when you're back online.</div>
+  </div>
+</body>
+</html>

@@ -343,7 +343,17 @@ window.NL=window.NL||{};
     bindGlobal();
     bindReveal();
     document.addEventListener('nl:rate',()=>{document.dispatchEvent(new CustomEvent('nl:rate-applied'))});
+    registerSW();
   }
+
+  /* ---- Offline / PWA service worker (real caching; safe, versioned) ---- */
+  function registerSW(){
+    if(!('serviceWorker' in navigator)) return;
+    window.addEventListener('load',()=>{
+      navigator.serviceWorker.register(ROOT+'sw.js').catch(()=>{/* non-fatal */});
+    });
+  }
+
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot);
   else boot();
 })();
