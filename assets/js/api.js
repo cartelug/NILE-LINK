@@ -311,10 +311,12 @@ window.NL=window.NL||{};
         await NL.sb.from('conversations').update(patch).eq('id', id);
       }
       const rows = (data||[]).map(m=>({
+        id: m.id,
         from: m.sender_id === uid ? 'me' : 'them',
         text: m.body,
         image: m.image_url || undefined,
-        time: relativeTime(m.created_at)
+        time: relativeTime(m.created_at),
+        ts: m.created_at
       }));
       return ok(rows);
     },
@@ -332,7 +334,7 @@ window.NL=window.NL||{};
         conversation_id: convId, sender_id: uid, body: text
       }).select().single();
       if(error) return err(error.message);
-      return ok({from:'me', text, time:'Just now', id:data.id});
+      return ok({from:'me', text, time:'Just now', id:data.id, ts:data.created_at});
     },
 
     // New: start (or return existing) conversation about a listing

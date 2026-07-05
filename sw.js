@@ -13,7 +13,7 @@
 
    Bump VERSION on any change to force a clean update.
    ============================================================ */
-const VERSION       = 'nl-20260705c';
+const VERSION       = 'nl-20260705d';
 const STATIC_CACHE  = 'nl-static-' + VERSION;
 const RUNTIME_CACHE = 'nl-runtime-' + VERSION;
 const OFFLINE_URL   = 'offline.html';

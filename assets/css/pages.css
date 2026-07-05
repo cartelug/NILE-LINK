@@ -477,3 +477,36 @@
   .save-search svg{width:13px;height:13px}
   .view-toggle button{padding:7px 10px;font-size:.76rem}
 }
+
+/* ============================================================
+   CONVERSATIONS v4 (v=20260705d) — optimistic send, grouping,
+   empty states
+   ============================================================ */
+.bubble.sending{opacity:.55}
+.bubble.failed{opacity:.85;outline:1.5px solid #f3c0c0}
+.bubble .b-check{margin-left:5px;font-weight:800;opacity:.75}
+.bubble.failed .b-check{color:#dc2626}
+/* consecutive messages from the same sender sit closer together */
+.bubble.cont{margin-top:2px}
+.bubble.me.cont{border-top-right-radius:8px}
+.bubble.them.cont{border-top-left-radius:8px}
+/* empty states */
+.conv-empty{padding:44px 22px;text-align:center;color:var(--tx-2)}
+.conv-empty .ce-ic{width:56px;height:56px;border-radius:16px;background:var(--lime-soft);color:var(--lime-700);display:grid;place-items:center;margin:0 auto 14px}
+.conv-empty .ce-ic svg{width:26px;height:26px}
+.conv-empty h3{font-weight:800;color:var(--tx-1);margin-bottom:6px}
+.conv-empty p{font-size:.85rem;font-weight:600;margin-bottom:14px}
+.thread-empty{margin:auto;text-align:center;color:var(--tx-2);padding:40px 24px}
+.thread-empty .te-ic{font-size:2.2rem;margin-bottom:10px}
+.thread-empty h3{font-weight:800;color:var(--tx-1);margin-bottom:6px}
+.thread-empty p{font-size:.85rem;font-weight:600;max-width:32ch;margin-inline:auto}
+
+/* Fix: quick-reply row must not stretch the thread pane (grid min-width:auto
+   pushed right-aligned bubbles off-screen on mobile). */
+#thread{min-width:0;max-width:100%;overflow:hidden}
+.thread-body{min-width:0}
+.qreplies{overflow-x:auto;flex-wrap:nowrap;min-width:0;scrollbar-width:none;-ms-overflow-style:none;
+  -webkit-mask-image:linear-gradient(90deg,#000 0,#000 calc(100% - 30px),transparent 100%);
+  mask-image:linear-gradient(90deg,#000 0,#000 calc(100% - 30px),transparent 100%)}
+.qreplies::-webkit-scrollbar{display:none}
+.qreplies button{flex:0 0 auto}
