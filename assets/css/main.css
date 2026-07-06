@@ -141,7 +141,14 @@ svg{display:block}
 .nav-links>a:hover::after,.nav-links>button:hover::after,
 .nav-links>a.active::after,.nav-links .has-mega:hover::after{transform:scaleX(1)}
 .nav-links>a.active{color:var(--ink)}
-.nav-links svg.caret{width:14px;height:14px;transition:transform .25s}
+/* "Categories" trigger: word with the caret centered directly beneath it */
+.has-mega>button{
+  position:relative;padding:5px 14px 3px;border-radius:10px;font-weight:600;font-size:.94rem;
+  color:var(--tx-2);transition:color .2s;display:inline-flex;flex-direction:column;
+  align-items:center;line-height:1.25;
+}
+.has-mega>button:hover{color:var(--ink)}
+.nav-links svg.caret{width:13px;height:13px;transition:transform .25s;display:block;margin-top:0}
 .has-mega:hover svg.caret{transform:rotate(180deg)}
 
 /* ============================================================

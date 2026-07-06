@@ -5,58 +5,305 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>About — Nile Link</title>
 <meta name="theme-color" content="#0a0e08">
-<link rel="icon" type="image/svg+xml" href="../assets/images/favicon.svg?v=20260706f">
-<link rel="apple-touch-icon" href="../assets/images/apple-touch-icon.png?v=20260706f">
+<link rel="icon" type="image/svg+xml" href="../assets/images/favicon.svg?v=20260706g">
+<link rel="apple-touch-icon" href="../assets/images/apple-touch-icon.png?v=20260706g">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="../assets/css/tokens.css?v=20260706f">
-<link rel="stylesheet" href="../assets/css/main.css?v=20260706f">
-<link rel="stylesheet" href="../assets/css/pages.css?v=20260706f">
+<link rel="stylesheet" href="../assets/css/tokens.css?v=20260706g">
+<link rel="stylesheet" href="../assets/css/main.css?v=20260706g">
+<link rel="stylesheet" href="../assets/css/pages.css?v=20260706g">
+<style>
+/* ============ ABOUT PAGE (embedded) ============ */
+/* ---- Hero ---- */
+.ab-hero{position:relative;overflow:hidden;isolation:isolate;background:linear-gradient(165deg,var(--ink-2),var(--night) 72%);color:var(--tx-inv);text-align:center;padding:clamp(72px,11vw,140px) 20px clamp(64px,9vw,116px)}
+.ab-hero::before{content:"";position:absolute;left:50%;top:-30%;width:min(900px,140vw);height:80%;transform:translateX(-50%);background:radial-gradient(closest-side,rgba(124,252,0,.16),transparent 72%);z-index:-1;pointer-events:none}
+.ab-hero::after{content:"";position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.045) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.045) 1px,transparent 1px);background-size:44px 44px;-webkit-mask-image:radial-gradient(70% 62% at 50% 38%,#000 25%,transparent 75%);mask-image:radial-gradient(70% 62% at 50% 38%,#000 25%,transparent 75%);z-index:-1;pointer-events:none}
+.ab-orb{position:absolute;border-radius:50%;filter:blur(60px);background:rgba(124,252,0,.16);z-index:-1;pointer-events:none}
+.ab-orb.o1{width:320px;height:320px;top:-130px;left:-120px}
+.ab-orb.o2{width:260px;height:260px;bottom:-140px;right:-100px;background:rgba(124,252,0,.10)}
+.ab-hero-in{max-width:820px;margin-inline:auto;position:relative}
+.ab-kicker{display:inline-flex;align-items:center;gap:8px;padding:7px 15px;border-radius:var(--r-pill);border:1px solid rgba(124,252,0,.32);background:rgba(124,252,0,.08);color:var(--lime);font-size:.7rem;font-weight:800;letter-spacing:.16em;text-transform:uppercase}
+.ab-kicker .kd{width:7px;height:7px;border-radius:50%;background:var(--lime);box-shadow:0 0 10px var(--lime-glow)}
+.ab-hero h1{font-weight:900;font-size:clamp(2.15rem,6.4vw,4rem);letter-spacing:-.035em;line-height:1.06;margin-top:22px}
+.ab-hero h1 .lm{color:var(--lime);text-shadow:0 0 32px rgba(124,252,0,.35)}
+.ab-hero p{color:var(--tx-inv-2);max-width:54ch;margin:18px auto 0;font-size:clamp(1rem,2.4vw,1.15rem);font-weight:500;line-height:1.65}
+.ab-hero-rule{width:74px;height:4px;border-radius:2px;background:linear-gradient(90deg,var(--lime),var(--lime-700));margin:28px auto 0;box-shadow:0 0 18px rgba(124,252,0,.4)}
+
+/* ---- Sections / shared ---- */
+.ab-sec{padding:clamp(56px,8vw,96px) 20px}
+.ab-wrap{max-width:1100px;margin-inline:auto}
+.ab-narrow{max-width:65ch;margin-inline:auto}
+.ab-h2{font-weight:900;font-size:clamp(1.55rem,4vw,2.35rem);letter-spacing:-.025em;line-height:1.12;margin:6px 0 18px;color:var(--tx)}
+.ab-eyebrow-inv{display:inline-flex;align-items:center;gap:7px;font-size:.72rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:var(--lime)}
+.ab-eyebrow-inv::before{content:"";width:18px;height:2px;background:var(--lime);border-radius:2px}
+.ab-link{color:var(--lime-700);font-weight:800}
+
+/* ---- Story ---- */
+.ab-story p{color:var(--tx-2);font-weight:500;line-height:1.85;margin-bottom:16px;font-size:1.02rem}
+.ab-quote{position:relative;margin:4px 0 24px;padding:8px 0 8px 22px;border-left:4px solid var(--lime);font-size:clamp(1.15rem,2.8vw,1.45rem);font-weight:700;line-height:1.55;letter-spacing:-.012em;color:var(--tx)}
+
+/* ---- Mission / Vision ---- */
+.ab-mv{display:grid;gap:16px}
+@media(min-width:820px){.ab-mv{grid-template-columns:1fr 1fr;gap:22px}}
+.ab-mv-card{position:relative;overflow:hidden;border-radius:var(--r-lg);padding:clamp(26px,4vw,40px);background:var(--paper);border:1px solid var(--line);box-shadow:var(--sh-2)}
+.ab-mv-card .ab-mv-ic{width:48px;height:48px;border-radius:14px;background:var(--lime-soft);color:var(--lime-700);display:grid;place-items:center;margin-bottom:16px}
+.ab-mv-card .ab-mv-ic svg{width:25px;height:25px}
+.ab-mv-card h3{font-weight:900;font-size:1.28rem;letter-spacing:-.015em;margin-bottom:8px}
+.ab-mv-card p{color:var(--tx-2);font-weight:500;line-height:1.7;font-size:.98rem;position:relative;z-index:1}
+.ab-mv-art{position:absolute;right:-22px;bottom:-26px;width:130px;height:130px;opacity:.07;pointer-events:none}
+.ab-mv-card.dark{background:linear-gradient(150deg,var(--ink-2),var(--night));border-color:rgba(124,252,0,.2);color:var(--tx-inv)}
+.ab-mv-card.dark .ab-mv-ic{background:rgba(124,252,0,.12);color:var(--lime)}
+.ab-mv-card.dark h3{color:#fff}
+.ab-mv-card.dark p{color:var(--tx-inv-2)}
+.ab-mv-card.dark .ab-mv-art{opacity:.12;color:var(--lime)}
+
+/* ---- Values (extends .values-grid / .value-card from pages.css) ---- */
+.ab-values .values-grid{grid-template-columns:1fr;gap:14px}
+@media(min-width:640px){.ab-values .values-grid{grid-template-columns:repeat(2,1fr)}}
+@media(min-width:980px){.ab-values .values-grid{grid-template-columns:repeat(4,1fr);gap:18px}}
+.ab-values .value-card{box-shadow:var(--sh-1)}
+@media(hover:hover){
+  .ab-values .value-card{transition:transform .3s var(--ease-out),box-shadow .3s var(--ease-out),border-color .3s var(--ease-out)}
+  .ab-values .value-card:hover{transform:translateY(-4px);box-shadow:var(--sh-3);border-color:var(--lime-600)}
+}
+
+/* ---- Journey timeline ---- */
+.ab-journey{background:var(--paper);border-block:1px solid var(--line)}
+.ab-tl{position:relative;margin-top:38px}
+.ab-tl::before{content:"";position:absolute;left:8px;top:8px;bottom:8px;width:2px;border-radius:2px;background:linear-gradient(180deg,var(--lime) 0%,var(--line-2) 100%)}
+.ab-tl-item{position:relative;padding:0 0 30px 44px}
+.ab-tl-item:last-child{padding-bottom:0}
+.ab-tl-dot{position:absolute;left:1px;top:8px;width:16px;height:16px;border-radius:50%;background:var(--lime);border:3px solid var(--paper);box-shadow:0 0 0 2px var(--lime-600),0 0 16px rgba(124,252,0,.45)}
+.ab-tl-card{background:var(--paper-2);border:1px solid var(--line);border-radius:var(--r-md);padding:20px 22px;box-shadow:var(--sh-1)}
+.ab-tl-year{display:inline-block;font-weight:900;font-size:.75rem;letter-spacing:.1em;text-transform:uppercase;color:var(--ink);background:var(--lime);padding:4px 12px;border-radius:var(--r-pill);margin-bottom:10px}
+.ab-tl-item:last-child .ab-tl-year{background:var(--ink);color:var(--lime)}
+.ab-tl-card h3{font-weight:800;font-size:1.08rem;letter-spacing:-.01em;margin-bottom:5px}
+.ab-tl-card p{color:var(--tx-2);font-weight:500;font-size:.94rem;line-height:1.6;margin:0}
+@media(hover:hover){
+  .ab-tl-card{transition:transform .3s var(--ease-out),box-shadow .3s var(--ease-out),border-color .3s var(--ease-out)}
+  .ab-tl-item:hover .ab-tl-card{transform:translateY(-3px);box-shadow:var(--sh-2);border-color:var(--line-2)}
+}
+@media(min-width:900px){
+  .ab-tl::before{left:50%;margin-left:-1px}
+  .ab-tl-item{width:calc(50% - 42px);padding-left:0;padding-bottom:36px}
+  .ab-tl-item:nth-child(odd){margin-right:auto;text-align:right}
+  .ab-tl-item:nth-child(even){margin-left:auto}
+  .ab-tl-dot{top:22px}
+  .ab-tl-item:nth-child(odd) .ab-tl-dot{left:auto;right:-50px}
+  .ab-tl-item:nth-child(even) .ab-tl-dot{left:-50px}
+}
+/* timeline reveal: dot pops, then card slides from its side */
+.ab-tl-item.reveal{opacity:1;transform:none;transition:none}
+.ab-tl-item.reveal .ab-tl-dot{transform:scale(0);transition:transform .38s var(--spring) .05s}
+.ab-tl-item.reveal.in .ab-tl-dot{transform:scale(1)}
+.ab-tl-item.reveal:not(.in) .ab-tl-card{opacity:0;transform:translateY(16px)}
+.ab-tl-item.reveal .ab-tl-card{transition:opacity .5s var(--ease-out) .14s,transform .5s var(--ease-out) .14s}
+.ab-tl-item.reveal.in .ab-tl-card{opacity:1;transform:none}
+@media(min-width:900px){
+  .ab-tl-item:nth-child(odd).reveal:not(.in) .ab-tl-card{transform:translateX(-22px)}
+  .ab-tl-item:nth-child(even).reveal:not(.in) .ab-tl-card{transform:translateX(22px)}
+}
+
+/* ---- Stats band (dark) ---- */
+.ab-stats{position:relative;overflow:hidden;background:linear-gradient(160deg,var(--ink-2),var(--night) 75%);color:var(--tx-inv);padding:clamp(56px,8vw,90px) 20px}
+.ab-stats::before{content:"";position:absolute;left:50%;top:-45%;width:min(820px,130vw);height:90%;transform:translateX(-50%);background:radial-gradient(closest-side,rgba(124,252,0,.12),transparent 72%);pointer-events:none}
+.ab-stats-head{text-align:center;margin-bottom:clamp(30px,5vw,46px);position:relative}
+.ab-stats-head h2{font-weight:900;font-size:clamp(1.5rem,3.8vw,2.2rem);letter-spacing:-.025em;margin-top:8px;color:#fff}
+.ab-stats-grid{max-width:1000px;margin-inline:auto;display:grid;grid-template-columns:repeat(2,1fr);gap:26px 14px;text-align:center;position:relative}
+@media(min-width:760px){.ab-stats-grid{grid-template-columns:repeat(4,1fr);gap:20px}}
+.ab-stat .num{font-weight:900;font-size:clamp(1.9rem,4.8vw,3rem);letter-spacing:-.04em;line-height:1;color:var(--lime);text-shadow:0 0 26px rgba(124,252,0,.3);font-variant-numeric:tabular-nums}
+.ab-stat .lbl{margin-top:9px;font-weight:800;font-size:.7rem;letter-spacing:.13em;text-transform:uppercase;color:var(--tx-inv-2)}
+
+/* ---- Closing CTA (lime) ---- */
+.ab-cta{position:relative;overflow:hidden;background:var(--lime);color:var(--ink);text-align:center;padding:clamp(60px,9vw,104px) 20px}
+.ab-cta::before,.ab-cta::after{content:"";position:absolute;border:2px solid rgba(10,14,8,.12);border-radius:50%;pointer-events:none}
+.ab-cta::before{width:320px;height:320px;top:-160px;left:-120px}
+.ab-cta::after{width:420px;height:420px;bottom:-260px;right:-160px}
+.ab-cta-in{position:relative;max-width:720px;margin-inline:auto}
+.ab-cta h2{font-weight:900;font-size:clamp(1.9rem,5vw,3rem);letter-spacing:-.03em;line-height:1.08}
+.ab-cta p{margin:14px auto 0;max-width:46ch;font-weight:600;color:#1a3a0a;font-size:1.05rem;line-height:1.6}
+.ab-cta-btns{display:flex;flex-wrap:wrap;gap:12px;justify-content:center;margin-top:28px}
+.ab-btn-dark{background:var(--ink);color:var(--lime);box-shadow:0 12px 32px rgba(10,14,8,.28)}
+.ab-btn-dark:hover{background:#000;color:var(--lime);transform:translateY(-1px)}
+.ab-btn-ghost-dark{background:transparent;color:var(--ink);border:2px solid rgba(10,14,8,.35)}
+.ab-btn-ghost-dark:hover{border-color:var(--ink);background:rgba(10,14,8,.06);color:var(--ink)}
+
+/* ---- Motion (entrances gated behind no-preference) ---- */
+@media(prefers-reduced-motion:no-preference){
+  @keyframes abUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
+  .ab-hero .ab-a1{animation:abUp .6s var(--ease-out) both}
+  .ab-hero .ab-a2{animation:abUp .6s var(--ease-out) .1s both}
+  .ab-hero .ab-a3{animation:abUp .6s var(--ease-out) .2s both}
+  .ab-hero .ab-a4{animation:abUp .6s var(--ease-out) .3s both}
+  @keyframes abKd{0%,100%{opacity:1}50%{opacity:.35}}
+  .ab-kicker .kd{animation:abKd 2.4s ease-in-out infinite}
+}
+@media(min-width:768px) and (prefers-reduced-motion:no-preference){
+  @keyframes abFloat{from{transform:translate3d(0,0,0)}to{transform:translate3d(0,26px,0)}}
+  .ab-orb{animation:abFloat 9s ease-in-out infinite alternate}
+  .ab-orb.o2{animation-delay:-4.5s}
+}
+@media(prefers-reduced-motion:reduce){
+  .ab-tl-item.reveal .ab-tl-dot{transform:scale(1);transition:none}
+  .ab-tl-item.reveal:not(.in) .ab-tl-card,
+  .ab-tl-item:nth-child(odd).reveal:not(.in) .ab-tl-card,
+  .ab-tl-item:nth-child(even).reveal:not(.in) .ab-tl-card{opacity:1;transform:none}
+  .ab-tl-item.reveal .ab-tl-card{transition:none}
+}
+</style>
 </head>
 <body data-page="about" class="has-mobnav">
 <div class="app-shell">
 <div data-nl-nav></div>
 
-<section class="about-hero">
-  <h1>Built in South Sudan,<br>for South Sudan.</h1>
-  <p>Nile Link connects buyers and sellers across the country — making it simple, safe and free to trade phones, cars, property, fashion and services.</p>
+<!-- ============ HERO — the "why" ============ -->
+<section class="ab-hero">
+  <span class="ab-orb o1" aria-hidden="true"></span>
+  <span class="ab-orb o2" aria-hidden="true"></span>
+  <div class="ab-hero-in">
+    <span class="ab-kicker ab-a1"><span class="kd" aria-hidden="true"></span>Our mission</span>
+    <h1 class="ab-a2">Built in South Sudan,<br><span class="lm">for South Sudan.</span></h1>
+    <p class="ab-a3">Nile Link connects buyers and sellers across the country — making it simple, safe and free to trade phones, cars, property, fashion and services.</p>
+    <div class="ab-hero-rule ab-a4" aria-hidden="true"></div>
+  </div>
 </section>
 
-<main class="wrap prose">
-  <p class="lead">We started Nile Link with one belief: people here deserve a marketplace as good as anywhere in the world — one that understands local prices, local cities, and local trust.</p>
-  <p>Every day, thousands of South Sudanese buy and sell through their phones. But too often deals happen in scattered groups, with no way to know who's real. Nile Link brings it all into one trusted place: verified sellers, secure messaging, and prices in both USD and SSP with a live exchange rate.</p>
-
-  <h2>What we stand for</h2>
-  <div class="values-grid">
-    <div class="value-card"><div class="vi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l8 4v6c0 5-3.5 8-8 10-4.5-2-8-5-8-10V6z"/><path d="M9 12l2 2 4-4"/></svg></div><h3>Trust first</h3><p>Verification, ratings and safe messaging so every deal feels secure.</p></div>
-    <div class="value-card"><div class="vi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15 15 0 0 1 0 20 15 15 0 0 1 0-20z"/></svg></div><h3>Local at heart</h3><p>Cities, prices and categories built around how South Sudan actually trades.</p></div>
-    <div class="value-card"><div class="vi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L3 14h7l-1 8 10-12h-7z"/></svg></div><h3>Always free</h3><p>Listing will always be free. We only charge for optional reach.</p></div>
+<!-- ============ STORY — why we exist ============ -->
+<section class="ab-sec ab-story">
+  <div class="ab-narrow">
+    <span class="sec-eyebrow reveal">Why we exist</span>
+    <h2 class="ab-h2 reveal">One trusted place to trade</h2>
+    <p class="ab-quote reveal" data-d="1">We started Nile Link with one belief: people here deserve a marketplace as good as anywhere in the world — one that understands local prices, local cities, and local trust.</p>
+    <p class="reveal" data-d="2">Every day, thousands of South Sudanese buy and sell through their phones. But too often deals happen in scattered groups, with no way to know who's real. Nile Link brings it all into one trusted place: verified sellers, secure messaging, and prices in both USD and SSP with a live exchange rate.</p>
   </div>
+</section>
 
-  <h2 id="careers">Our journey</h2>
-  <div class="timeline">
-    <div class="tl-item"><div class="tl-year">2025</div><h4>The idea</h4><p>Born from the frustration of buying and selling in messy chat groups.</p></div>
-    <div class="tl-item"><div class="tl-year">2026</div><h4>Nile Link launches</h4><p>Live in Juba with phones, cars, property, fashion and services.</p></div>
-    <div class="tl-item"><div class="tl-year">2026</div><h4>12 cities</h4><p>Expanding across South Sudan with verified sellers and live FX pricing.</p></div>
-    <div class="tl-item"><div class="tl-year">Next</div><h4>You</h4><p>We're hiring builders who care about South Sudan. <a href="help.html" style="color:var(--lime-700);font-weight:800">Get in touch →</a></p></div>
-  </div>
-
-  <div class="seller-cta" style="border-radius:var(--r-lg);margin:30px 0 20px">
-    <div class="seller-cta-inner" style="padding:40px 28px;grid-template-columns:1fr">
-      <div><h2 style="color:#fff">Ready to start?</h2><p>Join thousands trading on Nile Link today.</p><div class="seller-cta-btns"><a class="btn btn-lime btn-lg" href="signup.html">Create free account</a></div></div>
+<!-- ============ MISSION + VISION ============ -->
+<section class="ab-sec" style="padding-top:0">
+  <div class="ab-wrap">
+    <div class="ab-mv">
+      <div class="ab-mv-card reveal">
+        <div class="ab-mv-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4.5"/><circle cx="12" cy="12" r="1"/></svg></div>
+        <h3>Our mission</h3>
+        <p>To give every South Sudanese one simple, safe and free place to buy and sell — with verified sellers, secure messaging, and prices in both USD and SSP.</p>
+        <svg class="ab-mv-art" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" aria-hidden="true"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4.5"/></svg>
+      </div>
+      <div class="ab-mv-card dark reveal" data-d="1">
+        <div class="ab-mv-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/></svg></div>
+        <h3>Our vision</h3>
+        <p>A marketplace as good as anywhere in the world, built right here at home — where every deal starts with trust, not luck.</p>
+        <svg class="ab-mv-art" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" aria-hidden="true"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/></svg>
+      </div>
     </div>
   </div>
-</main>
+</section>
+
+<!-- ============ VALUES ============ -->
+<section class="ab-sec ab-values" style="padding-top:0">
+  <div class="ab-wrap">
+    <span class="sec-eyebrow reveal">What we stand for</span>
+    <h2 class="ab-h2 reveal">The values behind every deal</h2>
+    <div class="values-grid">
+      <div class="value-card reveal"><div class="vi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l8 4v6c0 5-3.5 8-8 10-4.5-2-8-5-8-10V6z"/><path d="M9 12l2 2 4-4"/></svg></div><h3>Trust first</h3><p>Verification, ratings and safe messaging so every deal feels secure.</p></div>
+      <div class="value-card reveal" data-d="1"><div class="vi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15 15 0 0 1 0 20 15 15 0 0 1 0-20z"/></svg></div><h3>Local at heart</h3><p>Cities, prices and categories built around how South Sudan actually trades.</p></div>
+      <div class="value-card reveal" data-d="2"><div class="vi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L3 14h7l-1 8 10-12h-7z"/></svg></div><h3>Always free</h3><p>Listing will always be free. We only charge for optional reach.</p></div>
+      <div class="value-card reveal" data-d="3"><div class="vi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg></div><h3>Community</h3><p>Real people — neighbours, shops and traders — helping each other find what they need.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ JOURNEY TIMELINE ============ -->
+<section class="ab-sec ab-journey" id="careers">
+  <div class="ab-wrap">
+    <div style="text-align:center">
+      <span class="sec-eyebrow reveal" style="justify-content:center">Our journey</span>
+      <h2 class="ab-h2 reveal">From one idea to 12 cities</h2>
+    </div>
+    <div class="ab-tl">
+      <div class="ab-tl-item reveal">
+        <span class="ab-tl-dot" aria-hidden="true"></span>
+        <div class="ab-tl-card"><span class="ab-tl-year">2025</span><h3>The idea</h3><p>Born from the frustration of buying and selling in messy chat groups.</p></div>
+      </div>
+      <div class="ab-tl-item reveal">
+        <span class="ab-tl-dot" aria-hidden="true"></span>
+        <div class="ab-tl-card"><span class="ab-tl-year">2026</span><h3>Nile Link launches</h3><p>Live in Juba with phones, cars, property, fashion and services.</p></div>
+      </div>
+      <div class="ab-tl-item reveal">
+        <span class="ab-tl-dot" aria-hidden="true"></span>
+        <div class="ab-tl-card"><span class="ab-tl-year">2026</span><h3>12 cities</h3><p>Expanding across South Sudan with verified sellers and live FX pricing.</p></div>
+      </div>
+      <div class="ab-tl-item reveal">
+        <span class="ab-tl-dot" aria-hidden="true"></span>
+        <div class="ab-tl-card"><span class="ab-tl-year">Next</span><h3>You</h3><p>We're hiring builders who care about South Sudan. <a class="ab-link" href="help.html">Get in touch →</a></p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ STATS BAND ============ -->
+<section class="ab-stats" id="abStats">
+  <div class="ab-wrap">
+    <div class="ab-stats-head reveal">
+      <span class="ab-eyebrow-inv">Nile Link today</span>
+      <h2>Growing every single day</h2>
+    </div>
+    <div class="ab-stats-grid">
+      <div class="ab-stat reveal"><div class="num" data-count="43200" data-suffix="+">43,200+</div><div class="lbl">Active Listings</div></div>
+      <div class="ab-stat reveal" data-d="1"><div class="num" data-count="8400" data-suffix="+">8,400+</div><div class="lbl">Verified Sellers</div></div>
+      <div class="ab-stat reveal" data-d="2"><div class="num" data-count="12">12</div><div class="lbl">Cities Covered</div></div>
+      <div class="ab-stat reveal" data-d="3"><div class="num">Free</div><div class="lbl">Always &amp; Forever</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ CLOSING CTA ============ -->
+<section class="ab-cta">
+  <div class="ab-cta-in reveal">
+    <h2>Join the Nile Link community.</h2>
+    <p>Join thousands trading on Nile Link today. Creating an account is free — and listing will always be free.</p>
+    <div class="ab-cta-btns">
+      <a class="btn btn-lg ab-btn-dark" href="signup.html">Create free account</a>
+      <a class="btn btn-lg ab-btn-ghost-dark" href="browse.html">Browse listings</a>
+    </div>
+  </div>
+</section>
 
 <div data-nl-footer></div>
 </div>
 <div data-nl-mobnav></div>
-<script defer src="../assets/js/supabase-config.js?v=20260706f"></script>
-<script defer src="../assets/js/supabase-client.js?v=20260706f"></script>
-<script defer src="../assets/js/realtime.js?v=20260706f"></script>
-<script defer src="../assets/js/data.js?v=20260706f"></script>
-<script defer src="../assets/js/api.js?v=20260706f"></script>
-<script defer src="../assets/js/core.js?v=20260706f"></script>
-<script defer src="../assets/js/i18n.js?v=20260706f"></script>
+<script defer src="../assets/js/supabase-config.js?v=20260706g"></script>
+<script defer src="../assets/js/supabase-client.js?v=20260706g"></script>
+<script defer src="../assets/js/realtime.js?v=20260706g"></script>
+<script defer src="../assets/js/data.js?v=20260706g"></script>
+<script defer src="../assets/js/api.js?v=20260706g"></script>
+<script defer src="../assets/js/core.js?v=20260706g"></script>
+<script defer src="../assets/js/i18n.js?v=20260706g"></script>
+<script>
+/* About page: stats count-up, triggered once on view; respects reduced motion. */
+(function(){
+  var sec=document.getElementById('abStats');if(!sec)return;
+  var els=sec.querySelectorAll('[data-count]');if(!els.length)return;
+  function fmt(n,el){return (el.dataset.prefix||'')+Math.round(n).toLocaleString('en-US')+(el.dataset.suffix||'');}
+  var reduce=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if(reduce||!('IntersectionObserver'in window)){els.forEach(function(el){el.textContent=fmt(parseFloat(el.dataset.count),el)});return}
+  var done=false;
+  var io=new IntersectionObserver(function(es){
+    es.forEach(function(en){
+      if(!en.isIntersecting||done)return;
+      done=true;io.disconnect();
+      els.forEach(function(el){
+        var target=parseFloat(el.dataset.count),dur=1400,t0=performance.now();
+        el.textContent=fmt(0,el);
+        (function step(now){
+          var t=Math.min((now-t0)/dur,1),e=1-Math.pow(1-t,3);
+          el.textContent=fmt(target*e,el);
+          if(t<1)requestAnimationFrame(step);
+        })(t0);
+      });
+    });
+  },{threshold:.35});
+  io.observe(sec);
+})();
+</script>
 </body>
 </html>

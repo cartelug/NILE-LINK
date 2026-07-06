@@ -4,157 +4,415 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Pricing & Boosts — Nile Link</title>
+<meta name="description" content="Listing on Nile Link is free, forever. Boost only when you want extra reach — simple, fair pricing built for South Sudan.">
 <meta name="theme-color" content="#0a0e08">
-<link rel="icon" type="image/svg+xml" href="../assets/images/favicon.svg?v=20260706f">
-<link rel="apple-touch-icon" href="../assets/images/apple-touch-icon.png?v=20260706f">
+<link rel="icon" type="image/svg+xml" href="../assets/images/favicon.svg?v=20260706g">
+<link rel="apple-touch-icon" href="../assets/images/apple-touch-icon.png?v=20260706g">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="../assets/css/tokens.css?v=20260706f">
-<link rel="stylesheet" href="../assets/css/main.css?v=20260706f">
-<link rel="stylesheet" href="../assets/css/pages.css?v=20260706f">
+<link rel="stylesheet" href="../assets/css/tokens.css?v=20260706g">
+<link rel="stylesheet" href="../assets/css/main.css?v=20260706g">
+<link rel="stylesheet" href="../assets/css/pages.css?v=20260706g">
+<style>
+/* ============ PRICING PAGE (px-) ============ */
+
+/* ---- Hero ---- */
+.px-hero{position:relative;overflow:hidden;background:linear-gradient(152deg,var(--ink-2) 0%,var(--night) 78%);color:var(--tx-inv);text-align:center;padding:clamp(52px,9vw,104px) 16px clamp(46px,7vw,86px);isolation:isolate}
+.px-hero::before{content:"";position:absolute;inset:-40% -20% auto;height:120%;background:radial-gradient(46% 60% at 50% 0%,rgba(124,252,0,.14),transparent 70%);z-index:-1;pointer-events:none}
+.px-hero::after{content:"";position:absolute;left:-120px;bottom:-140px;width:340px;height:340px;border-radius:50%;background:radial-gradient(circle,rgba(124,252,0,.08),transparent 68%);z-index:-1;pointer-events:none}
+.px-hero-inner{max-width:820px;margin-inline:auto;position:relative;z-index:2}
+.px-hero .sec-eyebrow{color:var(--lime);justify-content:center;margin-bottom:14px}
+.px-hero .sec-eyebrow::before{background:var(--lime)}
+.px-hero h1{font-weight:900;font-size:clamp(1.95rem,5.8vw,3.6rem);letter-spacing:-.032em;line-height:1.06}
+.px-hero h1 .lime{color:var(--lime);text-shadow:0 0 32px rgba(124,252,0,.42)}
+.px-hero .px-sub{color:var(--tx-inv-2);font-weight:500;font-size:clamp(.98rem,2.5vw,1.14rem);line-height:1.65;max-width:56ch;margin:16px auto 0}
+.px-hero-chips{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;margin-top:22px}
+.px-chip{display:inline-flex;align-items:center;gap:7px;min-height:34px;padding:6px 13px;border-radius:var(--r-pill);background:rgba(124,252,0,.09);border:1px solid rgba(124,252,0,.28);color:var(--lime);font-weight:700;font-size:.78rem}
+.px-chip svg{width:14px;height:14px;flex:0 0 auto}
+.px-hero .price-toggle{margin-top:28px;background:rgba(255,255,255,.05);border-color:rgba(255,255,255,.15)}
+.px-hero .price-toggle button{min-height:40px;color:var(--tx-inv-2)}
+.px-hero .price-toggle button.on{background:var(--lime);color:var(--ink)}
+.px-hero .price-toggle button.on .price-save{color:var(--ink)}
+/* one hero entrance only */
+@media(prefers-reduced-motion:no-preference){
+  .px-hero-inner>*{animation:pxRise .62s var(--ease-out) backwards}
+  .px-hero-inner>*:nth-child(2){animation-delay:.08s}
+  .px-hero-inner>*:nth-child(3){animation-delay:.16s}
+  .px-hero-inner>*:nth-child(4){animation-delay:.24s}
+  .px-hero-inner>*:nth-child(5){animation-delay:.3s}
+  @keyframes pxRise{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+}
+
+/* ---- Plan grid ---- */
+.px-plans{max-width:1100px;margin-inline:auto;padding-block:clamp(30px,5vw,52px) 8px}
+.px-plans .price-grid{max-width:none;gap:20px;padding-block:22px 6px;align-items:stretch}
+.plan{border-radius:var(--r-xl);padding:28px 24px 24px;box-shadow:var(--sh-1)}
+.plan.reveal{transition:opacity .55s var(--ease-out),transform .55s var(--ease-out),box-shadow .3s,border-color .3s}
+.plan .plan-bestfor{display:inline-flex;align-items:center;gap:6px;font-size:.7rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--tx-3);margin-bottom:10px}
+.plan.premium .plan-bestfor{color:var(--tx-inv-2)}
+.plan .plan-price{margin-top:12px}
+.plan .btn{min-height:44px}
+.px-free-note{display:inline-flex;align-items:center;gap:6px;margin-top:12px;padding:5px 11px;border-radius:var(--r-pill);background:var(--lime-soft);color:var(--lime-700);font-weight:800;font-size:.72rem}
+.px-free-note svg{width:13px;height:13px}
+.plan.featured{border:2px solid var(--lime-700);box-shadow:var(--sh-3),0 0 0 4px var(--lime-soft)}
+.plan.featured .plan-tag{box-shadow:0 6px 18px rgba(124,252,0,.35)}
+@media(min-width:1024px){
+  .plan.featured{transform:scale(1.03)}
+}
+@media(hover:hover){
+  .plan.reveal:hover{transition:opacity .55s var(--ease-out),transform .25s var(--ease-out),box-shadow .25s,border-color .25s}
+  .plan:hover{transform:translateY(-4px);box-shadow:var(--sh-3);border-color:var(--line-2)}
+  .plan.featured:hover{border-color:var(--lime-700);box-shadow:var(--sh-3),0 0 0 4px var(--lime-soft)}
+  @media(min-width:1024px){.plan.featured:hover{transform:scale(1.03) translateY(-4px)}}
+}
+@media(hover:none){.plan:hover{transform:none;box-shadow:var(--sh-1)}.plan.featured:hover{box-shadow:var(--sh-3),0 0 0 4px var(--lime-soft)}@media(min-width:1024px){.plan.featured:hover{transform:scale(1.03)}}}
+/* recommended card first on small screens */
+@media(max-width:639px){.px-plans .plan.featured{order:-1}}
+/* ribbon: one subtle entrance, only after its card reveals */
+@media(prefers-reduced-motion:no-preference){
+  .plan.featured.in .plan-tag{animation:pxPop .5s var(--spring) .5s backwards}
+  @keyframes pxPop{from{opacity:0;transform:translateX(-50%) translateY(6px) scale(.85)}to{opacity:1;transform:translateX(-50%) translateY(0) scale(1)}}
+}
+
+/* ---- Trust strip ---- */
+.px-trust{max-width:860px;margin:26px auto 0;background:var(--paper);border:1px solid var(--line);border-radius:var(--r-lg);padding:18px 20px;display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:10px 22px;box-shadow:var(--sh-1)}
+.px-trust .t{display:inline-flex;align-items:center;gap:8px;font-weight:700;font-size:.84rem;color:var(--tx-2)}
+.px-trust .t svg{width:17px;height:17px;color:var(--lime-700);flex:0 0 auto}
+
+/* ---- Section rhythm ---- */
+.px-sec{max-width:1100px;margin-inline:auto;padding-block:clamp(28px,4.5vw,48px) 0;scroll-margin-top:calc(var(--nav-h) + 14px)}
+.px-sec .sec-head{margin-bottom:clamp(16px,2.5vw,26px)}
+.px-sec-note{color:var(--tx-3);font-weight:600;font-size:.88rem;max-width:52ch}
+
+/* ---- Boost cards ---- */
+.boost-grid{max-width:none;gap:16px;padding-bottom:6px}
+.boost-card{border-radius:var(--r-lg);padding:22px;box-shadow:var(--sh-1)}
+.boost-card.reveal{transition:opacity .55s var(--ease-out),transform .55s var(--ease-out),box-shadow .3s,border-color .3s}
+.boost-card .bd{display:inline-flex;align-items:center;gap:5px;align-self:flex-start;margin:2px 0 4px;padding:3px 9px;border-radius:var(--r-pill);background:var(--bg);border:1px solid var(--line);color:var(--tx-2);font-weight:800;font-size:.68rem;letter-spacing:.06em;text-transform:uppercase}
+.boost-card .bd svg{width:11px;height:11px}
+.boost-card .btn{margin-top:auto;min-height:40px}
+@media(hover:hover){
+  .boost-card.reveal:hover{transition:opacity .55s var(--ease-out),transform .25s var(--ease-out),box-shadow .25s,border-color .25s}
+  .boost-card:hover{transform:translateY(-4px);box-shadow:var(--sh-2);border-color:var(--lime-700)}
+}
+
+/* ---- Add-ons ---- */
+.addon-grid{max-width:none;gap:12px;padding-bottom:6px}
+.addon{min-height:64px}
+.addon.reveal{transition:opacity .55s var(--ease-out),transform .55s var(--ease-out),box-shadow .3s,border-color .3s}
+@media(hover:hover){
+  .addon.reveal:hover{transition:opacity .55s var(--ease-out),transform .25s var(--ease-out),box-shadow .25s,border-color .25s}
+  .addon:hover{border-color:var(--line-2);box-shadow:var(--sh-2);transform:translateY(-2px)}
+}
+
+/* ---- Comparison table (desktop only) ---- */
+.px-compare{display:none}
+@media(min-width:820px){.px-compare{display:block}}
+.px-table-wrap{border:1px solid var(--line);border-radius:var(--r-lg);background:var(--paper);overflow:hidden;box-shadow:var(--sh-1)}
+.px-table{width:100%;border-collapse:collapse;font-size:.88rem}
+.px-table th,.px-table td{padding:13px 16px;text-align:center;border-bottom:1px solid var(--line)}
+.px-table th:first-child,.px-table td:first-child{text-align:left;font-weight:700;color:var(--tx-2)}
+.px-table thead th{background:var(--paper-2);font-weight:900;font-size:.92rem;color:var(--tx);border-bottom:1.5px solid var(--line-2)}
+.px-table thead th .pp{display:block;font-size:.74rem;font-weight:700;color:var(--tx-3);margin-top:2px}
+.px-table thead th.rec{color:var(--lime-700);position:relative}
+.px-table thead th.rec::after{content:"Most popular";display:block;font-size:.6rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--ink);background:var(--lime);border-radius:var(--r-pill);padding:2px 8px;width:max-content;margin:5px auto 0}
+.px-table td.rec,.px-table th.rec{background:rgba(124,252,0,.05)}
+.px-table tbody tr:last-child td{border-bottom:none}
+.px-table td svg{width:17px;height:17px;color:var(--lime-700);vertical-align:-3px}
+.px-table td .dash{color:var(--line-2);font-weight:800}
+.px-table td b{font-weight:800}
+.px-table tfoot td{border-bottom:none;border-top:1.5px solid var(--line-2);background:var(--paper-2);padding-block:14px}
+.px-table tfoot .btn{min-height:38px}
+/* ---- FAQ accordion ---- */
+.px-faq{max-width:760px;margin-inline:auto}
+.px-faq details{background:var(--paper);border:1px solid var(--line);border-radius:var(--r-md);margin-bottom:10px;overflow:hidden;transition:border-color .2s,box-shadow .25s,opacity .55s var(--ease-out),transform .55s var(--ease-out)}
+.px-faq details[open]{border-color:var(--line-2);box-shadow:var(--sh-1)}
+.px-faq summary{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:16px 18px;min-height:52px;font-weight:800;font-size:.95rem;cursor:pointer;list-style:none}
+.px-faq summary::-webkit-details-marker{display:none}
+.px-faq summary .chev{flex:0 0 auto;width:28px;height:28px;border-radius:9px;background:var(--bg);color:var(--tx-2);display:grid;place-items:center;transition:transform .25s var(--ease-out),background .2s,color .2s}
+.px-faq summary .chev svg{width:14px;height:14px}
+.px-faq details[open] summary .chev{transform:rotate(180deg);background:var(--lime-soft);color:var(--lime-700)}
+.px-faq .a{padding:0 18px 16px;color:var(--tx-2);font-weight:600;font-size:.9rem;line-height:1.6}
+@media(hover:hover){.px-faq details:not([open]):hover{border-color:var(--line-2)}}
+
+/* ---- Final CTA band ---- */
+.px-cta{position:relative;overflow:hidden;background:linear-gradient(135deg,#0c130a,var(--night));color:var(--tx-inv);border-radius:var(--r-xl);max-width:1100px;margin:clamp(34px,5vw,56px) auto 0;isolation:isolate}
+.px-cta::before{content:"";position:absolute;right:-90px;top:-110px;width:320px;height:320px;border-radius:50%;background:radial-gradient(circle,rgba(124,252,0,.16),transparent 68%);z-index:-1}
+.px-cta-inner{padding:clamp(38px,6vw,64px) clamp(22px,5vw,56px);text-align:center}
+.px-cta h2{font-weight:900;font-size:clamp(1.6rem,4.5vw,2.5rem);letter-spacing:-.03em;line-height:1.08}
+.px-cta h2 .lime{color:var(--lime)}
+.px-cta p{color:var(--tx-inv-2);font-weight:500;margin:12px auto 0;max-width:46ch}
+.px-cta-btns{display:flex;flex-wrap:wrap;justify-content:center;gap:12px;margin-top:24px}
+.px-cta .micro{margin-top:18px;font-size:.78rem;font-weight:700;color:var(--tx-inv-2);display:flex;flex-wrap:wrap;justify-content:center;gap:6px 16px}
+.px-cta .micro span{display:inline-flex;align-items:center;gap:6px}
+.px-cta .micro svg{width:13px;height:13px;color:var(--lime)}
+
+.px-fineprint{padding:26px 16px 54px}
+</style>
 </head>
 <body data-page="pricing" class="has-mobnav">
 <div class="app-shell">
 <div data-nl-nav></div>
 
-<div class="page-head"><div class="wrap"><div class="price-hero" style="margin-inline:auto">
-  <span class="sec-eyebrow" style="justify-content:center">Pricing & Boosts</span>
-  <h1>Simple, fair pricing</h1>
-  <div class="sub">Listing is always free. Pay only for the reach you need — built for South Sudan.</div>
-  <div class="price-toggle" id="priceToggle">
-    <button class="on" data-bill="monthly">Monthly</button>
-    <button data-bill="yearly">Yearly <span class="price-save">save 20%</span></button>
+<!-- ============ HERO ============ -->
+<section class="px-hero">
+  <div class="px-hero-inner">
+    <span class="sec-eyebrow">Pricing &amp; Boosts</span>
+    <h1>Free to post. Free to browse.<br><span class="lime">Boost when you're ready.</span></h1>
+    <p class="px-sub">Listing is always free — no card required, no auto-charges, and the free plan never expires. Pay only for the reach you need — built for South Sudan.</p>
+    <div class="px-hero-chips">
+      <span class="px-chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M20 6L9 17l-5-5"/></svg>Free forever — not a trial</span>
+      <span class="px-chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M20 6L9 17l-5-5"/></svg>No card required</span>
+      <span class="px-chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M20 6L9 17l-5-5"/></svg>No hidden fees</span>
+    </div>
+    <div class="price-toggle" id="priceToggle">
+      <button class="on" data-bill="monthly">Monthly</button>
+      <button data-bill="yearly">Yearly <span class="price-save">save 20%</span></button>
+    </div>
   </div>
-</div></div></div>
+</section>
 
-<main class="wrap" style="padding-block:18px 0">
+<main class="wrap" style="padding-block:8px 0">
+
   <!-- ============ PLAN LADDER ============ -->
-  <div class="price-grid">
+  <section class="px-plans" id="plans">
+    <div class="sec-head reveal" style="justify-content:center;text-align:center"><div><span class="sec-eyebrow" style="justify-content:center">Simple, fair pricing</span><h2 class="sec-title">Start free. Upgrade only for reach.</h2></div></div>
+    <div class="price-grid">
 
-    <div class="plan">
-      <h3>Starter</h3>
-      <div class="plan-price">Free<small>/forever</small></div>
-      <div class="plan-ssp">Always free</div>
-      <p class="plan-desc">Everything you need to start.</p>
-      <ul>
-        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M20 6L9 17l-5-5"/></svg>Unlimited listings</li>
-        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M20 6L9 17l-5-5"/></svg>In-app messaging & photos</li>
-        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M20 6L9 17l-5-5"/></svg>Order & quote requests</li>
-        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M20 6L9 17l-5-5"/></svg>Saved searches & alerts</li>
-        <li class="off"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>Boosted placement</li>
-      </ul>
-      <a class="btn btn-ghost btn-block" href="post.html" data-auth-required>Start free</a>
+      <div class="plan reveal">
+        <span class="plan-bestfor">Best for getting started</span>
+        <h3>Starter</h3>
+        <div class="plan-price">Free<small>/forever</small></div>
+        <div class="plan-ssp">Always free · 0 SSP</div>
+        <p class="plan-desc">Everything you need to start.</p>
+        <ul>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M20 6L9 17l-5-5"/></svg>Unlimited listings</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M20 6L9 17l-5-5"/></svg>In-app messaging &amp; photos</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M20 6L9 17l-5-5"/></svg>Order &amp; quote requests</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M20 6L9 17l-5-5"/></svg>Saved searches &amp; alerts</li>
+          <li class="off"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>Boosted placement</li>
+        </ul>
+        <a class="btn btn-ghost btn-block" href="post.html" data-auth-required>Start free</a>
+        <span class="px-free-note"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M20 6L9 17l-5-5"/></svg>Permanent — never converts to paid</span>
+      </div>
+
+      <div class="plan reveal" data-d="1">
+        <span class="plan-bestfor">Best for active sellers</span>
+        <h3>Plus</h3>
+        <div class="plan-price" data-amt="4">$4<small>/mo</small></div>
+        <div class="plan-ssp">≈ <span data-ssp-amt="4">—</span> SSP / month</div>
+        <p class="plan-desc">For active sellers wanting more reach.</p>
+        <ul>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M20 6L9 17l-5-5"/></svg>Everything in Starter</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M20 6L9 17l-5-5"/></svg>2 free boosts / month</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M20 6L9 17l-5-5"/></svg>Basic listing analytics</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M20 6L9 17l-5-5"/></svg>Faster verification review</li>
+        </ul>
+        <a class="btn btn-primary btn-block" href="signup.html">Get Plus</a>
+      </div>
+
+      <div class="plan featured reveal" data-d="2">
+        <span class="plan-tag">Most popular</span>
+        <span class="plan-bestfor">Best for growing businesses</span>
+        <h3>Pro Seller</h3>
+        <div class="plan-price" data-amt="9">$9<small>/mo</small></div>
+        <div class="plan-ssp">≈ <span data-ssp-amt="9">—</span> SSP / month</div>
+        <p class="plan-desc">For serious sellers and small businesses.</p>
+        <ul>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M20 6L9 17l-5-5"/></svg>Everything in Plus</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M20 6L9 17l-5-5"/></svg>5 boosts / month</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M20 6L9 17l-5-5"/></svg>Verified seller badge</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M20 6L9 17l-5-5"/></svg>Priority in search results</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M20 6L9 17l-5-5"/></svg>Advanced analytics</li>
+        </ul>
+        <a class="btn btn-lime btn-block" href="signup.html">Go Pro</a>
+      </div>
+
+      <div class="plan premium reveal" data-d="3">
+        <span class="plan-tag dark">For dealers</span>
+        <span class="plan-bestfor">Best for shops &amp; dealers</span>
+        <h3>Business</h3>
+        <div class="plan-price" data-amt="24">$24<small>/mo</small></div>
+        <div class="plan-ssp">≈ <span data-ssp-amt="24">—</span> SSP / month</div>
+        <p class="plan-desc">Branded shop, multi-staff, exports.</p>
+        <ul>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M20 6L9 17l-5-5"/></svg>Everything in Pro</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M20 6L9 17l-5-5"/></svg>15 boosts / month</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M20 6L9 17l-5-5"/></svg>Branded shop page + custom URL</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M20 6L9 17l-5-5"/></svg>Up to 5 staff seats</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M20 6L9 17l-5-5"/></svg>Lead exports (CSV)</li>
+        </ul>
+        <a class="btn btn-lime btn-block" href="help.html">Contact sales</a>
+      </div>
     </div>
 
-    <div class="plan">
-      <h3>Plus</h3>
-      <div class="plan-price" data-amt="4">$4<small>/mo</small></div>
-      <div class="plan-ssp">≈ <span data-ssp-amt="4">—</span> SSP / month</div>
-      <p class="plan-desc">For active sellers wanting more reach.</p>
-      <ul>
-        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M20 6L9 17l-5-5"/></svg>Everything in Starter</li>
-        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M20 6L9 17l-5-5"/></svg>2 free boosts / month</li>
-        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M20 6L9 17l-5-5"/></svg>Basic listing analytics</li>
-        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M20 6L9 17l-5-5"/></svg>Faster verification review</li>
-      </ul>
-      <a class="btn btn-primary btn-block" href="signup.html">Get Plus</a>
+    <div class="px-trust reveal" data-d="1">
+      <span class="t"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l8 4v6c0 5-3.5 8-8 10-4.5-2-8-5-8-10V6z"/><path d="M9 12l2 2 4-4"/></svg>No hidden fees — the price you see is the price you pay</span>
+      <span class="t"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg>Pay via mobile money (mPesa, Zain Cash), bank transfer or card</span>
+      <span class="t"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>24/7 support on every plan</span>
     </div>
 
-    <div class="plan featured">
-      <span class="plan-tag">Most popular</span>
-      <h3>Pro Seller</h3>
-      <div class="plan-price" data-amt="9">$9<small>/mo</small></div>
-      <div class="plan-ssp">≈ <span data-ssp-amt="9">—</span> SSP / month</div>
-      <p class="plan-desc">For serious sellers and small businesses.</p>
-      <ul>
-        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M20 6L9 17l-5-5"/></svg>Everything in Plus</li>
-        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M20 6L9 17l-5-5"/></svg>5 boosts / month</li>
-        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M20 6L9 17l-5-5"/></svg>Verified seller badge</li>
-        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M20 6L9 17l-5-5"/></svg>Priority in search results</li>
-        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M20 6L9 17l-5-5"/></svg>Advanced analytics</li>
-      </ul>
-      <a class="btn btn-lime btn-block" href="signup.html">Go Pro</a>
-    </div>
-
-    <div class="plan premium">
-      <span class="plan-tag dark">For dealers</span>
-      <h3>Business</h3>
-      <div class="plan-price" data-amt="24">$24<small>/mo</small></div>
-      <div class="plan-ssp">≈ <span data-ssp-amt="24">—</span> SSP / month</div>
-      <p class="plan-desc">Branded shop, multi-staff, exports.</p>
-      <ul>
-        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M20 6L9 17l-5-5"/></svg>Everything in Pro</li>
-        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M20 6L9 17l-5-5"/></svg>15 boosts / month</li>
-        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M20 6L9 17l-5-5"/></svg>Branded shop page + custom URL</li>
-        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M20 6L9 17l-5-5"/></svg>Up to 5 staff seats</li>
-        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M20 6L9 17l-5-5"/></svg>Lead exports (CSV)</li>
-      </ul>
-      <a class="btn btn-lime btn-block" href="help.html">Contact sales</a>
-    </div>
-  </div>
-
-  <p class="center muted" style="font-weight:600;margin:0 0 30px">All plans include free verification, secure chat and 24/7 support.<br>Need a custom plan? <a href="help.html" style="color:var(--lime-700);font-weight:800">Talk to our team</a> about Enterprise.</p>
+    <p class="center muted reveal" data-d="2" style="font-weight:600;margin:22px 0 0">All plans include free verification, secure chat and 24/7 support.<br>Need a custom plan? <a href="help.html" style="color:var(--lime-700);font-weight:800">Talk to our team</a> about Enterprise.</p>
+  </section>
 
   <!-- ============ ONE-OFF BOOSTS ============ -->
-  <div class="sec-head" style="margin-top:20px"><div><span class="sec-eyebrow">Pay as you go</span><h2 class="sec-title">One-off boosts</h2></div></div>
-  <div class="boost-grid">
-    <div class="boost-card">
-      <div class="bi"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M13 2L3 14h7l-1 8 10-12h-7z"/></svg></div>
-      <h4>24-hour boost</h4>
-      <div class="bp">$1<small>/listing</small></div>
-      <p>Quick visibility burst — great for fresh listings.</p>
-      <a class="btn btn-ghost btn-sm" href="dashboard.html" data-auth-required>Boost a listing</a>
+  <section class="px-sec" id="boosts">
+    <div class="sec-head reveal"><div><span class="sec-eyebrow">Pay as you go</span><h2 class="sec-title">One-off boosts</h2><p class="px-sec-note" style="margin-top:8px">No subscription needed — boost a single listing once, and it ends when the time is up. Nothing renews on its own.</p></div></div>
+    <div class="boost-grid">
+      <div class="boost-card reveal">
+        <div class="bi"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M13 2L3 14h7l-1 8 10-12h-7z"/></svg></div>
+        <h4>24-hour boost</h4>
+        <div class="bp">$1<small>/listing</small></div>
+        <span class="bd"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>One-time · lasts 24 hours</span>
+        <p>Quick visibility burst — great for fresh listings.</p>
+        <a class="btn btn-ghost btn-sm" href="dashboard.html" data-auth-required>Boost a listing</a>
+      </div>
+      <div class="boost-card reveal" data-d="1">
+        <span class="best">Best value</span>
+        <div class="bi"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M13 2L3 14h7l-1 8 10-12h-7z"/></svg></div>
+        <h4>7-day boost</h4>
+        <div class="bp">$2<small>/listing</small></div>
+        <span class="bd"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>One-time · lasts 7 days</span>
+        <p>A full week at the top of category results.</p>
+        <a class="btn btn-lime btn-sm" href="dashboard.html" data-auth-required>Boost for 7 days</a>
+      </div>
+      <div class="boost-card reveal" data-d="2">
+        <div class="bi"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.6 6.6L21.6 9l-5 4.6 1.4 6.9L12 17.2 6 20.5 7.4 13.6 2.4 9l6.9-.4z"/></svg></div>
+        <h4>30-day Featured</h4>
+        <div class="bp">$8<small>/listing</small></div>
+        <span class="bd"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>One-time · lasts 30 days</span>
+        <p>Featured tag + top placement for a full month.</p>
+        <a class="btn btn-ghost btn-sm" href="dashboard.html" data-auth-required>Feature listing</a>
+      </div>
+      <div class="boost-card reveal" data-d="3">
+        <div class="bi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12h18M3 6h18M3 18h18"/></svg></div>
+        <h4>Homepage Hero</h4>
+        <div class="bp">$20<small>/week</small></div>
+        <span class="bd"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>Booked per week</span>
+        <p>Massive exposure on the Nile Link homepage.</p>
+        <a class="btn btn-ghost btn-sm" href="help.html">Book hero</a>
+      </div>
     </div>
-    <div class="boost-card">
-      <span class="best">Best value</span>
-      <div class="bi"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M13 2L3 14h7l-1 8 10-12h-7z"/></svg></div>
-      <h4>7-day boost</h4>
-      <div class="bp">$2<small>/listing</small></div>
-      <p>A full week at the top of category results.</p>
-      <a class="btn btn-lime btn-sm" href="dashboard.html" data-auth-required>Boost for 7 days</a>
-    </div>
-    <div class="boost-card">
-      <div class="bi"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.6 6.6L21.6 9l-5 4.6 1.4 6.9L12 17.2 6 20.5 7.4 13.6 2.4 9l6.9-.4z"/></svg></div>
-      <h4>30-day Featured</h4>
-      <div class="bp">$8<small>/listing</small></div>
-      <p>Featured tag + top placement for a full month.</p>
-      <a class="btn btn-ghost btn-sm" href="dashboard.html" data-auth-required>Feature listing</a>
-    </div>
-    <div class="boost-card">
-      <div class="bi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12h18M3 6h18M3 18h18"/></svg></div>
-      <h4>Homepage Hero</h4>
-      <div class="bp">$20<small>/week</small></div>
-      <p>Massive exposure on the Nile Link homepage.</p>
-      <a class="btn btn-ghost btn-sm" href="help.html">Book hero</a>
-    </div>
-  </div>
+    <p class="px-sec-note reveal" style="margin-top:14px">Honest expectation: a boost increases how many buyers see your listing — it doesn't guarantee a sale. Clear photos and a fair price still do the heavy lifting.</p>
+  </section>
 
   <!-- ============ ADD-ONS ============ -->
-  <div class="sec-head" style="margin-top:20px"><div><span class="sec-eyebrow">Extras</span><h2 class="sec-title">Add-ons & micro-boosts</h2></div></div>
-  <div class="addon-grid">
-    <div class="addon"><div class="ai"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l8 4v6c0 5-3.5 8-8 10-4.5-2-8-5-8-10V6z"/><path d="M9 12l2 2 4-4"/></svg></div><div><b>Verification badge</b><span>One-off ID + business check</span></div><span class="addon-price">$5</span></div>
-    <div class="addon"><div class="ai" style="background:#fde7e7;color:#dc2626"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M3 3h13l4 4-4 4H3z"/></svg></div><div><b>"Urgent sale" tag</b><span>Red flag — buyers notice fast</span></div><span class="addon-price">$1</span></div>
-    <div class="addon"><div class="ai" style="background:#fff4e0;color:#ea580c"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 19V5M5 12l7-7 7 7"/></svg></div><div><b>Bump-to-top</b><span>Instant refresh in feed</span></div><span class="addon-price">$0.50</span></div>
-    <div class="addon"><div class="ai" style="background:#e7f7ed;color:#19a974"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 0 0-8.6 15l-1.3 4.8 4.9-1.3A10 10 0 1 0 12 2z"/></svg></div><div><b>Share to WhatsApp Channel</b><span>Push to our public channel</span></div><span class="addon-price">$1</span></div>
-    <div class="addon"><div class="ai" style="background:#e7eefb;color:#3b82f6"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6 19.8 19.8 0 0 1-3.1-8.7A2 2 0 0 1 4 2h3a2 2 0 0 1 2 1.7c.1.9.3 1.8.6 2.7a2 2 0 0 1-.5 2.1L7.9 9.8a16 16 0 0 0 6 6l1.3-1.2a2 2 0 0 1 2.1-.5c.9.3 1.8.5 2.7.6a2 2 0 0 1 1.7 2z"/></svg></div><div><b>Reveal phone number</b><span>Buyers can call you direct</span></div><span class="addon-price">Free</span></div>
-    <div class="addon"><div class="ai" style="background:#f0e9fb;color:#7c3aed"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="8.5" cy="10" r="1.5"/><path d="M21 16l-5-5L5 21"/></svg></div><div><b>Photo enhancement</b><span>Auto brighten + crop your cover</span></div><span class="addon-price">$1</span></div>
-    <div class="addon"><div class="ai" style="background:#e0f2fe;color:#0284c7"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a15 15 0 0 1 0 18 15 15 0 0 1 0-18z"/></svg></div><div><b>Auto re-post</b><span>Refresh expired listings weekly</span></div><span class="addon-price">$2/mo</span></div>
-    <div class="addon"><div class="ai" style="background:#fce7f3;color:#db2777"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.4 6.4L21 9l-5 4.5L17.5 21 12 17.3 6.5 21 8 13.5 3 9l6.6-.6z"/></svg></div><div><b>Featured shop banner</b><span>For Pro & Business sellers</span></div><span class="addon-price">$3/wk</span></div>
-  </div>
+  <section class="px-sec" id="addons">
+    <div class="sec-head reveal"><div><span class="sec-eyebrow">Extras</span><h2 class="sec-title">Add-ons &amp; micro-boosts</h2></div></div>
+    <div class="addon-grid">
+      <div class="addon reveal"><div class="ai"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l8 4v6c0 5-3.5 8-8 10-4.5-2-8-5-8-10V6z"/><path d="M9 12l2 2 4-4"/></svg></div><div><b>Verification badge</b><span>One-off ID + business check</span></div><span class="addon-price">$5</span></div>
+      <div class="addon reveal"><div class="ai" style="background:#fde7e7;color:#dc2626"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M3 3h13l4 4-4 4H3z"/></svg></div><div><b>"Urgent sale" tag</b><span>Red flag — buyers notice fast</span></div><span class="addon-price">$1</span></div>
+      <div class="addon reveal" data-d="1"><div class="ai" style="background:#fff4e0;color:#ea580c"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 19V5M5 12l7-7 7 7"/></svg></div><div><b>Bump-to-top</b><span>Instant refresh in feed</span></div><span class="addon-price">$0.50</span></div>
+      <div class="addon reveal" data-d="1"><div class="ai" style="background:#e7f7ed;color:#19a974"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 0 0-8.6 15l-1.3 4.8 4.9-1.3A10 10 0 1 0 12 2z"/></svg></div><div><b>Share to WhatsApp Channel</b><span>Push to our public channel</span></div><span class="addon-price">$1</span></div>
+      <div class="addon reveal" data-d="2"><div class="ai" style="background:#e7eefb;color:#3b82f6"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6 19.8 19.8 0 0 1-3.1-8.7A2 2 0 0 1 4 2h3a2 2 0 0 1 2 1.7c.1.9.3 1.8.6 2.7a2 2 0 0 1-.5 2.1L7.9 9.8a16 16 0 0 0 6 6l1.3-1.2a2 2 0 0 1 2.1-.5c.9.3 1.8.5 2.7.6a2 2 0 0 1 1.7 2z"/></svg></div><div><b>Reveal phone number</b><span>Buyers can call you direct</span></div><span class="addon-price">Free</span></div>
+      <div class="addon reveal" data-d="2"><div class="ai" style="background:#f0e9fb;color:#7c3aed"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="8.5" cy="10" r="1.5"/><path d="M21 16l-5-5L5 21"/></svg></div><div><b>Photo enhancement</b><span>Auto brighten + crop your cover</span></div><span class="addon-price">$1</span></div>
+      <div class="addon reveal" data-d="3"><div class="ai" style="background:#e0f2fe;color:#0284c7"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a15 15 0 0 1 0 18 15 15 0 0 1 0-18z"/></svg></div><div><b>Auto re-post</b><span>Refresh expired listings weekly</span></div><span class="addon-price">$2/mo</span></div>
+      <div class="addon reveal" data-d="3"><div class="ai" style="background:#fce7f3;color:#db2777"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.4 6.4L21 9l-5 4.5L17.5 21 12 17.3 6.5 21 8 13.5 3 9l6.6-.6z"/></svg></div><div><b>Featured shop banner</b><span>For Pro &amp; Business sellers</span></div><span class="addon-price">$3/wk</span></div>
+    </div>
+  </section>
 
-  <p class="center muted" style="font-weight:600;padding-bottom:50px">All prices in USD with live SSP equivalents. Pay via mobile money (mPesa, Zain Cash), bank transfer or card.</p>
+  <!-- ============ COMPARISON (desktop) ============ -->
+  <section class="px-sec px-compare" id="compare">
+    <div class="sec-head reveal"><div><span class="sec-eyebrow">Compare</span><h2 class="sec-title">What's in each plan</h2></div></div>
+    <div class="px-table-wrap reveal" data-d="1">
+      <table class="px-table">
+        <thead>
+          <tr>
+            <th scope="col">Feature</th>
+            <th scope="col">Starter<span class="pp">Free / forever</span></th>
+            <th scope="col">Plus<span class="pp">$4 / mo</span></th>
+            <th scope="col" class="rec">Pro Seller<span class="pp">$9 / mo</span></th>
+            <th scope="col">Business<span class="pp">$24 / mo</span></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>Unlimited listings</td><td><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M20 6L9 17l-5-5"/></svg></td><td><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M20 6L9 17l-5-5"/></svg></td><td class="rec"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M20 6L9 17l-5-5"/></svg></td><td><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M20 6L9 17l-5-5"/></svg></td></tr>
+          <tr><td>In-app messaging &amp; photos</td><td><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M20 6L9 17l-5-5"/></svg></td><td><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M20 6L9 17l-5-5"/></svg></td><td class="rec"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M20 6L9 17l-5-5"/></svg></td><td><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M20 6L9 17l-5-5"/></svg></td></tr>
+          <tr><td>Order &amp; quote requests</td><td><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M20 6L9 17l-5-5"/></svg></td><td><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M20 6L9 17l-5-5"/></svg></td><td class="rec"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M20 6L9 17l-5-5"/></svg></td><td><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M20 6L9 17l-5-5"/></svg></td></tr>
+          <tr><td>Saved searches &amp; alerts</td><td><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M20 6L9 17l-5-5"/></svg></td><td><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M20 6L9 17l-5-5"/></svg></td><td class="rec"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M20 6L9 17l-5-5"/></svg></td><td><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M20 6L9 17l-5-5"/></svg></td></tr>
+          <tr><td>Boosts included / month</td><td><span class="dash">—</span></td><td><b>2</b></td><td class="rec"><b>5</b></td><td><b>15</b></td></tr>
+          <tr><td>Listing analytics</td><td><span class="dash">—</span></td><td>Basic</td><td class="rec"><b>Advanced</b></td><td><b>Advanced</b></td></tr>
+          <tr><td>Faster verification review</td><td><span class="dash">—</span></td><td><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M20 6L9 17l-5-5"/></svg></td><td class="rec"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M20 6L9 17l-5-5"/></svg></td><td><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M20 6L9 17l-5-5"/></svg></td></tr>
+          <tr><td>Verified seller badge</td><td><span class="dash">—</span></td><td><span class="dash">—</span></td><td class="rec"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M20 6L9 17l-5-5"/></svg></td><td><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M20 6L9 17l-5-5"/></svg></td></tr>
+          <tr><td>Priority in search results</td><td><span class="dash">—</span></td><td><span class="dash">—</span></td><td class="rec"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M20 6L9 17l-5-5"/></svg></td><td><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M20 6L9 17l-5-5"/></svg></td></tr>
+          <tr><td>Branded shop page + custom URL</td><td><span class="dash">—</span></td><td><span class="dash">—</span></td><td class="rec"><span class="dash">—</span></td><td><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M20 6L9 17l-5-5"/></svg></td></tr>
+          <tr><td>Staff seats</td><td><span class="dash">—</span></td><td><span class="dash">—</span></td><td class="rec"><span class="dash">—</span></td><td><b>Up to 5</b></td></tr>
+          <tr><td>Lead exports (CSV)</td><td><span class="dash">—</span></td><td><span class="dash">—</span></td><td class="rec"><span class="dash">—</span></td><td><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M20 6L9 17l-5-5"/></svg></td></tr>
+        </tbody>
+        <tfoot>
+          <tr>
+            <td></td>
+            <td><a class="btn btn-ghost btn-sm" href="post.html" data-auth-required>Start free</a></td>
+            <td><a class="btn btn-primary btn-sm" href="signup.html">Get Plus</a></td>
+            <td class="rec"><a class="btn btn-lime btn-sm" href="signup.html">Go Pro</a></td>
+            <td><a class="btn btn-ghost btn-sm" href="help.html">Contact sales</a></td>
+          </tr>
+        </tfoot>
+      </table>
+    </div>
+  </section>
+
+  <!-- ============ PRICING FAQ ============ -->
+  <section class="px-sec" id="faq">
+    <div class="sec-head reveal" style="justify-content:center;text-align:center"><div><span class="sec-eyebrow" style="justify-content:center">Before you decide</span><h2 class="sec-title">Pricing questions, answered</h2></div></div>
+    <div class="px-faq">
+      <details class="reveal">
+        <summary>Is the free plan really free?<span class="chev"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></span></summary>
+        <div class="a">Yes — completely. Listing is always free, with unlimited listings, in-app messaging and photos. It's a permanent plan, not a trial: no card required, no auto-charges, and it never converts to a paid plan on its own.</div>
+      </details>
+      <details class="reveal" data-d="1">
+        <summary>How do I pay for boosts and plans?<span class="chev"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></span></summary>
+        <div class="a">Pay via mobile money (mPesa, Zain Cash), bank transfer or card. All prices are in USD with live SSP equivalents shown, so you always know today's value in South Sudanese Pounds.</div>
+      </details>
+      <details class="reveal" data-d="1">
+        <summary>Does a boost guarantee my item will sell?<span class="chev"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></span></summary>
+        <div class="a">No — and we won't pretend otherwise. A boost puts your listing in front of more buyers (top of category results, or the homepage). Whether it sells still depends on your photos, price and how quickly you reply. Boosts amplify a good listing; they can't fix a weak one.</div>
+      </details>
+      <details class="reveal" data-d="2">
+        <summary>What's the difference between plan boosts and one-off boosts?<span class="chev"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></span></summary>
+        <div class="a">Plans bundle boosts monthly — Plus includes 2 free boosts a month, Pro Seller 5, and Business 15. One-off boosts are pay-as-you-go for a single listing (like the $2 seven-day boost), with no subscription needed. Casual sellers can stay on the free plan and buy a boost only when they want one.</div>
+      </details>
+      <details class="reveal" data-d="2">
+        <summary>Can I change or cancel a paid plan?<span class="chev"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></span></summary>
+        <div class="a">Plans are billed monthly (or yearly at 20% off, if you pick the yearly option). To upgrade, downgrade or cancel — or if a payment went wrong — message our team via <a href="help.html" style="color:var(--lime-700);font-weight:800">Help &amp; Support</a> and we'll sort it out. Your listings stay live on the free plan either way.</div>
+      </details>
+      <details class="reveal" data-d="3">
+        <summary>Why are prices in USD and SSP?<span class="chev"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></span></summary>
+        <div class="a">Prices are set in USD to stay stable, and we show live SSP equivalents next to every plan so you always see what it costs in South Sudanese Pounds at today's rate.</div>
+      </details>
+    </div>
+  </section>
+
+  <!-- ============ FINAL CTA ============ -->
+  <section class="px-cta reveal">
+    <div class="px-cta-inner">
+      <h2>Start free today.<br><span class="lime">Boost when you're ready.</span></h2>
+      <p>Your first listing costs nothing — and it never will. Add a boost only when you want extra reach.</p>
+      <div class="px-cta-btns">
+        <a class="btn btn-lime btn-lg" href="post.html" data-auth-required>Post a free listing</a>
+        <a class="btn btn-ghost btn-lg" href="#boosts" style="color:#fff;border-color:rgba(255,255,255,.25)">See one-off boosts</a>
+      </div>
+      <div class="micro">
+        <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M20 6L9 17l-5-5"/></svg>Free forever</span>
+        <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M20 6L9 17l-5-5"/></svg>No card required</span>
+        <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M20 6L9 17l-5-5"/></svg>No auto-charges</span>
+      </div>
+    </div>
+  </section>
+
+  <p class="center muted px-fineprint" style="font-weight:600">All prices in USD with live SSP equivalents. Pay via mobile money (mPesa, Zain Cash), bank transfer or card.</p>
 </main>
 
 <div data-nl-footer></div>
 </div>
 <div data-nl-mobnav></div>
-<script defer src="../assets/js/supabase-config.js?v=20260706f"></script>
-<script defer src="../assets/js/supabase-client.js?v=20260706f"></script>
-<script defer src="../assets/js/realtime.js?v=20260706f"></script>
-<script defer src="../assets/js/data.js?v=20260706f"></script>
-<script defer src="../assets/js/api.js?v=20260706f"></script>
-<script defer src="../assets/js/core.js?v=20260706f"></script>
-<script defer src="../assets/js/i18n.js?v=20260706f"></script>
+<script defer src="../assets/js/supabase-config.js?v=20260706g"></script>
+<script defer src="../assets/js/supabase-client.js?v=20260706g"></script>
+<script defer src="../assets/js/realtime.js?v=20260706g"></script>
+<script defer src="../assets/js/data.js?v=20260706g"></script>
+<script defer src="../assets/js/api.js?v=20260706g"></script>
+<script defer src="../assets/js/core.js?v=20260706g"></script>
+<script defer src="../assets/js/i18n.js?v=20260706g"></script>
 <script>
 // SSP equivalents + monthly/yearly toggle
 function applyRate(){var rate=window.NL?NL.getRate():4585;document.querySelectorAll('[data-ssp-amt]').forEach(function(el){var amt=+el.dataset.sspAmt;el.textContent=(amt*rate).toLocaleString('en-US')})}

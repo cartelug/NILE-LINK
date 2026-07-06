@@ -5,61 +5,308 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Help Center — Nile Link</title>
 <meta name="theme-color" content="#0a0e08">
-<link rel="icon" type="image/svg+xml" href="../assets/images/favicon.svg?v=20260706f">
-<link rel="apple-touch-icon" href="../assets/images/apple-touch-icon.png?v=20260706f">
+<link rel="icon" type="image/svg+xml" href="../assets/images/favicon.svg?v=20260706g">
+<link rel="apple-touch-icon" href="../assets/images/apple-touch-icon.png?v=20260706g">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="../assets/css/tokens.css?v=20260706f">
-<link rel="stylesheet" href="../assets/css/main.css?v=20260706f">
-<link rel="stylesheet" href="../assets/css/pages.css?v=20260706f">
+<link rel="stylesheet" href="../assets/css/tokens.css?v=20260706g">
+<link rel="stylesheet" href="../assets/css/main.css?v=20260706g">
+<link rel="stylesheet" href="../assets/css/pages.css?v=20260706g">
+<style>
+  /* ---------- Help Center hero ---------- */
+  .hc-hero{position:relative;overflow:hidden;background:var(--ink);color:var(--tx-inv);text-align:center;padding:clamp(52px,9vw,96px) 16px clamp(84px,10vw,120px)}
+  .hc-hero::before{content:"";position:absolute;inset:auto auto -180px -140px;width:460px;height:460px;border-radius:50%;background:radial-gradient(circle,var(--lime-soft),transparent 65%);pointer-events:none}
+  .hc-hero::after{content:"";position:absolute;top:-160px;right:-120px;width:420px;height:420px;border-radius:50%;background:radial-gradient(circle,rgba(124,252,0,.10),transparent 65%);pointer-events:none}
+  .hc-hero-in{position:relative;z-index:2;max-width:680px;margin-inline:auto}
+  .hc-eyebrow{display:inline-flex;align-items:center;gap:8px;font-size:.74rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:var(--lime);border:1px solid var(--line-dark);border-radius:var(--r-pill);padding:8px 14px;margin-bottom:18px}
+  .hc-eyebrow svg{width:14px;height:14px}
+  .hc-hero h1{font-weight:900;font-size:clamp(1.9rem,6vw,3rem);letter-spacing:-.03em;line-height:1.08}
+  .hc-hero .hc-sub{color:var(--tx-inv-2);font-weight:600;margin-top:12px;font-size:clamp(.95rem,2.4vw,1.05rem)}
+  .hc-search{position:relative;max-width:600px;margin:26px auto 0}
+  .hc-search svg.hc-si{position:absolute;left:20px;top:50%;transform:translateY(-50%);width:20px;height:20px;color:var(--tx-3);pointer-events:none}
+  .hc-search input{width:100%;min-height:58px;padding:16px 54px 16px 52px;border-radius:var(--r-pill);border:2px solid transparent;background:var(--paper);color:var(--tx);font:600 1rem var(--font);box-shadow:var(--sh-3);transition:border-color .2s,box-shadow .2s}
+  .hc-search input::placeholder{color:var(--tx-3);font-weight:600}
+  .hc-search input::-webkit-search-cancel-button,.hc-search input::-webkit-search-decoration{-webkit-appearance:none;appearance:none}
+  .hc-search input:focus{outline:none;border-color:var(--lime);box-shadow:0 0 0 4px var(--lime-glow),var(--sh-3)}
+  .hc-clear{position:absolute;right:9px;top:50%;transform:translateY(-50%);width:40px;height:40px;border-radius:50%;display:grid;place-items:center;color:var(--tx-3);background:transparent;cursor:pointer;transition:background .2s,color .2s}
+  .hc-clear[hidden]{display:none}
+  .hc-clear:hover{background:var(--bg);color:var(--tx)}
+  .hc-clear svg{width:18px;height:18px}
+  .hc-count{margin-top:14px;font-size:.86rem;font-weight:700;color:var(--tx-inv-2);min-height:1.2em}
+  .hc-count b{color:var(--lime)}
+  .hc-chips{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;margin-top:16px}
+  .hc-chip{min-height:40px;padding:8px 16px;border-radius:var(--r-pill);border:1px solid var(--line-dark);background:rgba(255,255,255,.04);color:var(--tx-inv-2);font:700 .82rem var(--font);cursor:pointer;transition:border-color .2s,color .2s,transform .2s}
+  .hc-chip:active{transform:scale(.97)}
+  @media(hover:hover){.hc-chip:hover{border-color:var(--lime);color:var(--lime)}}
+
+  /* ---------- Quick-link tiles ---------- */
+  .hc-tiles{position:relative;z-index:3;max-width:1080px;margin:-56px auto 0;padding:0 16px;display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+  @media(min-width:880px){.hc-tiles{grid-template-columns:repeat(4,1fr);gap:16px;padding:0 24px}}
+  .hc-tile{display:flex;flex-direction:column;gap:10px;background:var(--paper);border:1px solid var(--line);border-radius:var(--r-lg);padding:18px 16px;box-shadow:var(--sh-2);text-decoration:none;color:var(--tx);transition:transform .25s var(--ease-out),box-shadow .25s,border-color .25s}
+  .hc-tile:active{transform:scale(.98)}
+  @media(hover:hover){.hc-tile:hover{transform:translateY(-4px);box-shadow:var(--sh-3);border-color:var(--line-2)}.hc-tile:hover .hc-ti{background:var(--lime);color:var(--ink)}}
+  .hc-ti{width:44px;height:44px;border-radius:var(--r-sm);background:var(--lime-soft);color:var(--lime-700);display:grid;place-items:center;transition:background .25s,color .25s}
+  .hc-ti svg{width:22px;height:22px}
+  .hc-tile h3{font-weight:800;font-size:.95rem;letter-spacing:-.01em}
+  .hc-tile p{color:var(--tx-3);font-weight:700;font-size:.78rem}
+  @media(min-width:880px){.hc-tile{padding:24px 22px}}
+
+  /* ---------- FAQ groups & accordions ---------- */
+  .hc-faq{max-width:760px;margin-inline:auto;padding:clamp(44px,7vw,64px) 16px 8px}
+  .hc-faq>h2{font-weight:900;font-size:clamp(1.35rem,3.5vw,1.7rem);letter-spacing:-.02em;margin-bottom:6px}
+  .hc-faq>.hc-faq-sub{color:var(--tx-3);font-weight:600;font-size:.92rem;margin-bottom:26px}
+  .hc-group{margin-bottom:30px;scroll-margin-top:calc(var(--nav-h) + 16px)}
+  .hc-glabel{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+  .hc-glabel span{font-size:.76rem;font-weight:800;letter-spacing:.13em;text-transform:uppercase;color:var(--tx-2)}
+  .hc-glabel em{font-style:normal;font-size:.72rem;font-weight:800;color:var(--lime-700);background:var(--lime-soft);border-radius:var(--r-pill);padding:3px 9px}
+  .hc-glabel::after{content:"";flex:1;height:1px;background:var(--line)}
+  .hc-acc{background:var(--paper);border:1px solid var(--line);border-radius:var(--r-md);margin-bottom:10px;overflow:hidden;transition:border-color .25s,box-shadow .25s;scroll-margin-top:calc(var(--nav-h) + 16px)}
+  .hc-acc.open{border-color:var(--line-2);box-shadow:var(--sh-2)}
+  .hc-q{display:flex;align-items:center;justify-content:space-between;gap:14px;width:100%;min-height:56px;padding:17px 18px;text-align:left;font:700 .97rem/1.4 var(--font);color:var(--tx);cursor:pointer;background:none;border:0}
+  .hc-q .hc-chev{flex:0 0 auto;width:28px;height:28px;border-radius:50%;display:grid;place-items:center;background:var(--bg);color:var(--tx-3);transition:transform .25s var(--ease-out),background .25s,color .25s}
+  .hc-q .hc-chev svg{width:15px;height:15px}
+  .hc-acc.open .hc-chev{transform:rotate(180deg);background:var(--lime);color:var(--ink)}
+  .hc-a{max-height:0;overflow:hidden;transition:max-height .28s var(--ease)}
+  .hc-a-in{padding:0 18px 18px;color:var(--tx-2);font-weight:500;line-height:1.7;font-size:.94rem;opacity:0;transform:translateY(-4px);transition:opacity .25s ease .06s,transform .25s ease .06s}
+  .hc-acc.open .hc-a-in{opacity:1;transform:none}
+  .hc-t mark{background:var(--lime-glow);color:inherit;border-radius:3px;padding:0 1px}
+  .hc-hide{display:none!important}
+  .hc-empty{display:flex;flex-direction:column;align-items:center;gap:10px;text-align:center;background:var(--paper);border:1px dashed var(--line-2);border-radius:var(--r-lg);padding:38px 20px;margin-bottom:30px}
+  .hc-empty[hidden]{display:none}
+  .hc-empty svg{width:34px;height:34px;color:var(--tx-3)}
+  .hc-empty p{color:var(--tx-2);font-weight:600;font-size:.94rem}
+  .hc-empty p b{color:var(--tx)}
+  .hc-empty button{min-height:40px;padding:9px 18px;border-radius:var(--r-pill);border:1.5px solid var(--line-2);background:var(--paper);font:800 .84rem var(--font);color:var(--tx);cursor:pointer;transition:border-color .2s,transform .2s}
+  .hc-empty button:active{transform:scale(.97)}
+  @media(hover:hover){.hc-empty button:hover{border-color:var(--lime-700)}}
+
+  /* ---------- Contact / escalation ---------- */
+  .hc-contact{max-width:1000px;margin-inline:auto;padding:clamp(30px,5vw,48px) 16px clamp(56px,7vw,80px);scroll-margin-top:calc(var(--nav-h) + 16px)}
+  .hc-contact-grid{display:grid;grid-template-columns:1fr;gap:22px;background:var(--paper);border:1px solid var(--line);border-radius:var(--r-xl);box-shadow:var(--sh-2);padding:clamp(22px,4vw,44px);position:relative;overflow:hidden}
+  .hc-contact-grid::before{content:"";position:absolute;top:-120px;right:-120px;width:300px;height:300px;border-radius:50%;background:radial-gradient(circle,var(--lime-soft),transparent 70%);pointer-events:none}
+  @media(min-width:900px){.hc-contact-grid{grid-template-columns:.95fr 1.05fr;gap:44px;align-items:start}}
+  .hc-contact h2{font-weight:900;font-size:clamp(1.4rem,3.6vw,1.8rem);letter-spacing:-.02em;margin-bottom:8px}
+  .hc-contact .hc-clead{color:var(--tx-2);font-weight:600;line-height:1.65;font-size:.95rem;margin-bottom:20px}
+  .hc-copts{display:flex;flex-direction:column;gap:10px;position:relative;z-index:1}
+  .hc-copt{display:flex;align-items:center;gap:14px;min-height:64px;padding:12px 14px;border:1px solid var(--line);border-radius:var(--r-md);background:var(--paper-2);text-decoration:none;color:var(--tx);transition:transform .25s var(--ease-out),box-shadow .25s,border-color .25s}
+  .hc-copt:active{transform:scale(.98)}
+  @media(hover:hover){.hc-copt:hover{transform:translateY(-2px);box-shadow:var(--sh-2);border-color:var(--line-2)}}
+  .hc-copt .hc-ci{flex:0 0 auto;width:42px;height:42px;border-radius:var(--r-sm);background:var(--lime-soft);color:var(--lime-700);display:grid;place-items:center}
+  .hc-copt .hc-ci svg{width:20px;height:20px}
+  .hc-copt small{display:block;color:var(--tx-3);font-weight:700;font-size:.74rem;text-transform:uppercase;letter-spacing:.08em}
+  .hc-copt b{font-weight:800;font-size:.95rem}
+  .hc-form-card{position:relative;z-index:1}
+  .hc-form-title{font-weight:800;font-size:1.02rem;margin-bottom:14px;display:flex;align-items:center;gap:8px}
+  .hc-form-title svg{width:18px;height:18px;color:var(--lime-700)}
+
+  /* ---------- Motion safety ---------- */
+  @media(prefers-reduced-motion:reduce){
+    .hc-a,.hc-a-in,.hc-q .hc-chev,.hc-tile,.hc-copt,.hc-chip,.hc-clear,.hc-search input,.hc-empty button{transition:none!important}
+    .hc-acc.open .hc-a-in{opacity:1;transform:none}
+    html{scroll-behavior:auto}
+  }
+</style>
 </head>
 <body data-page="help" class="has-mobnav">
 <div class="app-shell">
 <div data-nl-nav></div>
 
-<div class="page-head"><div class="wrap"><div style="margin-inline:auto;text-align:center">
-  <span class="sec-eyebrow" style="justify-content:center">Help Center</span>
-  <h1>How can we help?</h1>
-  <div class="sub">Answers to the most common questions.</div>
-</div></div></div>
+<section class="hc-hero">
+  <div class="hc-hero-in">
+    <span class="hc-eyebrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.1 9a3 3 0 0 1 5.8 1c0 2-3 2.5-3 4"/><path d="M12 17.5h.01"/></svg>Help Center</span>
+    <h1>How can we help?</h1>
+    <p class="hc-sub">Search the answers below, or message our team — we're here for you.</p>
+    <div class="hc-search">
+      <svg class="hc-si" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+      <input id="hcSearch" type="search" autocomplete="off" placeholder="Search help — try “free”, “verified”, “report”…" aria-label="Search help articles">
+      <button class="hc-clear" id="hcClear" type="button" aria-label="Clear search" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
+    </div>
+    <p class="hc-count" id="hcCount" aria-live="polite"></p>
+    <div class="hc-chips" aria-label="Popular searches">
+      <button class="hc-chip" type="button" data-q="free">Fees</button>
+      <button class="hc-chip" type="button" data-q="sell">Selling</button>
+      <button class="hc-chip" type="button" data-q="verified">Verified badge</button>
+      <button class="hc-chip" type="button" data-q="report">Reporting</button>
+      <button class="hc-chip" type="button" data-q="SSP">SSP prices</button>
+    </div>
+  </div>
+</section>
 
-<main class="wrap prose">
-  <h2 id="faq">Frequently asked</h2>
-  <div id="faqList">
-    <div class="accordion"><button class="acc-q">Is Nile Link free to use?<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></button><div class="acc-a"><div class="acc-a-inner">Yes. Creating an account and posting listings is completely free, forever. You only pay if you choose to boost a listing or upgrade to Pro Seller for more reach.</div></div></div>
-    <div class="accordion"><button class="acc-q">How do I sell an item?<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></button><div class="acc-a"><div class="acc-a-inner">Tap <b>Sell</b>, pick a category, add a title, price, location and photos, then publish — it goes live instantly. See our full <a href="sell-guide.html" style="color:var(--lime-700);font-weight:800">step-by-step seller guide →</a></div></div></div>
-    <div class="accordion" id="safety"><button class="acc-q">How do I stay safe when buying?<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></button><div class="acc-a"><div class="acc-a-inner">Always meet in a public place, inspect the item before paying, and never send money in advance to someone you don't know. Prefer sellers with the green verified badge.</div></div></div>
-    <div class="accordion"><button class="acc-q">What does the verified badge mean?<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></button><div class="acc-a"><div class="acc-a-inner">A green tick means our team has confirmed the seller's identity and shop details. It's a strong signal of trust, though you should still follow safe-trading tips.</div></div></div>
-    <div class="accordion" id="report"><button class="acc-q">How do I report a listing or user?<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></button><div class="acc-a"><div class="acc-a-inner">Open the listing and use the report option, or contact us below with the listing link. We review every report quickly.</div></div></div>
-    <div class="accordion"><button class="acc-q">Why are prices shown in USD and SSP?<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></button><div class="acc-a"><div class="acc-a-inner">Sellers set prices in USD for stability, and we show a live SSP estimate using the current exchange rate so everyone knows what to expect.</div></div></div>
+<nav class="hc-tiles" aria-label="Help topics">
+  <a class="hc-tile reveal" href="#g-start">
+    <span class="hc-ti"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L3 14h7l-1 8 11-13h-7z"/></svg></span>
+    <h3>Getting started</h3><p>2 answers</p>
+  </a>
+  <a class="hc-tile reveal" data-d="1" href="#safety">
+    <span class="hc-ti"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l8 4v6c0 5-3.5 8.5-8 10-4.5-1.5-8-5-8-10V6z"/><path d="M9 12l2 2 4-4"/></svg></span>
+    <h3>Safety &amp; trust</h3><p>3 answers</p>
+  </a>
+  <a class="hc-tile reveal" data-d="2" href="#g-pay">
+    <span class="hc-ti"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/><path d="M6 15h4"/></svg></span>
+    <h3>Prices &amp; payments</h3><p>1 answer</p>
+  </a>
+  <a class="hc-tile reveal" data-d="3" href="sell-guide.html">
+    <span class="hc-ti"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M2 4h6a4 4 0 0 1 4 4v12a3 3 0 0 0-3-3H2z"/><path d="M22 4h-6a4 4 0 0 0-4 4v12a3 3 0 0 1 3-3h7z"/></svg></span>
+    <h3>Seller guide</h3><p>Step-by-step →</p>
+  </a>
+</nav>
+
+<main class="hc-faq" id="faq">
+  <h2 class="reveal">Frequently asked</h2>
+  <p class="hc-faq-sub reveal" data-d="1">Every answer, grouped by topic. Tap a question to expand it.</p>
+
+  <div class="hc-empty" id="hcEmpty" hidden>
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/><path d="M8 11h6"/></svg>
+    <p>No answers match <b>“<span id="hcEmptyQ"></span>”</b><br>Try different words, or message us below — we'll get back to you quickly.</p>
+    <button type="button" id="hcReset">Clear search</button>
   </div>
 
-  <h2 id="terms">Still need help?</h2>
-  <p>Reach our team and we'll get back to you quickly.</p>
-  <div class="review-card">
-    <form id="contactForm">
-      <div class="field"><label>Your name</label><input type="text" required placeholder="Your name"></div>
-      <div class="field"><label>Email or phone</label><input type="text" required placeholder="How we reach you"></div>
-      <div class="field"><label>Message</label><textarea required placeholder="How can we help?"></textarea></div>
-      <button class="btn btn-lime btn-block btn-lg" type="submit">Send message</button>
-    </form>
-  </div>
-  <p class="center muted" style="margin:20px 0 50px;font-weight:600">Or email <b>support@nilelink.ss</b> · WhatsApp <b>+211 900 000 000</b></p>
+  <section class="hc-group reveal" id="g-start">
+    <div class="hc-glabel"><span>Getting started</span><em>2</em></div>
+    <div class="hc-acc">
+      <button class="hc-q" type="button" aria-expanded="false"><span class="hc-t">Is Nile Link free to use?</span><span class="hc-chev"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></span></button>
+      <div class="hc-a"><div class="hc-a-inner hc-a-in">Yes. Creating an account and posting listings is completely free, forever. You only pay if you choose to boost a listing or upgrade to Pro Seller for more reach.</div></div>
+    </div>
+    <div class="hc-acc">
+      <button class="hc-q" type="button" aria-expanded="false"><span class="hc-t">How do I sell an item?</span><span class="hc-chev"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></span></button>
+      <div class="hc-a"><div class="hc-a-inner hc-a-in">Tap <b>Sell</b>, pick a category, add a title, price, location and photos, then publish — it goes live instantly. See our full <a href="sell-guide.html" style="color:var(--lime-700);font-weight:800">step-by-step seller guide →</a></div></div>
+    </div>
+  </section>
+
+  <section class="hc-group reveal" id="safety">
+    <div class="hc-glabel"><span>Safety &amp; trust</span><em>3</em></div>
+    <div class="hc-acc">
+      <button class="hc-q" type="button" aria-expanded="false"><span class="hc-t">How do I stay safe when buying?</span><span class="hc-chev"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></span></button>
+      <div class="hc-a"><div class="hc-a-inner hc-a-in">Always meet in a public place, inspect the item before paying, and never send money in advance to someone you don't know. Prefer sellers with the green verified badge.</div></div>
+    </div>
+    <div class="hc-acc">
+      <button class="hc-q" type="button" aria-expanded="false"><span class="hc-t">What does the verified badge mean?</span><span class="hc-chev"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></span></button>
+      <div class="hc-a"><div class="hc-a-inner hc-a-in">A green tick means our team has confirmed the seller's identity and shop details. It's a strong signal of trust, though you should still follow safe-trading tips.</div></div>
+    </div>
+    <div class="hc-acc" id="report">
+      <button class="hc-q" type="button" aria-expanded="false"><span class="hc-t">How do I report a listing or user?</span><span class="hc-chev"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></span></button>
+      <div class="hc-a"><div class="hc-a-inner hc-a-in">Open the listing and use the report option, or contact us below with the listing link. We review every report quickly.</div></div>
+    </div>
+  </section>
+
+  <section class="hc-group reveal" id="g-pay">
+    <div class="hc-glabel"><span>Prices &amp; payments</span><em>1</em></div>
+    <div class="hc-acc">
+      <button class="hc-q" type="button" aria-expanded="false"><span class="hc-t">Why are prices shown in USD and SSP?</span><span class="hc-chev"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></span></button>
+      <div class="hc-a"><div class="hc-a-inner hc-a-in">Sellers set prices in USD for stability, and we show a live SSP estimate using the current exchange rate so everyone knows what to expect.</div></div>
+    </div>
+  </section>
 </main>
+
+<section class="hc-contact" id="terms">
+  <div class="hc-contact-grid reveal">
+    <div>
+      <h2>Still stuck?</h2>
+      <p class="hc-clead">Reach our team and we'll get back to you quickly. WhatsApp is usually the fastest place to find us.</p>
+      <div class="hc-copts">
+        <a class="hc-copt" href="https://wa.me/211900000000">
+          <span class="hc-ci"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 0 1-13.4 7.9L3 21l1.1-4.6A9 9 0 1 1 21 12z"/><path d="M9 10a4.5 4.5 0 0 0 5 5l1.5-1.5-2-1.5-1 .8a3 3 0 0 1-1.3-1.3l.8-1-1.5-2z"/></svg></span>
+          <span><small>WhatsApp</small><b>+211 900 000 000</b></span>
+        </a>
+        <a class="hc-copt" href="mailto:support@nilelink.ss">
+          <span class="hc-ci"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg></span>
+          <span><small>Email</small><b>support@nilelink.ss</b></span>
+        </a>
+      </div>
+    </div>
+    <div class="hc-form-card">
+      <div class="hc-form-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>Send us a message</div>
+      <form id="contactForm">
+        <div class="field"><label>Your name</label><input type="text" required placeholder="Your name"></div>
+        <div class="field"><label>Email or phone</label><input type="text" required placeholder="How we reach you"></div>
+        <div class="field"><label>Message</label><textarea required placeholder="How can we help?"></textarea></div>
+        <button class="btn btn-lime btn-block btn-lg" type="submit">Send message</button>
+      </form>
+    </div>
+  </div>
+</section>
 
 <div data-nl-footer></div>
 </div>
 <div data-nl-mobnav></div>
-<script defer src="../assets/js/supabase-config.js?v=20260706f"></script>
-<script defer src="../assets/js/supabase-client.js?v=20260706f"></script>
-<script defer src="../assets/js/realtime.js?v=20260706f"></script>
-<script defer src="../assets/js/data.js?v=20260706f"></script>
-<script defer src="../assets/js/api.js?v=20260706f"></script>
-<script defer src="../assets/js/core.js?v=20260706f"></script>
-<script defer src="../assets/js/i18n.js?v=20260706f"></script>
+<script defer src="../assets/js/supabase-config.js?v=20260706g"></script>
+<script defer src="../assets/js/supabase-client.js?v=20260706g"></script>
+<script defer src="../assets/js/realtime.js?v=20260706g"></script>
+<script defer src="../assets/js/data.js?v=20260706g"></script>
+<script defer src="../assets/js/api.js?v=20260706g"></script>
+<script defer src="../assets/js/core.js?v=20260706g"></script>
+<script defer src="../assets/js/i18n.js?v=20260706g"></script>
 <script>
-document.addEventListener('click',function(e){var q=e.target.closest('.acc-q');if(!q)return;var acc=q.parentElement;var a=acc.querySelector('.acc-a');var open=acc.classList.toggle('open');a.style.maxHeight=open?a.scrollHeight+'px':'0'});
-document.addEventListener('submit',function(e){if(e.target.id==='contactForm'){e.preventDefault();e.target.reset();window.NL&&NL.toast('Message sent — we\'ll be in touch!',{type:'success'})}});
+(function(){
+  var input=document.getElementById('hcSearch'),clearBtn=document.getElementById('hcClear'),
+      countEl=document.getElementById('hcCount'),emptyEl=document.getElementById('hcEmpty'),
+      emptyQ=document.getElementById('hcEmptyQ'),resetBtn=document.getElementById('hcReset'),
+      groups=[].slice.call(document.querySelectorAll('.hc-group')),
+      items=[].slice.call(document.querySelectorAll('.hc-acc')).map(function(acc){
+        var t=acc.querySelector('.hc-t');
+        return {acc:acc,t:t,q:t.textContent,body:acc.querySelector('.hc-a-in').textContent||''};
+      }),
+      total=items.length;
+
+  /* ---- Accordions: smooth expand/collapse, one open per group ---- */
+  function setOpen(acc,open){
+    var a=acc.querySelector('.hc-a'),q=acc.querySelector('.hc-q');
+    acc.classList.toggle('open',open);
+    a.style.maxHeight=open?a.scrollHeight+'px':'0';
+    q.setAttribute('aria-expanded',open?'true':'false');
+  }
+  document.addEventListener('click',function(e){
+    var q=e.target.closest('.hc-q');if(!q)return;
+    var acc=q.parentElement,willOpen=!acc.classList.contains('open'),grp=acc.closest('.hc-group');
+    if(willOpen&&grp)[].forEach.call(grp.querySelectorAll('.hc-acc.open'),function(o){if(o!==acc)setOpen(o,false)});
+    setOpen(acc,willOpen);
+  });
+
+  /* ---- Instant FAQ filter with highlight + match count ---- */
+  function escHtml(s){return s.replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
+  function escRx(s){return s.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')}
+  function filter(){
+    var raw=input.value.trim(),q=raw.toLowerCase(),n=0;
+    clearBtn.hidden=!raw;
+    items.forEach(function(it){
+      var hit=!q||it.q.toLowerCase().indexOf(q)>-1||it.body.toLowerCase().indexOf(q)>-1;
+      it.acc.classList.toggle('hc-hide',!hit);
+      if(hit)n++;
+      if(q&&hit&&it.q.toLowerCase().indexOf(q)>-1){
+        it.t.innerHTML=escHtml(it.q).replace(new RegExp('('+escRx(escHtml(raw))+')','ig'),'<mark>$1</mark>');
+      }else{it.t.textContent=it.q;}
+    });
+    groups.forEach(function(g){
+      g.classList.toggle('hc-hide',!!q&&!g.querySelector('.hc-acc:not(.hc-hide)'));
+    });
+    if(!raw){countEl.textContent='';emptyEl.hidden=true;return;}
+    if(n===0){countEl.textContent='';emptyQ.textContent=raw;emptyEl.hidden=false;}
+    else{emptyEl.hidden=true;countEl.innerHTML='<b>'+n+'</b> of '+total+' answers match “'+escHtml(raw)+'”';}
+  }
+  input.addEventListener('input',filter);
+  clearBtn.addEventListener('click',function(){input.value='';filter();input.focus();});
+  resetBtn.addEventListener('click',function(){input.value='';filter();input.focus();});
+  [].forEach.call(document.querySelectorAll('.hc-chip'),function(ch){
+    ch.addEventListener('click',function(){input.value=ch.getAttribute('data-q');filter();});
+  });
+
+  /* ---- Deep links: open the accordion the hash points to ---- */
+  function openHash(){
+    var h=location.hash.slice(1);if(!h)return;
+    var el=document.getElementById(h);
+    if(el&&el.classList&&el.classList.contains('hc-acc'))setOpen(el,true);
+  }
+  openHash();
+  window.addEventListener('hashchange',openHash);
+
+  /* ---- Contact form (delegated; keeps existing toast behavior) ---- */
+  document.addEventListener('submit',function(e){
+    if(e.target.id==='contactForm'){
+      e.preventDefault();e.target.reset();
+      window.NL&&NL.toast('Message sent — we\'ll be in touch!',{type:'success'});
+    }
+  });
+})();
 </script>
 </body>
 </html>

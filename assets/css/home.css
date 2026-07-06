@@ -233,20 +233,114 @@
 .stats-sub{text-align:center;margin-top:28px;font-weight:700;color:#1c3d08;font-size:1.05rem}
 
 /* ============================================================
-   WHY / TRUST  — bento
+   WHY / TRUST  — bento v2 (trust grid + stat band + CTA pair)
    ============================================================ */
+.why-head{text-align:center;max-width:640px;margin:0 auto clamp(28px,4.5vw,48px)}
+.why-head .sec-eyebrow{justify-content:center}
+.why-head .sec-sub{margin-inline:auto}
+
+/* Bento grid: 1-col → feature + 2x2 → 12-col bento */
 .bento{display:grid;gap:16px;grid-template-columns:1fr}
-@media(min-width:768px){.bento{grid-template-columns:1.4fr 1fr;grid-template-rows:auto auto}}
-.bento-card{background:var(--paper);border:1px solid var(--line);border-radius:var(--r-lg);padding:28px;transition:transform .25s,box-shadow .25s;position:relative;overflow:hidden}
-.bento-card:hover{transform:translateY(-4px);box-shadow:var(--sh-3)}
-.bento-lg{grid-row:1/3}
-@media(max-width:767px){.bento-lg{grid-row:auto}}
-.bento-ic{width:56px;height:56px;border-radius:16px;display:grid;place-items:center;margin-bottom:18px;background:var(--lime-soft);color:var(--lime-700)}
-.bento-ic svg{width:28px;height:28px}
-.bento-card h3{font-size:1.24rem;font-weight:800;letter-spacing:-.02em;margin-bottom:8px}
-.bento-card p{color:var(--tx-3);font-size:.95rem;font-weight:500}
-.bento-lg .bento-art{margin-top:24px;height:160px;border-radius:var(--r-md);background:linear-gradient(135deg,#0e140a,#11220c);display:grid;place-items:center;color:var(--lime);position:relative;overflow:hidden}
-.bento-lg .bento-art svg{width:90px;height:90px;filter:drop-shadow(0 0 16px var(--lime-glow))}
+@media(min-width:640px){
+  .bento{grid-template-columns:repeat(2,1fr)}
+  .bento-lg{grid-column:1/-1}
+}
+@media(min-width:1024px){
+  .bento{grid-template-columns:repeat(12,1fr);gap:20px}
+  .bento-lg{grid-column:span 6;grid-row:span 2}
+  .bento-sm{grid-column:span 3}
+}
+
+.bento-card{
+  position:relative;display:flex;flex-direction:column;
+  background:var(--paper);border:1px solid var(--line);border-radius:var(--r-lg);
+  padding:clamp(22px,3vw,30px);overflow:hidden;
+  transition:transform .3s var(--ease),box-shadow .3s,border-color .3s;
+}
+/* soft lime wash that fades in on hover */
+.bento-card::after{
+  content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;
+  background:radial-gradient(120% 90% at 100% 0%,var(--lime-soft),transparent 55%);
+  opacity:0;transition:opacity .3s;
+}
+@media(hover:hover){
+  .bento-card:hover{transform:translateY(-4px);border-color:rgba(124,252,0,.55);box-shadow:var(--sh-3),0 0 0 3px rgba(124,252,0,.14)}
+  .bento-card:hover::after{opacity:1}
+  .bento-card:hover .bento-ic{transform:scale(1.08) rotate(-5deg)}
+}
+.bento-ic{
+  width:52px;height:52px;border-radius:15px;flex-shrink:0;
+  display:grid;place-items:center;margin-bottom:16px;
+  background:var(--lime-soft);color:var(--lime-700);
+  border:1px solid rgba(124,252,0,.28);
+  transition:transform .3s var(--spring);
+}
+.bento-ic svg{width:26px;height:26px}
+.bento-card h3{font-size:1.18rem;font-weight:800;letter-spacing:-.02em;margin-bottom:8px}
+.bento-card p{color:var(--tx-3);font-size:.94rem;font-weight:500;line-height:1.55;max-width:44ch}
+
+/* Feature card art: dark panel, glow, mock verified-seller chip */
+.bento-lg .bento-art{
+  position:relative;margin-top:clamp(20px,3vw,28px);flex:1;min-height:190px;
+  border-radius:var(--r-md);overflow:hidden;
+  background:linear-gradient(140deg,#0e140a,#12250c);
+  display:flex;align-items:center;justify-content:center;
+}
+.ba-glow{position:absolute;width:280px;height:280px;border-radius:50%;background:radial-gradient(circle,var(--lime-glow),transparent 68%);opacity:.32;filter:blur(28px)}
+.ba-shield{position:absolute;width:160px;height:160px;right:-26px;top:-26px;color:rgba(124,252,0,.14);transform:rotate(10deg)}
+.ba-seller{
+  position:relative;display:flex;align-items:center;gap:12px;
+  width:min(340px,88%);padding:14px 16px;border-radius:16px;
+  background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.13);
+  backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);
+}
+.ba-av{width:44px;height:44px;border-radius:50%;flex-shrink:0;display:grid;place-items:center;background:rgba(124,252,0,.14);color:var(--lime)}
+.ba-av svg{width:22px;height:22px}
+.ba-lines{flex:1;min-width:0;display:flex;flex-direction:column;gap:7px}
+.ba-lines i{display:block;height:9px;border-radius:5px;background:rgba(255,255,255,.17)}
+.ba-lines .l1{width:72%}
+.ba-lines .l2{width:46%;background:rgba(255,255,255,.09)}
+.ba-badge{
+  display:inline-flex;align-items:center;gap:5px;flex-shrink:0;
+  background:var(--lime);color:var(--ink);font-weight:800;font-size:.72rem;
+  padding:5px 11px;border-radius:var(--r-pill);
+}
+.ba-badge svg{width:12px;height:12px}
+@keyframes baPulse{0%,100%{box-shadow:0 0 0 0 rgba(124,252,0,.45)}50%{box-shadow:0 0 0 9px rgba(124,252,0,0)}}
+.bento-card.in .ba-badge{animation:baPulse 2.8s ease-in-out infinite}
+@media(prefers-reduced-motion:reduce){.bento-card.in .ba-badge{animation:none}}
+
+/* Stat band: near-black, lime numerals, count-up */
+.why-band{
+  position:relative;overflow:hidden;isolation:isolate;
+  margin-top:clamp(20px,3vw,28px);border-radius:var(--r-xl);
+  background:linear-gradient(135deg,var(--ink-2),var(--night));
+  border:1px solid rgba(124,252,0,.15);
+  padding:clamp(26px,4vw,42px) clamp(18px,4vw,48px);
+  display:grid;grid-template-columns:repeat(2,1fr);gap:24px 16px;
+}
+.why-band::before{
+  content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;
+  background:
+    radial-gradient(60% 100% at 50% 0%,rgba(124,252,0,.10),transparent 62%),
+    radial-gradient(circle,rgba(124,252,0,.05) 1px,transparent 1.5px) 0 0/22px 22px;
+}
+@media(min-width:768px){.why-band{grid-template-columns:repeat(4,1fr)}}
+.wb-item{position:relative;display:flex;flex-direction:column;gap:6px;text-align:center}
+@media(min-width:768px){
+  .wb-item+.wb-item::before{content:"";position:absolute;left:0;top:50%;transform:translateY(-50%);height:64%;width:1px;background:var(--line-dark)}
+}
+.wb-num{
+  font-weight:900;font-size:clamp(1.7rem,4vw,2.6rem);letter-spacing:-.03em;line-height:1;
+  color:var(--lime);font-variant-numeric:tabular-nums;
+  text-shadow:0 0 26px rgba(124,252,0,.35);
+}
+.wb-num em{font-style:normal;font-size:.44em;font-weight:800;margin-left:5px;letter-spacing:.05em}
+.wb-lbl{font-size:.72rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--tx-inv-2)}
+
+/* CTA pair under the band */
+.why-cta{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:14px;margin-top:clamp(24px,4vw,38px)}
+.why-cta .btn svg{width:18px;height:18px}
 
 /* ============================================================
    SELLER CTA  — phone mock only (band styles live in main.css
