@@ -34,9 +34,7 @@ window.NL=window.NL||{};
     img.src=IMG_FALLBACK;
     img.alt='';
     img.removeAttribute('srcset');
-    img.style.objectFit='contain';
-    img.style.background='#eef1e6';
-    img.style.padding='16%';
+    img.classList.add('img-fallback');
   },true);
 
   /* ============================================================
