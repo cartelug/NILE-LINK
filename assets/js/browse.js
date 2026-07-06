@@ -86,6 +86,7 @@
 
   function render(){
     renderActive();
+    NL.renderSkeleton($('#browseGrid'),8);
     NL.api.listings.list(state).then(r=>{
       let list=applyPills(r.data);
       if(state.hoods.length)list=list.filter(x=>state.hoods.some(h=>(x.loc||'').includes(h)));

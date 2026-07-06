@@ -24,6 +24,7 @@
   /* ---- Featured grid + tabs ---- */
   let filter='all';
   function renderGrid(){
+    NL.renderSkeleton($('#homeGrid'),8);
     NL.api.listings.list({group:filter}).then(r=>NL.renderGrid($('#homeGrid'),r.data));
     // update "See all" links contextually
     document.querySelectorAll('.sec-link[data-see-all]').forEach(a=>{a.href=root+'pages/browse.html'+(filter!=='all'?'?group='+filter:'')});

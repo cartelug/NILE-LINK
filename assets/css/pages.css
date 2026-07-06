@@ -70,7 +70,8 @@
 
 .browse-main{min-width:0}
 .browse-bar{display:flex;align-items:center;gap:12px;margin-bottom:16px;flex-wrap:wrap}
-.browse-search{flex:1;min-width:200px;display:flex;align-items:center;gap:9px;padding:11px 15px;background:var(--paper);border:1px solid var(--line);border-radius:var(--r-pill)}
+.browse-search{flex:1;min-width:200px;display:flex;align-items:center;gap:9px;padding:11px 15px;background:var(--paper);border:1px solid var(--line);border-radius:var(--r-pill);transition:border-color .15s,box-shadow .15s}
+.browse-search:focus-within{border-color:var(--lime-700);box-shadow:0 0 0 3px var(--lime-soft)}
 .browse-search svg{width:18px;height:18px;color:var(--tx-3);flex-shrink:0}
 .browse-search input{flex:1;border:none;background:none;font-weight:600;font-size:.95rem;min-width:0}
 .browse-search input:focus{outline:none}
@@ -341,7 +342,7 @@
 .lr-title{font-weight:800;font-size:.92rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .lr-meta{font-size:.8rem;color:var(--tx-3);font-weight:600;margin-top:2px;display:flex;gap:10px;flex-wrap:wrap}
 .lr-actions{display:flex;gap:6px;flex-shrink:0}
-.lr-actions button{width:36px;height:36px;border-radius:10px;background:var(--bg);display:grid;place-items:center;color:var(--tx-2)}
+.lr-actions button{width:40px;height:40px;border-radius:10px;background:var(--bg);display:grid;place-items:center;color:var(--tx-2);transition:background .15s}
 .lr-actions button svg{width:17px;height:17px}
 .lr-actions button:hover{background:var(--line)}
 .status-pill{display:inline-flex;align-items:center;gap:5px;padding:3px 10px;border-radius:var(--r-pill);font-size:.72rem;font-weight:800}
