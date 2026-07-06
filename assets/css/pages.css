@@ -483,7 +483,7 @@
    empty states
    ============================================================ */
 .bubble.sending{opacity:.55}
-.bubble.failed{opacity:.85;outline:1.5px solid #f3c0c0}
+.bubble.failed{opacity:.85;outline:1.5px solid #f3c0c0;cursor:pointer}
 .bubble .b-check{margin-left:5px;font-weight:800;opacity:.75}
 .bubble.failed .b-check{color:#dc2626}
 /* consecutive messages from the same sender sit closer together */

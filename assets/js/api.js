@@ -292,7 +292,8 @@ window.NL=window.NL||{};
           lastTime: r.last_time ? relativeTime(r.last_time) : '',
           unread: isBuyer ? (r.unread_for_buyer||0) : (r.unread_for_seller||0),
           verified: isBuyer ? !!r.seller_verified : !!r.buyer_verified,
-          avInitial: ((isBuyer ? r.seller_name : r.buyer_name) || '?').charAt(0).toUpperCase()
+          avInitial: ((isBuyer ? r.seller_name : r.buyer_name) || '?').charAt(0).toUpperCase(),
+          isSeller: !isBuyer
         };
       });
       return ok(rows);
@@ -351,6 +352,14 @@ window.NL=window.NL||{};
         .select().single();
       if(error) return err(error.message);
       return ok({id: data.id});
+    },
+
+    // Sum of unread across all my conversations (used for the nav badge).
+    async unreadCount(){
+      if(!useSb()) return ok(D.CONVERSATIONS.reduce((a,c)=>a+(c.unread||0),0));
+      const r = await messages.conversations();
+      if(!r.ok) return r;
+      return ok(r.data.reduce((a,c)=>a+(c.unread||0),0));
     },
 
     // Start a conversation with the seller and send an opening/offer message.

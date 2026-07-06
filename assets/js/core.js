@@ -71,14 +71,26 @@ window.NL=window.NL||{};
   /* ============================================================
      BADGES (saved count, notif/msg dots)
      ============================================================ */
+  function paintDot(sel,n){
+    document.querySelectorAll(sel).forEach(b=>{if(n){b.textContent=n>99?'99+':n;b.classList.add('show')}else b.classList.remove('show')});
+  }
   function updateBadges(){
-    document.querySelectorAll('[data-saved-count]').forEach(b=>{if(FAVS.length){b.textContent=FAVS.length>99?'99+':FAVS.length;b.classList.add('show')}else b.classList.remove('show')});
-    const unread=D.NOTIFICATIONS.filter(n=>!n.read).length;
-    document.querySelectorAll('[data-notif-dot]').forEach(b=>{if(unread){b.textContent=unread;b.classList.add('show')}else b.classList.remove('show')});
-    const munread=D.CONVERSATIONS.reduce((a,c)=>a+(c.unread||0),0);
-    document.querySelectorAll('[data-msg-dot]').forEach(b=>{if(munread){b.textContent=munread;b.classList.add('show')}else b.classList.remove('show')});
+    paintDot('[data-saved-count]', FAVS.length);
+    if(!NL.isAuthed()){ paintDot('[data-notif-dot]',0); paintDot('[data-msg-dot]',0); return; }
+    if(window.NL && NL.api && NL.api.notifications){
+      NL.api.notifications.unread().then(r=>paintDot('[data-notif-dot]', (r&&r.ok)?r.data:0));
+    }
+    if(window.NL && NL.api && NL.api.messages){
+      NL.api.messages.unreadCount().then(r=>paintDot('[data-msg-dot]', (r&&r.ok)?r.data:0));
+    }
   }
   NL.updateBadges=updateBadges;
+  // Any page: refresh the nav badges the moment a new message/notification
+  // arrives, or a conversation's unread count changes (e.g. read elsewhere).
+  document.addEventListener('nl:new-message', updateBadges);
+  document.addEventListener('nl:new-notification', updateBadges);
+  document.addEventListener('nl:conv-updated', updateBadges);
+  document.addEventListener('nl:auth', updateBadges);
 
   /* ============================================================
      PRODUCT CARD  (kept identical in spirit)

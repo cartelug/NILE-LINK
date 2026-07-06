@@ -68,9 +68,10 @@
   function bubble(m,cont){
     const cls='bubble '+(m.from==='me'?'me':'them')+(cont?' cont':'')+(m.sending?' sending':'');
     const cidAttr=m.cid?' data-cid="'+m.cid+'"':'';
+    const retryAttr=m.from==='me'?(m.image?' data-retry-img="'+esc(m.image)+'"':' data-retry-text="'+esc(m.text||'')+'"'):'';
     const status=m.from==='me'?('<span class="b-check">'+(m.sending?'·':'✓')+'</span>'):'';
-    if(m.image||m.img)return '<div class="'+cls+' with-img"'+cidAttr+'><img src="'+(m.image||m.img)+'" alt="photo" loading="lazy"><span class="b-time">'+clock(m.ts)+status+'</span></div>';
-    return '<div class="'+cls+'"'+cidAttr+'>'+esc(m.text)+'<span class="b-time">'+clock(m.ts)+status+'</span></div>';
+    if(m.image||m.img)return '<div class="'+cls+' with-img"'+cidAttr+retryAttr+'><img src="'+(m.image||m.img)+'" alt="photo" loading="lazy"><span class="b-time">'+clock(m.ts)+status+'</span></div>';
+    return '<div class="'+cls+'"'+cidAttr+retryAttr+'>'+esc(m.text)+'<span class="b-time">'+clock(m.ts)+status+'</span></div>';
   }
   function appendMsg(body,m){
     let html='';
@@ -183,8 +184,34 @@
     }
     function failSent(cidKey){
       const el=body.querySelector('[data-cid="'+cidKey+'"]');
-      if(el){ el.classList.add('failed'); const ck=el.querySelector('.b-check'); if(ck)ck.textContent='!'; }
+      if(el){ el.classList.add('failed'); const ck=el.querySelector('.b-check'); if(ck){ck.textContent='!';ck.title='Failed to send — tap to retry'} el.title='Tap to retry'; }
     }
+
+    async function sendText(txt){
+      const k=optimistic({from:'me',text:txt});
+      const res=await NL.api.messages.send(id,txt);
+      if(res.ok){ confirmSent(k,res.data.id); c.lastMsg=txt; c.lastTime='Just now'; renderList($('#convSearch')?$('#convSearch').value:''); }
+      else{ failSent(k); NL.toast(res.error||'Message failed to send',{type:'error'}); }
+    }
+    async function sendImage(img){
+      const k=optimistic({from:'me',image:img});
+      if(isLive()){
+        try{
+          const uid=(await NL.sb.auth.getUser()).data.user.id;
+          const { data, error } = await NL.sb.from('messages').insert({conversation_id:id,sender_id:uid,body:'',image_url:img}).select().single();
+          if(error) failSent(k); else confirmSent(k,data.id);
+        }catch(_){ failSent(k); }
+      }else{ confirmSent(k); }
+    }
+
+    // Tap a failed bubble to retry the exact same send.
+    body.addEventListener('click', e=>{
+      const failed=e.target.closest('.bubble.failed'); if(!failed) return;
+      if(e.target.closest('img')) return; // let the lightbox handler own image taps
+      failed.remove();
+      if(failed.dataset.retryImg) sendImage(failed.dataset.retryImg);
+      else if(failed.dataset.retryText) sendText(failed.dataset.retryText);
+    });
 
     $('#composeForm').addEventListener('submit', async e=>{
       e.preventDefault();
@@ -193,24 +220,9 @@
 
       // images first
       const imgs=pending.splice(0,pending.length); renderPrev();
-      for(const img of imgs){
-        const k=optimistic({from:'me',image:img});
-        if(isLive()){
-          try{
-            const uid=(await NL.sb.auth.getUser()).data.user.id;
-            const { data, error } = await NL.sb.from('messages').insert({conversation_id:id,sender_id:uid,body:'',image_url:img}).select().single();
-            if(error) failSent(k); else confirmSent(k,data.id);
-          }catch(_){ failSent(k); }
-        }else{ confirmSent(k); }
-      }
+      for(const img of imgs) await sendImage(img);
 
-      if(txt){
-        inp.value='';
-        const k=optimistic({from:'me',text:txt});
-        const res=await NL.api.messages.send(id,txt);
-        if(res.ok){ confirmSent(k,res.data.id); c.lastMsg=txt; c.lastTime='Just now'; renderList($('#convSearch')?$('#convSearch').value:''); }
-        else{ failSent(k); NL.toast(res.error||'Message failed to send',{type:'error'}); }
-      }
+      if(txt){ inp.value=''; await sendText(txt); }
 
       // mock-mode demo reply
       if(!isLive()){

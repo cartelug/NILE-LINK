@@ -77,7 +77,14 @@
   }
   async function loadRequests(){
     const r=await NL.api.messages.conversations();
-    CONVOS=(r.ok&&r.data)?r.data:[];
+    // "Requests" = buyers messaging YOU about your listings — i.e.
+    // conversations where you're the seller side. Conversations you
+    // started as a buyer (messaging someone else's listing) belong in
+    // the regular Messages inbox, not here.
+    const all=(r.ok&&r.data)?r.data:[];
+    // Mock conversations have no buyer/seller side to filter by — show
+    // them all so the offline/dev preview still has demo content.
+    CONVOS=NL.sb ? all.filter(c=>c.isSeller) : all;
     renderRequests(); renderStats();
   }
 
