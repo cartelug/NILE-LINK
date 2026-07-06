@@ -238,6 +238,7 @@ window.NL=window.NL||{};
       '</div>'+
       '<div class="foot-col"><h4>Company</h4>'+
         '<a href="'+href('pages/about.html')+'">About Us</a>'+
+        '<a href="'+href('pages/sell-guide.html')+'">How to Sell</a>'+
         '<a href="'+href('pages/pricing.html')+'">Pricing</a>'+
         '<a href="'+href('pages/about.html')+'#careers">Careers</a>'+
         '<a href="'+href('pages/help.html')+'">Contact</a>'+
