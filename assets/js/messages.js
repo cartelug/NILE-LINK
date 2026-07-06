@@ -97,7 +97,8 @@
 
   /* ---------------- Open a thread ---------------- */
   async function openConv(id){
-    const c=convs.find(x=>x.id===id);if(!c)return;
+    const c=convs.find(x=>String(x.id)===String(id));if(!c)return;
+    id=c.id;
     active=id;c.unread=0;NL.updateBadges();renderList($('#convSearch')?$('#convSearch').value:'');
     $('#chat').classList.add('show-thread');
     lastFrom=null; lastDayKey=null;

@@ -21,6 +21,24 @@ window.NL=window.NL||{};
   NL.sspLine=it=>'≈ '+fmtSSP(it.usd*NL.getRate())+(it.note||'');
   NL.glyph=(k,s)=>'<svg class="glyph" width="'+s+'" height="'+s+'" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">'+(D.ICONS[k]||D.ICONS.services)+'</svg>';
 
+  /* ---- Broken-photo fallback: on flaky connections a listing photo
+     can fail to load anywhere on the site (card, gallery, chat). Without
+     this, the browser renders the raw alt text over the image box. Swap
+     any failed remote <img> to a neutral placeholder graphic instead. ---- */
+  const IMG_FALLBACK='data:image/svg+xml,'+encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect width="100" height="100" fill="#eef1e6"/><g fill="none" stroke="#9aa88c" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"><rect x="20" y="28" width="60" height="44" rx="5"/><circle cx="35" cy="43" r="5.5"/><path d="M20 63l15-15 12 12 11-9 22 22" /></g></svg>');
+  document.addEventListener('error',e=>{
+    const img=e.target;
+    if(!img||img.tagName!=='IMG'||img.dataset.fallback)return;
+    if((img.src||'').indexOf('assets/images/')!==-1)return; // trust local site assets
+    img.dataset.fallback='1';
+    img.src=IMG_FALLBACK;
+    img.alt='';
+    img.removeAttribute('srcset');
+    img.style.objectFit='contain';
+    img.style.background='#eef1e6';
+    img.style.padding='16%';
+  },true);
+
   /* ============================================================
      AUTH STATE
      ============================================================ */
