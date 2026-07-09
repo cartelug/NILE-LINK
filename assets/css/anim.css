@@ -1,0 +1,195 @@
+/* ============================================================
+   NILE LINK — anim.css
+   Motion & animation pack. Layers rich, tasteful motion on top of
+   the existing UI by targeting existing class names (no HTML edits).
+   GPU-only (transform/opacity). Everything ambient/looping is gated
+   behind (prefers-reduced-motion: no-preference) so "reduce motion"
+   users get calm, still pages.
+   ============================================================ */
+
+/* ---------- shared easings / durations ---------- */
+:root{
+  --a-fast:.16s; --a-ui:.32s; --a-slow:.55s;
+  --a-ease:cubic-bezier(.22,1,.36,1);
+  --a-out:cubic-bezier(.16,1,.3,1);
+  --a-spring:cubic-bezier(.34,1.56,.64,1);
+}
+
+/* ============================================================
+   1. SCROLL PROGRESS BAR  (injected by anim.js)
+   ============================================================ */
+.nl-progress{position:fixed;top:0;left:0;height:3px;width:100%;z-index:400;transform:scaleX(0);transform-origin:left;
+  background:linear-gradient(90deg,var(--lime-700),var(--lime));box-shadow:0 0 10px var(--lime-glow);pointer-events:none;
+  transition:opacity .3s}
+.nl-progress.hide{opacity:0}
+
+/* ============================================================
+   2. CURSOR GLOW  (desktop, over dark sections; injected by anim.js)
+   ============================================================ */
+.nl-cursor{position:fixed;top:0;left:0;width:460px;height:460px;border-radius:50%;z-index:1;pointer-events:none;
+  background:radial-gradient(circle,rgba(124,252,0,.16),transparent 62%);
+  transform:translate3d(-9999px,-9999px,0) translate(-50%,-50%);opacity:0;transition:opacity .35s;mix-blend-mode:screen;will-change:transform}
+.nl-cursor.on{opacity:1}
+
+/* ============================================================
+   3. REVEAL VOCABULARY  ([data-anim] handled by anim.js -> .in)
+   Existing .reveal keeps working; these add extra flavours.
+   ============================================================ */
+[data-anim]{opacity:0;will-change:transform,opacity;transition:opacity var(--a-slow) var(--a-out),transform var(--a-slow) var(--a-out)}
+[data-anim="fade"]{transform:none}
+[data-anim="fade-up"]{transform:translateY(26px)}
+[data-anim="fade-down"]{transform:translateY(-26px)}
+[data-anim="left"]{transform:translateX(-32px)}
+[data-anim="right"]{transform:translateX(32px)}
+[data-anim="scale"]{transform:scale(.92)}
+[data-anim="blur"]{filter:blur(10px);transform:translateY(16px)}
+[data-anim].in{opacity:1;transform:none;filter:none}
+/* stagger children */
+[data-anim-stagger]>*{opacity:0;transform:translateY(20px);transition:opacity var(--a-slow) var(--a-out),transform var(--a-slow) var(--a-out)}
+[data-anim-stagger].in>*{opacity:1;transform:none}
+[data-anim-stagger].in>*:nth-child(1){transition-delay:.04s}
+[data-anim-stagger].in>*:nth-child(2){transition-delay:.10s}
+[data-anim-stagger].in>*:nth-child(3){transition-delay:.16s}
+[data-anim-stagger].in>*:nth-child(4){transition-delay:.22s}
+[data-anim-stagger].in>*:nth-child(5){transition-delay:.28s}
+[data-anim-stagger].in>*:nth-child(6){transition-delay:.34s}
+[data-anim-stagger].in>*:nth-child(7){transition-delay:.40s}
+[data-anim-stagger].in>*:nth-child(8){transition-delay:.46s}
+
+/* ============================================================
+   4. MICRO-INTERACTIONS  (buttons, cards, links, taps)
+   ============================================================ */
+/* press-scale on any button / card-ish tap target */
+.btn,.btn-google,.brp,.dash-tab,.role-opt,.cat-card,.value-card,.bento-card,.hc-tile,
+.drawer-tile,.drawer-row,.icon-btn,.fav,.view-toggle button,.pill,.chip,.cookie-btns button{
+  transition:transform var(--a-fast) var(--a-ease),box-shadow var(--a-ui),border-color var(--a-ui),background var(--a-ui),color var(--a-ui)}
+.btn:active,.btn-google:active,.brp:active,.cat-card:active,.value-card:active,.bento-card:active,
+.hc-tile:active,.drawer-tile:active,.role-opt:active,.cookie-btns button:active{transform:scale(.965)}
+.icon-btn:active,.fav:active{transform:scale(.9)}
+
+/* button hover lift for primary CTAs */
+.btn-lime,.btn-primary{position:relative;overflow:hidden}
+.btn-lime:hover,.btn-primary:hover{transform:translateY(-2px)}
+/* periodic shimmer sweep across primary buttons */
+@media(prefers-reduced-motion:no-preference){
+  .btn-lime::after,.btn-primary::after{content:"";position:absolute;inset:0;background:linear-gradient(110deg,transparent 30%,rgba(255,255,255,.45) 50%,transparent 70%);
+    transform:translateX(-130%);animation:btnSheen 6s ease-in-out 2s infinite;pointer-events:none}
+  @keyframes btnSheen{0%,72%{transform:translateX(-130%)}86%,100%{transform:translateX(130%)}}
+}
+
+/* card hover glow (enhances existing .card:hover lift) */
+.card{transition:transform .25s var(--a-ease),box-shadow .25s,border-color .25s}
+.card:hover{box-shadow:0 18px 44px rgba(16,24,8,.16),0 0 0 1.5px var(--lime-soft)}
+
+/* link underline micro-motion already exists in nav; add icon spin on hover */
+@media(hover:hover){
+  .icon-btn:hover{transform:translateY(-1px)}
+  .cat-card:hover,.value-card:hover,.bento-card:hover,.hc-tile:hover{transform:translateY(-4px)}
+}
+
+/* ============================================================
+   5. 3-D TILT  (anim.js adds .tilt-on + sets CSS vars)
+   ============================================================ */
+.tilt-on{transform:perspective(760px) rotateX(var(--ty,0deg)) rotateY(var(--tx,0deg)) translateZ(0);
+  transition:transform .18s var(--a-out)}
+.tilt-reset{transition:transform .5s var(--a-spring)}
+
+/* ============================================================
+   6. AMBIENT / ALWAYS-ON MOTION  (subtle; reduce-motion opts out)
+   ============================================================ */
+@media(prefers-reduced-motion:no-preference){
+  /* slow drifting glows — target section decorative layers */
+  .seller-mesh span,.hc-hero::before,.hc-hero::after{animation:drift 16s ease-in-out infinite alternate}
+  .seller-mesh span:nth-child(2){animation-duration:20s;animation-delay:-4s}
+  .seller-mesh span:nth-child(3){animation-duration:24s;animation-delay:-8s}
+  @keyframes drift{from{transform:translate3d(0,0,0) scale(1)}to{transform:translate3d(18px,-22px,0) scale(1.08)}}
+
+  /* gentle float for floating listing cards + trust art */
+  .float-stack .fc{animation:floaty 7s ease-in-out infinite}
+  .float-stack .fc2{animation-duration:8.5s;animation-delay:-2s}
+  .float-stack .fc3{animation-duration:9.5s;animation-delay:-4s}
+  @keyframes floaty{0%,100%{transform:translateY(0) rotate(var(--r,0deg))}50%{transform:translateY(-12px) rotate(var(--r,0deg))}}
+
+  /* live pulse dots */
+  .hero-badge .dot,.wb-item .wb-num,.status-pill.st-live::before{will-change:opacity}
+  .hero-badge .dot{animation:pulseDot 2.2s ease-in-out infinite}
+  @keyframes pulseDot{0%,100%{box-shadow:0 0 0 0 var(--lime-glow)}50%{box-shadow:0 0 0 7px transparent}}
+
+  /* subtle breathing on primary hero CTA glow */
+  .hero-search-bar{animation:heroBreathe 6s ease-in-out infinite}
+  @keyframes heroBreathe{0%,100%{box-shadow:0 22px 64px rgba(124,252,0,.20)}50%{box-shadow:0 26px 74px rgba(124,252,0,.34)}}
+
+  /* Ken-Burns slow zoom on big photos */
+  .auth-brand-bg img,.about-hero-bg img{animation:kenburns 26s ease-in-out infinite alternate}
+  @keyframes kenburns{from{transform:scale(1)}to{transform:scale(1.09)}}
+}
+
+/* ============================================================
+   7. NAV / CHROME polish
+   ============================================================ */
+#nlNav{transition:box-shadow .3s,background .3s,height .3s}
+.nav-logo-mark{transition:transform .3s var(--a-spring)}
+.nav-logo:hover .nav-logo-mark{transform:rotate(-8deg) scale(1.06)}
+/* mobile bottom-nav active bounce */
+@media(prefers-reduced-motion:no-preference){
+  .mob-nav a.active svg,.mob-nav a[aria-current] svg{animation:navPop .4s var(--a-spring)}
+  @keyframes navPop{0%{transform:scale(1)}40%{transform:scale(1.28)}100%{transform:scale(1)}}
+}
+/* drawer menu items cascade when open */
+.drawer.open .drawer-tile,.drawer.open .drawer-row,.drawer.open .drawer-legal{animation:drawerItem .42s var(--a-out) both}
+@keyframes drawerItem{from{opacity:0;transform:translateX(14px)}to{opacity:1;transform:none}}
+.drawer.open .drawer-tile:nth-child(2){animation-delay:.04s}
+.drawer.open .drawer-tile:nth-child(3){animation-delay:.08s}
+.drawer.open .drawer-tile:nth-child(4){animation-delay:.12s}
+.drawer.open .drawer-row:nth-child(1){animation-delay:.10s}
+.drawer.open .drawer-row:nth-child(2){animation-delay:.15s}
+.drawer.open .drawer-row:nth-child(3){animation-delay:.20s}
+.drawer.open .drawer-row:nth-child(4){animation-delay:.25s}
+.drawer.open .drawer-row:nth-child(5){animation-delay:.30s}
+@media(prefers-reduced-motion:reduce){.drawer.open .drawer-tile,.drawer.open .drawer-row,.drawer.open .drawer-legal{animation:none}}
+
+/* ============================================================
+   8. SAVE-HEART burst (enhances existing favPop)
+   ============================================================ */
+@media(prefers-reduced-motion:no-preference){
+  .fav.on::after{content:"";position:absolute;inset:-6px;border-radius:50%;border:2px solid var(--err);opacity:0;
+    animation:heartBurst .5s var(--a-out)}
+  @keyframes heartBurst{0%{opacity:.7;transform:scale(.5)}100%{opacity:0;transform:scale(1.6)}}
+}
+
+/* ============================================================
+   9. CHAT typing indicator  (used by messages.js if present)
+   ============================================================ */
+.typing{display:inline-flex;gap:4px;align-items:center;padding:10px 14px}
+.typing i{width:7px;height:7px;border-radius:50%;background:var(--tx-3);display:inline-block}
+@media(prefers-reduced-motion:no-preference){
+  .typing i{animation:typing 1.2s ease-in-out infinite}
+  .typing i:nth-child(2){animation-delay:.15s}
+  .typing i:nth-child(3){animation-delay:.3s}
+  @keyframes typing{0%,60%,100%{transform:translateY(0);opacity:.5}30%{transform:translateY(-5px);opacity:1}}
+}
+
+/* ============================================================
+   10. RIPPLE  (anim.js injects .nl-ripple spans)
+   ============================================================ */
+.nl-ripple{position:absolute;border-radius:50%;transform:scale(0);background:rgba(255,255,255,.5);
+  pointer-events:none;animation:ripple .6s var(--a-out) forwards;mix-blend-mode:overlay}
+@keyframes ripple{to{transform:scale(2.6);opacity:0}}
+.btn-lime .nl-ripple,.btn-primary .nl-ripple{background:rgba(10,14,8,.22)}
+
+/* ============================================================
+   11. TOAST / BADGE pops (enhance)
+   ============================================================ */
+@media(prefers-reduced-motion:no-preference){
+  .icon-dot.show,[data-notif-dot].show,[data-msg-dot].show,[data-saved-count].show{animation:badgePop .4s var(--a-spring)}
+  @keyframes badgePop{0%{transform:scale(0)}60%{transform:scale(1.25)}100%{transform:scale(1)}}
+}
+
+/* ============================================================
+   12. GLOBAL reduced-motion safety net for the JS-driven extras
+   ============================================================ */
+@media(prefers-reduced-motion:reduce){
+  .nl-progress,.nl-cursor{display:none!important}
+  [data-anim],[data-anim-stagger]>*{opacity:1!important;transform:none!important;filter:none!important;transition:none!important}
+  .tilt-on{transform:none!important}
+}

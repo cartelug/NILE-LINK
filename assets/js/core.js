@@ -130,7 +130,7 @@ window.NL=window.NL||{};
     '</article>';
   }
   NL.cardHTML=cardHTML;
-  NL.renderGrid=(el,list)=>{if(!el)return;el.innerHTML=list&&list.length?list.map((it,i)=>cardHTML(it,i)).join(''):'<div class="empty"><svg width="54" height="54" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4-4"/></svg><p style="font-weight:600">No listings match — try another category or search.</p></div>';if(window.NLi18n&&NLi18n.getLang()&&NLi18n.getLang()!=='en')document.dispatchEvent(new CustomEvent('nl:translate'))};
+  NL.renderGrid=(el,list)=>{if(!el)return;el.innerHTML=list&&list.length?list.map((it,i)=>cardHTML(it,i)).join(''):'<div class="empty"><svg width="54" height="54" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4-4"/></svg><p style="font-weight:600">No listings match — try another category or search.</p></div>';if(window.NLi18n&&NLi18n.getLang()&&NLi18n.getLang()!=='en')document.dispatchEvent(new CustomEvent('nl:translate'));if(window.NLAnim)NLAnim.rescan()};
 
   /* Shown while a listings fetch is in flight (real backend can be slow
      on weak connections) so the grid never sits blank between page load
