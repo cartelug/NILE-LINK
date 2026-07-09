@@ -241,6 +241,12 @@ window.NL=window.NL||{};
         '<a class="drawer-row" href="'+href('pages/about.html')+'"><span class="dr-ic" style="background:#e7f7ed;color:#19a974">'+dic('<circle cx="12" cy="12" r="9"/><path d="M12 16v-4M12 8h.01"/>')+'</span>About Nile Link</a>'+
         '<a class="drawer-row" href="'+href('pages/help.html')+'"><span class="dr-ic" style="background:#f0e9fb;color:#7c3aed">'+dic('<circle cx="12" cy="12" r="9"/><path d="M9.5 9a2.5 2.5 0 0 1 5 0c0 2-2.5 2-2.5 4M12 17h.01"/>')+'</span>Help Center</a>'+
       '</div>'+
+      '<div class="drawer-legal">'+
+        '<span class="dl-label">Legal</span>'+
+        '<a href="'+href('pages/terms.html')+'">Terms &amp; Conditions</a>'+
+        '<a href="'+href('pages/privacy.html')+'">Privacy Policy</a>'+
+        '<a href="'+href('pages/cookies.html')+'">Cookie Policy</a>'+
+      '</div>'+
       '<div class="drawer-foot">'+
         '<div class="guest-only" style="display:flex;gap:10px"><a class="btn btn-ghost btn-block" href="'+href('pages/signin.html')+'">Sign in</a><a class="btn btn-primary btn-block" href="'+href('pages/signup.html')+'">Register</a></div>'+
         '<button class="btn btn-ghost btn-block auth-only" data-signout>Sign out</button>'+
@@ -284,7 +290,7 @@ window.NL=window.NL||{};
         '<a href="'+href('pages/help.html')+'">Help Center</a>'+
         '<a href="'+href('pages/help.html')+'#safety">Safety Tips</a>'+
         '<a href="'+href('pages/help.html')+'#report">Report a Listing</a>'+
-        '<a href="'+href('pages/terms.html')+'">Terms of Use</a>'+
+        '<a href="'+href('pages/terms.html')+'">Terms &amp; Conditions</a>'+
         '<a href="'+href('pages/privacy.html')+'">Privacy Policy</a>'+
         '<a href="'+href('pages/cookies.html')+'">Cookie Policy</a>'+
       '</div>'+

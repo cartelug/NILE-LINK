@@ -247,6 +247,10 @@ svg{display:block}
 .drawer-row:hover{background:var(--bg)}
 .drawer-row .dr-ic{width:38px;height:38px;border-radius:10px;display:grid;place-items:center;flex-shrink:0}
 .drawer-row .dr-ic svg{width:19px;height:19px}
+.drawer-legal{padding:14px 20px 4px;border-top:1px solid var(--line);display:flex;flex-wrap:wrap;align-items:center;gap:8px 16px}
+.drawer-legal .dl-label{width:100%;font-size:.68rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--tx-3);margin-bottom:2px}
+.drawer-legal a{font-size:.82rem;font-weight:700;color:var(--tx-2);transition:color .2s}
+.drawer-legal a:hover{color:var(--lime-700)}
 .drawer-foot{margin-top:auto;padding:16px;border-top:1px solid var(--line)}
 
 /* ============================================================
