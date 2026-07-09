@@ -286,6 +286,7 @@ window.NL=window.NL||{};
         '<a href="'+href('pages/help.html')+'#report">Report a Listing</a>'+
         '<a href="'+href('pages/terms.html')+'">Terms of Use</a>'+
         '<a href="'+href('pages/privacy.html')+'">Privacy Policy</a>'+
+        '<a href="'+href('pages/cookies.html')+'">Cookie Policy</a>'+
       '</div>'+
     '</div>'+
     '<div class="foot-bottom"><div class="foot-flag"></div><div class="foot-bottom-inner">'+
@@ -381,8 +382,43 @@ window.NL=window.NL||{};
     bindGlobal();
     bindReveal();
     document.addEventListener('nl:rate',()=>{document.dispatchEvent(new CustomEvent('nl:rate-applied'))});
+    mountCookieBanner();
     registerSW();
   }
+
+  /* ---- Cookie consent banner ----
+     The site only uses essential local storage (session, language, saved
+     items) plus Google Fonts and Google sign-in. There is no ad/analytics
+     tracking, so this is a straightforward accept/decline notice with a
+     link to the full Cookie Policy. The choice is remembered on-device. ---- */
+  function mountCookieBanner(){
+    try{ if(localStorage.getItem('nl_cookie_consent')) return; }catch(e){ return; }
+    if(document.getElementById('nlCookie')) return;
+    const to=href('pages/cookies.html');
+    const el=document.createElement('div');
+    el.id='nlCookie';
+    el.className='cookie-bar';
+    el.setAttribute('role','dialog');
+    el.setAttribute('aria-label','Cookie notice');
+    el.innerHTML=
+      '<div class="cookie-bar-in">'+
+        '<div class="cookie-txt"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a10 10 0 1 0 10 10 4 4 0 0 1-5-5 4 4 0 0 1-5-5z"/><circle cx="9" cy="12" r="1"/><circle cx="14" cy="15" r="1"/><circle cx="15" cy="9" r="1"/></svg>'+
+          '<span>We use essential cookies and local storage to keep you signed in and remember your preferences. See our <a href="'+to+'">Cookie Policy</a>.</span></div>'+
+        '<div class="cookie-btns">'+
+          '<button type="button" class="cookie-decline" data-cookie="declined">Decline</button>'+
+          '<button type="button" class="btn btn-lime cookie-accept" data-cookie="accepted">Accept</button>'+
+        '</div>'+
+      '</div>';
+    document.body.appendChild(el);
+    requestAnimationFrame(()=>el.classList.add('show'));
+    el.addEventListener('click',e=>{
+      const b=e.target.closest('[data-cookie]'); if(!b) return;
+      try{ localStorage.setItem('nl_cookie_consent',b.dataset.cookie); localStorage.setItem('nl_cookie_consent_at',new Date().toISOString()); }catch(_){}
+      el.classList.remove('show');
+      setTimeout(()=>el.remove(),320);
+    });
+  }
+  NL.reopenCookieSettings=function(){ try{localStorage.removeItem('nl_cookie_consent');}catch(e){} mountCookieBanner(); };
 
   /* ---- Offline / PWA service worker (real caching; safe, versioned) ---- */
   function registerSW(){
