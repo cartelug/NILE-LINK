@@ -13,11 +13,11 @@ window.NLDATA=(function(){
   };
 
   const CATEGORIES=[
-    {name:'Phones & Electronics',short:'Electronics',key:'electronics',count:'120+ items'},
-    {name:'Fashion & Beauty',short:'Fashion',key:'fashion',count:'90+ items'},
-    {name:'Cars & Motorbikes',short:'Cars',key:'cars',count:'45+ listings'},
-    {name:'Property & Land',short:'Property',key:'property',count:'60+ listings'},
-    {name:'Services',short:'Services',key:'services',count:'70+ providers'}
+    {name:'Phones & Electronics',short:'Electronics',key:'electronics',count:'Phones, laptops & more'},
+    {name:'Fashion & Beauty',short:'Fashion',key:'fashion',count:'Clothing & beauty'},
+    {name:'Cars & Motorbikes',short:'Cars',key:'cars',count:'Cars & bikes'},
+    {name:'Property & Land',short:'Property',key:'property',count:'Homes & land'},
+    {name:'Services',short:'Services',key:'services',count:'Local services'}
   ];
   const CATLABEL={electronics:'Phones & Electronics',fashion:'Fashion & Beauty',cars:'Cars & Motorbikes',property:'Property & Land',services:'Services'};
   const typeForCat=k=>k==='services'?'quote':(k==='cars'||k==='property')?'contact':'order';
