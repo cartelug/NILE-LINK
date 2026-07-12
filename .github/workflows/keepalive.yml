@@ -1,0 +1,27 @@
+name: Supabase keep-alive
+
+# Free Supabase projects pause after ~7 days with no activity. This makes a
+# tiny read request once a day so the project always counts as "active" and
+# never sleeps during quiet early-launch days. It uses the public anon key
+# (the same one already shipped in the browser) and reads a single row.
+
+on:
+  schedule:
+    - cron: '17 6 * * *'   # daily at 06:17 UTC
+  workflow_dispatch: {}      # allows a manual run from the Actions tab
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ping Supabase REST
+        run: |
+          URL="https://eztxmvkwkgjlqkcwhqqv.supabase.co/rest/v1/listings?select=id&limit=1"
+          KEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImV6dHhtdmt3a2dqbHFrY3docXF2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODMxNjA1ODUsImV4cCI6MjA5ODczNjU4NX0.c6SkIgTkE0G1F4-ABWvWS8i9wrrGW4ms7p0a21yD5Uo"
+          code=$(curl -s -o /dev/null -w "%{http_code}" "$URL" -H "apikey: $KEY" -H "Authorization: Bearer $KEY")
+          echo "Supabase responded with HTTP $code"
+          # 200 = OK. Treat anything in the 2xx/3xx/4xx range as "project awake";
+          # only a network failure (000) or 5xx should fail the job.
+          if [ "$code" -ge 500 ] || [ "$code" -eq 000 ]; then
+            echo "Keep-alive ping failed"; exit 1
+          fi
