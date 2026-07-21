@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="600" viewBox="0 0 800 600">
+  <rect width="800" height="600" fill="#f6f8f3"/>
+
+  <!-- dashed placeholder card behind -->
+  <rect x="330" y="230" width="180" height="130" rx="14" fill="none" stroke="#c7d0b8" stroke-width="4" stroke-dasharray="8 8"/>
+
+  <!-- bookmark ribbon -->
+  <g transform="translate(360,200)">
+    <path d="M0 0 H80 V150 L40 110 L0 150 Z" fill="none" stroke="#39472c" stroke-width="6" stroke-linejoin="round"/>
+    <path d="M28 55 L38 65 L56 40" fill="none" stroke="#7cfc00" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+
+  <text x="400" y="500" text-anchor="middle" font-family="Verdana, Arial, sans-serif" font-size="26" font-weight="700" fill="#3d4a30">Nothing saved yet</text>
+  <text x="400" y="534" text-anchor="middle" font-family="Verdana, Arial, sans-serif" font-size="17" fill="#8a9a78">Tap the heart on a listing to save it for later</text>
+</svg>

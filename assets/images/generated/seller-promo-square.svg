@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1080" height="1080" viewBox="0 0 1080 1080">
+  <rect width="1080" height="1080" fill="#0a0e08"/>
+
+  <!-- flag-color corner ribbon -->
+  <g transform="translate(920,0)">
+    <path d="M0 0 H160 V160 Z" fill="#000000"/>
+    <path d="M20 0 H160 V140 Z" fill="#da121a"/>
+    <path d="M40 0 H160 V120 Z" fill="#078930"/>
+    <path d="M60 0 H160 V100 Z" fill="#0033a0"/>
+    <path d="M80 0 H160 V80 Z" fill="#fcdd09"/>
+  </g>
+
+  <!-- lime accent bar -->
+  <rect x="80" y="140" width="140" height="14" rx="7" fill="#7cfc00"/>
+
+  <!-- headline -->
+  <text x="80" y="260" font-family="Verdana, Arial, sans-serif" font-weight="800" font-size="72" fill="#f3f7ec">SELL IT ON</text>
+  <text x="80" y="345" font-family="Verdana, Arial, sans-serif" font-weight="800" font-size="86" fill="#7cfc00">NILE LINK</text>
+  <text x="80" y="405" font-family="Verdana, Arial, sans-serif" font-weight="700" font-size="34" fill="#a7b799">100% free to list — no fees, ever.</text>
+
+  <!-- category icon row -->
+  <g transform="translate(80,540)">
+    <!-- phone -->
+    <g>
+      <rect x="0" y="0" width="220" height="220" rx="24" fill="#11160d"/>
+      <rect x="80" y="50" width="60" height="120" rx="10" fill="none" stroke="#7cfc00" stroke-width="6"/>
+      <circle cx="110" cy="152" r="4" fill="#7cfc00"/>
+    </g>
+    <!-- car -->
+    <g transform="translate(260,0)">
+      <rect x="0" y="0" width="220" height="220" rx="24" fill="#11160d"/>
+      <g transform="translate(40,100)">
+        <rect x="0" y="20" width="140" height="36" rx="12" fill="none" stroke="#7cfc00" stroke-width="6"/>
+        <path d="M16 20 L38 -8 L102 -8 L124 20" fill="none" stroke="#7cfc00" stroke-width="6" stroke-linejoin="round"/>
+        <circle cx="30" cy="60" r="14" fill="none" stroke="#7cfc00" stroke-width="6"/>
+        <circle cx="110" cy="60" r="14" fill="none" stroke="#7cfc00" stroke-width="6"/>
+      </g>
+    </g>
+    <!-- shirt -->
+    <g transform="translate(520,0)">
+      <rect x="0" y="0" width="220" height="220" rx="24" fill="#11160d"/>
+      <path d="M70 40 L95 25 L125 25 L150 40 L170 70 L145 90 L145 190 L75 190 L75 90 L50 70 Z" fill="none" stroke="#7cfc00" stroke-width="6" stroke-linejoin="round"/>
+    </g>
+  </g>
+
+  <text x="80" y="1000" font-family="Verdana, Arial, sans-serif" font-size="26" fill="#69795a">Phones · Vehicles · Property · Fashion · Services</text>
+</svg>

@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900" viewBox="0 0 1600 900">
+  <rect width="1600" height="900" fill="#f6f8f3"/>
+
+  <!-- connecting dotted line -->
+  <line x1="260" y1="450" x2="1340" y2="450" stroke="#7cfc00" stroke-width="4" stroke-dasharray="2 18" stroke-linecap="round"/>
+
+  <!-- Panel 1: snap a photo -->
+  <g transform="translate(140,260)">
+    <circle cx="120" cy="120" r="120" fill="#eef1e8"/>
+    <g transform="translate(55,70)">
+      <rect x="0" y="30" width="130" height="90" rx="14" fill="none" stroke="#39472c" stroke-width="6"/>
+      <rect x="40" y="10" width="50" height="24" rx="6" fill="none" stroke="#39472c" stroke-width="6"/>
+      <circle cx="65" cy="76" r="26" fill="none" stroke="#39472c" stroke-width="6"/>
+      <circle cx="65" cy="76" r="8" fill="#7cfc00"/>
+    </g>
+    <text x="120" y="290" text-anchor="middle" font-family="Verdana, Arial, sans-serif" font-weight="700" font-size="28" fill="#0e1408">Snap a photo</text>
+  </g>
+
+  <!-- Panel 2: set your price -->
+  <g transform="translate(680,260)">
+    <circle cx="120" cy="120" r="120" fill="#eef1e8"/>
+    <g transform="translate(48,60)">
+      <rect x="10" y="30" width="130" height="90" rx="14" fill="none" stroke="#39472c" stroke-width="6"/>
+      <rect x="40" y="10" width="50" height="24" rx="6" fill="none" stroke="#39472c" stroke-width="6"/>
+      <text x="75" y="88" text-anchor="middle" font-family="Verdana, Arial, sans-serif" font-weight="800" font-size="30" fill="#39472c">$</text>
+      <circle cx="128" cy="26" r="20" fill="#7cfc00"/>
+      <path d="M119 26 L125 33 L138 18" fill="none" stroke="#0a0e08" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+    </g>
+    <text x="120" y="290" text-anchor="middle" font-family="Verdana, Arial, sans-serif" font-weight="700" font-size="28" fill="#0e1408">Set your price</text>
+  </g>
+
+  <!-- Panel 3: chat with buyers -->
+  <g transform="translate(1220,260)">
+    <circle cx="120" cy="120" r="120" fill="#eef1e8"/>
+    <g transform="translate(45,70)">
+      <rect x="0" y="0" width="100" height="66" rx="18" fill="none" stroke="#39472c" stroke-width="6"/>
+      <path d="M18 66 L18 86 L40 66 Z" fill="none" stroke="#39472c" stroke-width="6" stroke-linejoin="round"/>
+      <rect x="55" y="46" width="100" height="66" rx="18" fill="#7cfc00"/>
+      <path d="M137 112 L137 132 L159 112 Z" fill="#7cfc00"/>
+    </g>
+    <text x="120" y="290" text-anchor="middle" font-family="Verdana, Arial, sans-serif" font-weight="700" font-size="28" fill="#0e1408">Chat with buyers</text>
+  </g>
+</svg>

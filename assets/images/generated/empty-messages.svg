@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="600" viewBox="0 0 800 600">
+  <rect width="800" height="600" fill="#f6f8f3"/>
+
+  <!-- envelope -->
+  <g transform="translate(300,320)">
+    <rect x="0" y="0" width="180" height="120" rx="10" fill="none" stroke="#39472c" stroke-width="5"/>
+    <path d="M0 8 L90 78 L180 8" fill="none" stroke="#39472c" stroke-width="5" stroke-linejoin="round"/>
+  </g>
+
+  <!-- chat bubble -->
+  <g transform="translate(370,180)">
+    <rect x="0" y="0" width="150" height="100" rx="24" fill="none" stroke="#39472c" stroke-width="5"/>
+    <path d="M28 100 L28 128 L58 100 Z" fill="none" stroke="#39472c" stroke-width="5" stroke-linejoin="round"/>
+    <circle cx="120" cy="26" r="7" fill="#7cfc00"/>
+  </g>
+
+  <text x="400" y="500" text-anchor="middle" font-family="Verdana, Arial, sans-serif" font-size="26" font-weight="700" fill="#3d4a30">No messages yet</text>
+  <text x="400" y="534" text-anchor="middle" font-family="Verdana, Arial, sans-serif" font-size="17" fill="#8a9a78">When a buyer messages you, it'll show up here</text>
+</svg>
