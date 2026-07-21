@@ -50,9 +50,12 @@
   background-size:32px 32px,32px 32px,100% 100%;
   position:relative;overflow:hidden;
 }
-.browse-map .map-pin{position:absolute;width:30px;height:30px;border-radius:50% 50% 50% 0;background:var(--lime);transform:rotate(-45deg);box-shadow:0 4px 10px rgba(124,252,0,.4)}
+.browse-map .map-pin{position:absolute;width:30px;height:30px;border-radius:50% 50% 50% 0;background:var(--lime);transform:rotate(-45deg);box-shadow:0 4px 10px rgba(124,252,0,.4);z-index:2}
 .browse-map .map-pin::before{content:"";position:absolute;inset:6px;background:var(--ink);border-radius:50%}
 .browse-map h3{color:var(--tx);font-weight:800;font-size:1.1rem;margin-bottom:4px}
+.browse-map-photo{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0}
+.browse-map::before{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(246,248,243,.3),rgba(246,248,243,.9));z-index:1}
+.browse-map>div{position:relative;z-index:2}
 
 .browse-wrap{display:grid;grid-template-columns:1fr;gap:20px;padding-block:18px}
 @media(min-width:1024px){.browse-wrap{grid-template-columns:240px 1fr;gap:28px}}

@@ -304,6 +304,7 @@ img.img-fallback{object-fit:contain!important;background:#eef1e6;padding:16%;box
 .card .vchip{display:inline-flex;align-items:center;gap:2px;margin-left:auto;color:var(--ok);font-weight:800;font-size:.68rem;flex-shrink:0}
 
 .empty{grid-column:1/-1;display:flex;flex-direction:column;align-items:center;gap:14px;padding:60px 20px;color:var(--tx-3);text-align:center}
+.empty-photo{width:100%;max-width:280px;border-radius:var(--r-md);box-shadow:var(--sh-2)}
 
 /* skeleton */
 .skel-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
